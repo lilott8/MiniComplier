@@ -28,4 +28,8 @@ public class Character {
     public String getCharacter() {
         return character;
     }
+
+    public String toString() {
+        return String.format("%s: (%d, %d)", character, line, at);
+    }
 }

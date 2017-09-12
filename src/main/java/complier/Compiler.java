@@ -3,7 +3,7 @@ package complier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import complier.scanner.PhiScanner;
+import complier.scanner.MCScanner;
 import complier.scanner.Scanner;
 import config.CommonConfig;
 import config.ConfigFactory;
@@ -21,7 +21,7 @@ public class Compiler {
     private Scanner scanner;
 
     public Compiler() {
-        this.scanner = new PhiScanner();
+        this.scanner = new MCScanner();
         this.config = ConfigFactory.getConfig();
     }
 
