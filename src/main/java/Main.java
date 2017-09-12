@@ -2,6 +2,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cli.CliWrapper;
+import complier.Compiler;
 
 /**
  * @created: 9/11/17
@@ -18,6 +19,7 @@ public class Main {
         CliWrapper cli = new CliWrapper();
         cli.parseCommandLine(args);
 
-
+        Compiler compiler = new Compiler();
+        compiler.compile();
     }
 }
