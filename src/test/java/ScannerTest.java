@@ -37,5 +37,7 @@ public class ScannerTest {
         scanner.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
         assertEquals(85, scanner.getNumberOfChars());
         assertEquals(4, scanner.getNumberOfLines());
+
+
     }
 }

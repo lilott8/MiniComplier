@@ -44,6 +44,7 @@ public class MCScanner implements Scanner {
         if (((CommonConfig) ConfigFactory.getConfig()).isDebug()) {
             logger.trace(scanningTable);
         }
+        reader.closeFile();
     }
 
     @Override
