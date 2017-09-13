@@ -1,2 +1,2 @@
 # MiniComplier
-This is a toy compiler to learn and understand the full compilation process.
+This is a toy complier to learn and understand the full compilation process.
