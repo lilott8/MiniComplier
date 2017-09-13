@@ -35,6 +35,15 @@ public class MCReader extends FileHandler {
         return this;
     }
 
+    public int read() {
+        try {
+            return this.reader.read();
+        } catch (IOException e) {
+            logger.error(e);
+        }
+        return -1;
+    }
+
     public String getNextLine() {
         try {
             return this.reader.readLine();

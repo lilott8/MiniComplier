@@ -3,7 +3,7 @@ package complier.parser.datastructures;
 import java.util.ArrayList;
 import java.util.List;
 
-import complier.scanner.datastructures.Character;
+import complier.scanner.datastructures.MCCharacter;
 
 /**
  * @created: 9/12/17
@@ -12,13 +12,13 @@ import complier.scanner.datastructures.Character;
  */
 public class Token {
 
-    private List<Character> token = new ArrayList<>();
+    private List<MCCharacter> token = new ArrayList<>();
     private int start = -1;
 
     public Token() {
     }
 
-    public void addToToken(Character token) {
+    public void addToToken(MCCharacter token) {
         if (this.start == -1) {
             this.start = token.getAt();
         }
@@ -27,7 +27,7 @@ public class Token {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (Character c : this.token) {
+        for (MCCharacter c : this.token) {
             sb.append(c.getCharacter());
         }
         return sb.append(": ").append(this.start).toString();

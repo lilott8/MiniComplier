@@ -24,20 +24,42 @@ public class ScannerTest {
     }
 
     @Test
-    public void emptyFileSuccess() {
+    public void emptyFile() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/emptyFile.mc");
         assertEquals(0, scanner.getNumberOfChars());
-        assertEquals(0, scanner.getNumberOfLines());
+        assertEquals(1, scanner.getNumberOfLines());
     }
 
     @Test
-    public void scanFileSuccess() {
+    public void multipleLineBreaks() {
+        Scanner scanner = new MCScanner();
+        scanner.scanFile("src/main/resources/testcases/scanner/multipleLineBreaks.mc");
+        assertEquals(51, scanner.getNumberOfChars());
+        assertEquals(10, scanner.getNumberOfLines());
+    }
+
+    @Test
+    public void onlyLineBreaks() {
+        Scanner scanner = new MCScanner();
+        scanner.scanFile("src/main/resources/testcases/scanner/lineBreaks.mc");
+        assertEquals(9, scanner.getNumberOfChars());
+        assertEquals(10, scanner.getNumberOfLines());
+    }
+
+    @Test
+    public void regularFileFormat() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
-        assertEquals(85, scanner.getNumberOfChars());
+        assertEquals(92, scanner.getNumberOfChars());
         assertEquals(4, scanner.getNumberOfLines());
+    }
 
-
+    @Test
+    public void toyProgram1() {
+        Scanner scanner = new MCScanner();
+        scanner.scanFile("src/main/resources/testcases/toyProgram.mc");
+        assertEquals(75, scanner.getNumberOfChars());
+        assertEquals(5, scanner.getNumberOfLines());
     }
 }

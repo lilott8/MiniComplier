@@ -34,7 +34,15 @@ public class Compiler {
             logger.trace("Preparing to compile: " + this.config.getCompilationFile());
         }
         this.scanner.scanFile(this.config.getCompilationFile());
+
+        if (this.config.isDebug()) {
+            logger.trace(this.scanner);
+        }
+
         this.parser.parse(this.scanner);
-        logger.trace(this.parser);
+
+        if (this.config.isDebug()) {
+            logger.trace(this.parser);
+        }
     }
 }

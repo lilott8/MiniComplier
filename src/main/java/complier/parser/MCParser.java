@@ -4,17 +4,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Properties;
 
 import complier.parser.datastructures.Token;
+import complier.scanner.MCScanner;
 import complier.scanner.Scanner;
-import complier.scanner.datastructures.Character;
+import complier.scanner.datastructures.MCCharacter;
 
 /**
  * @created: 9/12/17
@@ -44,14 +40,15 @@ public class MCParser implements Parser {
     public void parse(Scanner scanner) {
         StringBuilder sb = new StringBuilder();
         Token token = new Token();
-        for (Character c : scanner.getCharacters()) {
-            logger.info(c);
-            if(!StringUtils.equalsIgnoreCase(c.getCharacter(), "(space)")) {
+        for (MCCharacter c : scanner.getCharacters()) {
+            if (!StringUtils.equalsIgnoreCase(c.getCharacter(), StringUtils.SPACE) && !StringUtils.equals(c.getCharacter(), MCScanner.NEWLINE)) {
                 token.addToToken(c);
                 sb.append(c);
             } else {
-                logger.debug("adding new token");
-                this.tokens.put(sb.toString(), token);
+                // only add tokens that aren't whitespace!
+                if (!StringUtils.isEmpty(sb.toString())) {
+                    this.tokens.put(sb.toString(), token);
+                }
                 token = new Token();
                 sb = new StringBuilder();
             }

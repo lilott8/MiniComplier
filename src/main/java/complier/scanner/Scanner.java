@@ -2,7 +2,7 @@ package complier.scanner;
 
 import java.util.LinkedHashSet;
 
-import complier.scanner.datastructures.Character;
+import complier.scanner.datastructures.MCCharacter;
 
 /**
  * @created: 9/11/17
@@ -16,5 +16,5 @@ public interface Scanner {
 
     int getNumberOfLines();
 
-    LinkedHashSet<Character> getCharacters();
+    LinkedHashSet<MCCharacter> getCharacters();
 }

@@ -6,9 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashSet;
 
-import complier.scanner.datastructures.Character;
-import config.CommonConfig;
-import config.ConfigFactory;
+import complier.scanner.datastructures.MCCharacter;
 import io.MCReader;
 
 /**
@@ -19,43 +17,75 @@ import io.MCReader;
 public class MCScanner implements Scanner {
 
     public static final Logger logger = LogManager.getLogger(MCScanner.class);
-    private LinkedHashSet<Character> scanningTable = new LinkedHashSet<>();
-    private int numberOfLines = 0;
+    private LinkedHashSet<MCCharacter> scanningTable = new LinkedHashSet<>();
+    private int numberOfLines = 1;
+    public static final String NEWLINE = "(nl)";
 
     public MCScanner() {
     }
 
+    /**
+     * Scans the file, breaking it up into discrete tokens.
+     *
+     * @param input input file to be scanned.
+     */
     @Override
     public void scanFile(String input) {
         MCReader reader = new MCReader(input);
         String line;
-        int lineNumber = 0;
-        while (!StringUtils.isEmpty(line = reader.getNextLine())) {
-            for (int x = 0; x < line.length() - 1; x++) {
-                if (java.lang.Character.isWhitespace(line.charAt(x))) {
-                    this.scanningTable.add(new Character(lineNumber, x, "(space)"));
-                } else {
-                    this.scanningTable.add(new Character(lineNumber, x, String.valueOf(line.charAt(x))));
-                }
+        int character = 0;
+        int charAt = 1;
+        while ((character = reader.read()) >= 0) {
+            String chars = Character.toString((char) character);
+            /*
+             * Handles our three cases:
+             * 1) We have a line break,
+             * 2) We have a space,
+             * 3) We have a non-whitespace character.
+             */
+            if (StringUtils.equals(chars, StringUtils.CR) || StringUtils.equals(chars, StringUtils.LF)) {
+                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, NEWLINE));
+                // Reset our character
+                charAt = 1;
+                this.numberOfLines++;
+            } else if (StringUtils.equals(chars, StringUtils.SPACE)) {
+                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, StringUtils.SPACE));
+                charAt++;
+            } else {
+                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, chars));
+                charAt++;
             }
-            lineNumber++;
-            this.numberOfLines = lineNumber;
         }
         reader.closeFile();
     }
 
+    /**
+     * Returns the number of characters in the corpus
+     *
+     * @return int
+     */
     @Override
     public int getNumberOfChars() {
         return this.scanningTable.size();
     }
 
+    /**
+     * Returns the number of lines in the corpus
+     *
+     * @return int
+     */
     @Override
     public int getNumberOfLines() {
         return this.numberOfLines;
     }
 
+    /**
+     * Returns the scanned characters in their data structure.
+     *
+     * @return LinkedHashSet data structure
+     */
     @Override
-    public LinkedHashSet<Character> getCharacters() {
+    public LinkedHashSet<MCCharacter> getCharacters() {
         return this.scanningTable;
     }
 
