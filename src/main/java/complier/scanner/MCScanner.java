@@ -41,9 +41,6 @@ public class MCScanner implements Scanner {
             lineNumber++;
             this.numberOfLines = lineNumber;
         }
-        if (((CommonConfig) ConfigFactory.getConfig()).isDebug()) {
-            logger.trace(scanningTable);
-        }
         reader.closeFile();
     }
 
@@ -55,5 +52,14 @@ public class MCScanner implements Scanner {
     @Override
     public int getNumberOfLines() {
         return this.numberOfLines;
+    }
+
+    @Override
+    public LinkedHashSet<Character> getCharacters() {
+        return this.scanningTable;
+    }
+
+    public String toString() {
+        return this.scanningTable.toString();
     }
 }
