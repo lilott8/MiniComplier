@@ -1,8 +1,9 @@
 package complier.lexicon.subphases;
 
-import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
-import datastructures.MCCharacter;
+import datastructures.Token;
 
 /**
  * @created: 9/11/17
@@ -16,5 +17,7 @@ public interface Scanner {
 
     int getNumberOfLines();
 
-    LinkedHashSet<MCCharacter> getCharacters();
+    int getNumberOfTokens();
+
+    Map<Integer, List<Token>> getCharacters();
 }

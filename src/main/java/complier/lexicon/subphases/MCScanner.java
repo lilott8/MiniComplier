@@ -4,9 +4,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import datastructures.MCCharacter;
+import datastructures.Token;
 import io.MCReader;
 
 /**
@@ -17,9 +21,10 @@ import io.MCReader;
 public class MCScanner implements Scanner {
 
     public static final Logger logger = LogManager.getLogger(MCScanner.class);
-    private LinkedHashSet<MCCharacter> scanningTable = new LinkedHashSet<>();
-    private int numberOfLines = 1;
+    private Map<Integer, List<Token>> tokens = new LinkedHashMap<>();
     public static final String NEWLINE = "(nl)";
+    private int numChars = 0;
+    private int numTokens = 0;
 
     public MCScanner() {
     }
@@ -33,28 +38,25 @@ public class MCScanner implements Scanner {
     public void scanFile(String input) {
         MCReader reader = new MCReader(input);
         String line;
-        int character = 0;
-        int charAt = 1;
-        while ((character = reader.read()) >= 0) {
-            String chars = Character.toString((char) character);
-            /*
-             * Handles our three cases:
-             * 1) We have a line break,
-             * 2) We have a space,
-             * 3) We have a non-whitespace character.
-             */
-            if (StringUtils.equals(chars, StringUtils.CR) || StringUtils.equals(chars, StringUtils.LF)) {
-                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, NEWLINE));
-                // Reset our character
-                charAt = 1;
-                this.numberOfLines++;
-            } else if (StringUtils.equals(chars, StringUtils.SPACE)) {
-                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, StringUtils.SPACE));
-                charAt++;
-            } else {
-                this.scanningTable.add(new MCCharacter(this.numberOfLines, charAt, chars));
-                charAt++;
+        int lineNumber = 0;
+        this.tokens.put(lineNumber, new ArrayList<>());
+        while ((line = reader.getNextLine()) != null) {
+            Token token = new Token();
+            for (int charAt = 0; charAt < line.length(); charAt++) {
+                this.numChars++;
+                String chars = Character.toString(line.charAt(charAt));
+                if (!StringUtils.equalsAny(chars, StringUtils.CR, StringUtils.LF, StringUtils.SPACE)) {
+                    token.addToToken(new MCCharacter(lineNumber, charAt, chars));
+                } else {
+                    this.tokens.get(lineNumber).add(token);
+                    this.numTokens++;
+                    token = new Token();
+                }
             }
+            this.tokens.get(lineNumber).add(token);
+            this.numTokens++;
+            lineNumber++;
+            this.tokens.put(lineNumber, new ArrayList<>());
         }
         reader.closeFile();
     }
@@ -66,7 +68,11 @@ public class MCScanner implements Scanner {
      */
     @Override
     public int getNumberOfChars() {
-        return this.scanningTable.size();
+        return this.numChars;
+    }
+
+    public int getNumberOfTokens() {
+        return this.numTokens;
     }
 
     /**
@@ -76,7 +82,7 @@ public class MCScanner implements Scanner {
      */
     @Override
     public int getNumberOfLines() {
-        return this.numberOfLines;
+        return this.tokens.size();
     }
 
     /**
@@ -85,11 +91,11 @@ public class MCScanner implements Scanner {
      * @return LinkedHashSet data structure
      */
     @Override
-    public LinkedHashSet<MCCharacter> getCharacters() {
-        return this.scanningTable;
+    public Map<Integer, List<Token>> getCharacters() {
+        return this.tokens;
     }
 
     public String toString() {
-        return this.scanningTable.toString();
+        return this.tokens.toString();
     }
 }
