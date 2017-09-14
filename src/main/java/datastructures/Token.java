@@ -1,9 +1,7 @@
-package complier.parser.datastructures;
+package datastructures;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import complier.scanner.datastructures.MCCharacter;
 
 /**
  * @created: 9/12/17
@@ -23,6 +21,26 @@ public class Token {
             this.start = token.getAt();
         }
         this.token.add(token);
+    }
+
+    public String getToken() {
+        StringBuilder sb = new StringBuilder();
+        for (MCCharacter c : this.token) {
+            sb.append(c.getCharacter());
+        }
+        return sb.toString();
+    }
+
+    public MCCharacter getCharacterAt(int at) {
+        if (at <= this.token.size()) {
+            return this.token.get(at);
+        } else {
+            return null;
+        }
+    }
+
+    public int getTokenSize() {
+        return this.token.size();
     }
 
     public String toString() {

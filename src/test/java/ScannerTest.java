@@ -2,8 +2,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cli.CliWrapper;
-import complier.scanner.MCScanner;
-import complier.scanner.Scanner;
+import complier.lexicon.subphases.MCScanner;
+import complier.lexicon.subphases.Scanner;
 
 import static org.junit.Assert.assertEquals;
 
@@ -61,5 +61,13 @@ public class ScannerTest {
         scanner.scanFile("src/main/resources/testcases/toyProgram.mc");
         assertEquals(75, scanner.getNumberOfChars());
         assertEquals(5, scanner.getNumberOfLines());
+    }
+
+    @Test
+    public void toyProgramWithComments() {
+        Scanner scanner = new MCScanner();
+        scanner.scanFile("src/main/resources/testcases/toyProgramComment.mc");
+        assertEquals(92, scanner.getNumberOfChars());
+        assertEquals(6, scanner.getNumberOfLines());
     }
 }

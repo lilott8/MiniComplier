@@ -1,8 +1,8 @@
-package complier.scanner;
+package complier.lexicon.subphases;
 
 import java.util.LinkedHashSet;
 
-import complier.scanner.datastructures.MCCharacter;
+import datastructures.MCCharacter;
 
 /**
  * @created: 9/11/17

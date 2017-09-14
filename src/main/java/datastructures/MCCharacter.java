@@ -1,4 +1,4 @@
-package complier.scanner.datastructures;
+package datastructures;
 
 import org.apache.commons.lang3.StringUtils;
 

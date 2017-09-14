@@ -3,10 +3,7 @@ package complier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import complier.parser.MCParser;
-import complier.parser.Parser;
-import complier.scanner.MCScanner;
-import complier.scanner.Scanner;
+import complier.lexicon.Lexicon;
 import config.CommonConfig;
 import config.ConfigFactory;
 
@@ -20,12 +17,12 @@ public class Compiler {
     private CommonConfig config;
     public static final Logger logger = LogManager.getLogger(Compiler.class);
 
-    private Scanner scanner;
-    private Parser parser;
+    //private Scanner scanner;
+    //private Parser parser;
 
     public Compiler() {
-        this.scanner = new MCScanner();
-        this.parser = new MCParser();
+        //this.scanner = new MCScanner();
+        //this.parser = new MCParser();
         this.config = ConfigFactory.getConfig();
     }
 
@@ -33,7 +30,11 @@ public class Compiler {
         if (this.config.isDebug()) {
             logger.trace("Preparing to compile: " + this.config.getCompilationFile());
         }
-        this.scanner.scanFile(this.config.getCompilationFile());
+        Lexicon lexxer = new Lexicon();
+        lexxer.runPhase();
+
+
+        /*this.scanner.scanFile(this.config.getCompilationFile());
 
         if (this.config.isDebug()) {
             logger.trace(this.scanner);
@@ -43,6 +44,6 @@ public class Compiler {
 
         if (this.config.isDebug()) {
             logger.trace(this.parser);
-        }
+        }*/
     }
 }
