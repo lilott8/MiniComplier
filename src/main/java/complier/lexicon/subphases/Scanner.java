@@ -1,9 +1,8 @@
 package complier.lexicon.subphases;
 
-import java.util.List;
 import java.util.Map;
 
-import datastructures.Token;
+import datastructures.tokenizers.Tokenizer;
 
 /**
  * @created: 9/11/17
@@ -17,7 +16,5 @@ public interface Scanner {
 
     int getNumberOfLines();
 
-    int getNumberOfTokens();
-
-    Map<Integer, List<Token>> getCharacters();
+    Map<Integer, Tokenizer> getTokens();
 }

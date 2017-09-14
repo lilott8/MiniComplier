@@ -28,14 +28,14 @@ public class ScannerTest {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/emptyFile.mc");
         assertEquals(0, scanner.getNumberOfChars());
-        assertEquals(1, scanner.getNumberOfLines());
+        assertEquals(0, scanner.getNumberOfLines());
     }
 
     @Test
     public void multipleLineBreaks() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/multipleLineBreaks.mc");
-        assertEquals(51, scanner.getNumberOfChars());
+        assertEquals(36, scanner.getNumberOfChars());
         assertEquals(10, scanner.getNumberOfLines());
     }
 
@@ -43,15 +43,15 @@ public class ScannerTest {
     public void onlyLineBreaks() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/lineBreaks.mc");
-        assertEquals(9, scanner.getNumberOfChars());
-        assertEquals(10, scanner.getNumberOfLines());
+        assertEquals(0, scanner.getNumberOfChars());
+        assertEquals(9, scanner.getNumberOfLines());
     }
 
     @Test
     public void regularFileFormat() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
-        assertEquals(92, scanner.getNumberOfChars());
+        assertEquals(75, scanner.getNumberOfChars());
         assertEquals(4, scanner.getNumberOfLines());
     }
 
@@ -59,7 +59,7 @@ public class ScannerTest {
     public void toyProgram1() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/toyProgram.mc");
-        assertEquals(75, scanner.getNumberOfChars());
+        assertEquals(60, scanner.getNumberOfChars());
         assertEquals(5, scanner.getNumberOfLines());
     }
 
@@ -67,7 +67,7 @@ public class ScannerTest {
     public void toyProgramWithComments() {
         Scanner scanner = new MCScanner();
         scanner.scanFile("src/main/resources/testcases/toyProgramComment.mc");
-        assertEquals(92, scanner.getNumberOfChars());
+        assertEquals(73, scanner.getNumberOfChars());
         assertEquals(6, scanner.getNumberOfLines());
     }
 }
