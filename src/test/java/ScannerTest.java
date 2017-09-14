@@ -2,8 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cli.CliWrapper;
-import complier.lexicon.subphases.MCScanner;
-import complier.lexicon.subphases.Scanner;
+import complier.lexicon.Lexicon;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,49 +24,49 @@ public class ScannerTest {
 
     @Test
     public void emptyFile() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/emptyFile.mc");
-        assertEquals(0, scanner.getNumberOfChars());
-        assertEquals(0, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/scanner/emptyFile.mc");
+        assertEquals(0, lexicon.getNumberOfChars());
+        assertEquals(0, lexicon.getNumberOfLines());
     }
 
     @Test
     public void multipleLineBreaks() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/multipleLineBreaks.mc");
-        assertEquals(36, scanner.getNumberOfChars());
-        assertEquals(10, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/scanner/multipleLineBreaks.mc");
+        assertEquals(36, lexicon.getNumberOfChars());
+        assertEquals(10, lexicon.getNumberOfLines());
     }
 
     @Test
     public void onlyLineBreaks() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/lineBreaks.mc");
-        assertEquals(0, scanner.getNumberOfChars());
-        assertEquals(9, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/scanner/lineBreaks.mc");
+        assertEquals(0, lexicon.getNumberOfChars());
+        assertEquals(9, lexicon.getNumberOfLines());
     }
 
     @Test
     public void regularFileFormat() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
-        assertEquals(75, scanner.getNumberOfChars());
-        assertEquals(4, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
+        assertEquals(75, lexicon.getNumberOfChars());
+        assertEquals(4, lexicon.getNumberOfLines());
     }
 
     @Test
     public void toyProgram1() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/toyProgram.mc");
-        assertEquals(60, scanner.getNumberOfChars());
-        assertEquals(5, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/toyProgram.mc");
+        assertEquals(60, lexicon.getNumberOfChars());
+        assertEquals(5, lexicon.getNumberOfLines());
     }
 
     @Test
     public void toyProgramWithComments() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/toyProgramComment.mc");
-        assertEquals(73, scanner.getNumberOfChars());
-        assertEquals(6, scanner.getNumberOfLines());
+        Lexicon lexicon = new Lexicon();
+        lexicon.scanFile("src/main/resources/testcases/toyProgramComment.mc");
+        assertEquals(73, lexicon.getNumberOfChars());
+        assertEquals(6, lexicon.getNumberOfLines());
     }
 }

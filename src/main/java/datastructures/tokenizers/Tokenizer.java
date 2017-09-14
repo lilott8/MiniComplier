@@ -1,9 +1,9 @@
 package datastructures.tokenizers;
 
-import java.util.List;
 import java.util.Map;
 
 import datastructures.MCCharacter;
+import datastructures.MCToken;
 
 /**
  * @created: 9/14/17
@@ -23,5 +23,5 @@ public interface Tokenizer {
 
     int getNumberOfChars();
 
-    Map<Integer, List<MCCharacter>> getCharacterMap();
+    Map<Integer, MCToken> getCharacterMap();
 }
