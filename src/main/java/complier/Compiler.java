@@ -3,47 +3,30 @@ package complier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import complier.lexicon.Lexicon;
-import config.CommonConfig;
-import config.ConfigFactory;
+import java.util.ArrayList;
+import java.util.List;
+
+import lexxer.MJLexxer;
+import shared.Phase;
 
 /**
- * @created: 9/11/17
+ * @created: 10/22/17
  * @since: 0.1
  * @project: MiniComplier
  */
 public class Compiler {
 
-    private CommonConfig config;
     public static final Logger logger = LogManager.getLogger(Compiler.class);
 
-    //private Scanner scanner;
-    //private Parser parser;
+    private List<Phase> phases = new ArrayList<>();
 
     public Compiler() {
-        //this.scanner = new MCScanner();
-        //this.parser = new MCParser();
-        this.config = ConfigFactory.getConfig();
+        phases.add(new MJLexxer());
     }
 
     public void compile() {
-        if (this.config.isDebug()) {
-            logger.trace("Preparing to compile: " + this.config.getCompilationFile());
+        for (Phase phase : this.phases) {
+            logger.info("running: " + phase.getPhaseName());
         }
-        Lexicon lexxer = new Lexicon();
-        lexxer.runPhase();
-
-
-        /*this.scanner.scanFile(this.config.getCompilationFile());
-
-        if (this.config.isDebug()) {
-            logger.trace(this.scanner);
-        }
-
-        this.parser.parse(this.scanner);
-
-        if (this.config.isDebug()) {
-            logger.trace(this.parser);
-        }*/
     }
 }
