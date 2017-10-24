@@ -13,12 +13,16 @@ import config.ConfigFactory;
  * @since: 0.1
  * @project: MiniComplier
  */
-abstract class FileHandler {
+public abstract class FileHandler {
 
     private static final Logger logger = LogManager.getLogger();
     protected String fileName;
     protected File fileHandler;
     protected CommonConfig config = ConfigFactory.getConfig();
+    // EOF when printing chars to stdout.
+    public static final int EOF = 65535;
+    // ASCII value for NL
+    public static final int NEW_LINE = 10;
 
     FileHandler(String fileName, Class<? extends FileHandler> clazz) {
         this.config = ConfigFactory.getConfig();

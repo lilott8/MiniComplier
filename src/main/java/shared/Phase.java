@@ -8,4 +8,6 @@ package shared;
 public interface Phase {
 
     String getPhaseName();
+
+    Phase runPhase();
 }

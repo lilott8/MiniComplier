@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -16,6 +17,8 @@ public class MCReader extends FileHandler {
 
     public static final Logger logger = LogManager.getLogger(MCReader.class);
     protected BufferedReader reader;
+    public static final String ENCODING = "UTF-8";
+    public static final int EOF = -128;
 
     public MCReader(String fileName) {
         super(fileName, FileHandler.class);
@@ -28,7 +31,7 @@ public class MCReader extends FileHandler {
                 logger.trace("Opening file to read: " + this.fileName);
             }
             this.fileHandler = new File(this.fileName);
-            this.reader = new BufferedReader(new java.io.FileReader(this.fileHandler));
+            this.reader = new BufferedReader(new FileReader(this.fileHandler));
         } catch (IOException e) {
             logger.error(e);
         }

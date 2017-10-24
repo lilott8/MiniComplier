@@ -14,19 +14,20 @@ import shared.Phase;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class Compiler {
+public class Complier {
 
-    public static final Logger logger = LogManager.getLogger(Compiler.class);
+    public static final Logger logger = LogManager.getLogger(Complier.class);
 
     private List<Phase> phases = new ArrayList<>();
 
-    public Compiler() {
+    public Complier() {
         phases.add(new MJLexxer());
     }
 
     public void compile() {
         for (Phase phase : this.phases) {
             logger.info("running: " + phase.getPhaseName());
+            phase.runPhase();
         }
     }
 }
