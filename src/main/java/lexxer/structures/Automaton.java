@@ -7,7 +7,11 @@ package lexxer.structures;
  */
 public interface Automaton {
 
+    int getId();
+
     boolean isStart();
+
+    String getName();
 
     boolean isEnd();
 
@@ -15,5 +19,5 @@ public interface Automaton {
 
     boolean isValid();
 
-
+    String getUUID();
 }

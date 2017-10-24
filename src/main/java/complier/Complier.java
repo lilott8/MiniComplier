@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import lexxer.MJLexxer;
+import lexxer.MCLexxer;
 import shared.Phase;
 
 /**
@@ -21,7 +21,7 @@ public class Complier {
     private List<Phase> phases = new ArrayList<>();
 
     public Complier() {
-        phases.add(new MJLexxer());
+        phases.add(new MCLexxer());
     }
 
     public void compile() {
