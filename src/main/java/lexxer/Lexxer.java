@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import lexxer.structures.Automaton;
 import lexxer.structures.MCCharacter;
-import lexxer.structures.MJEdge;
+import lexxer.structures.automaton.Automaton;
+import lexxer.structures.edges.Edge;
 import shared.Phase;
 
 /**
@@ -30,11 +30,11 @@ public abstract class Lexxer implements Phase {
 
     protected List<MCCharacter> characters = new ArrayList<>();
 
-    protected DirectedGraph<Automaton, MJEdge> lexxer = new SimpleDirectedGraph<>(MJEdge.class);
+    protected DirectedGraph<Automaton, Edge> lexxer = new SimpleDirectedGraph<>(Edge.class);
 
     private static final Logger logger = LogManager.getLogger(Lexxer.class);
 
-    private int VERTEX_ID = 0;
+    private int VERTEX_ID = 1;
 
     @Override
     public String getPhaseName() {
@@ -54,15 +54,15 @@ public abstract class Lexxer implements Phase {
     public void printGraphviz() {
         IntegerNameProvider<Automaton> p1 = new IntegerNameProvider<>();
         StringNameProvider<Automaton> p2 = new StringNameProvider<>();
-        EdgeNameProvider<MJEdge> edgeProvider = new EdgeNameProvider<MJEdge>() {
+        EdgeNameProvider<Edge> edgeProvider = new EdgeNameProvider<Edge>() {
             @Override
-            public String getEdgeName(MJEdge mjEdge) {
+            public String getEdgeName(Edge mjEdge) {
                 return mjEdge.toString();
             }
         };
-        DOTExporter<Automaton, MJEdge> expoerter = new DOTExporter<>(p1, p2, edgeProvider);
+        DOTExporter<Automaton, Edge> exporter = new DOTExporter<>(p1, p2, edgeProvider);
         try {
-            expoerter.export(new FileWriter("/Users/jason/Desktop/graph.dot"), this.lexxer);
+            exporter.export(new FileWriter("/Users/jason/Desktop/graph.dot"), this.lexxer);
         } catch (IOException e) {
             logger.error(e);
         }

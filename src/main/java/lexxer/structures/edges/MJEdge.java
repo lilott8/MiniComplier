@@ -1,9 +1,11 @@
-package lexxer.structures;
+package lexxer.structures.edges;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jgrapht.graph.DefaultEdge;
 
 import java.util.UUID;
+
+import lexxer.structures.automaton.Automaton;
 
 /**
  * @created: 10/23/17
@@ -16,8 +18,6 @@ public class MJEdge extends DefaultEdge {
     private final boolean epsilon;
     private static final long serialVersionUID = 1L;
     private final String uuid = UUID.randomUUID().toString();
-
-    public static final String EPSILON = "";
 
     public MJEdge(String edge, boolean epsilon) {
         super();
@@ -41,10 +41,6 @@ public class MJEdge extends DefaultEdge {
         return (Automaton) super.getTarget();
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s: transition: %s\t epsilon: %b", super.toString(), this.transition, this.epsilon);
-    }
 
     public String getTransition() {
         return transition;
