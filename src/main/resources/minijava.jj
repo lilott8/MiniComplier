@@ -1,0 +1,112 @@
+/* BUILD FROM: https://github.com/javacc/javacc/blob/master/examples/JavaGrammars/1.5/Java1.5.jj */
+
+options {
+    CHOICE_AMBIGUITY_CHECK = 2;
+    OTHER_AMBIGUITY_CHECK = 1;
+    DEBUG_PARSER = 1;
+    DEBUG_PARSER = false;
+    DEBUG_LOOKAHEAD = false;
+    DEBUG_TOKEN_MANAGER = false;
+    ERROR_REPORTING = true;
+    JAVA_UNICODE_ESCAPE = true;
+    UNICODE_INPUT = false;
+    IGNORE_CASE = false;
+    USER_TOKEN_MANAGER = false;
+    USER_CHAR_STREAM = false;
+    BUILD_PARSER = false;
+    BUILD_TOKEN_MANAGER = true;
+    SANITY_CHECK = true;
+    FORCE_LA_CHECK = false;
+}
+
+PARSER_BEGIN(MCLexxer)
+
+public class MCLexxer {}
+
+PARSER_END(MCLexxer)
+
+/* WHITE SPACE */
+
+SKIP:
+{
+    " "
+|   "\t"
+|   "\n"
+|   "\r"
+|   "\f"
+}
+
+/* RESERVED WORDS AND LITERALS */
+
+TOKEN :
+{
+    <BOOLEAN: "boolean">
+|   <BREAK: "break">
+|   <CLASS: "class">
+|   <CONTINUE: "continue">
+|   <DO: "do">
+|   <ELSE: "else">
+|   <EXTENDS: "extends">
+|   <FALSE: "false">
+|   <FOR: "for">
+|   <IF: "if">
+|   <INT: "int">
+|   <NEW: "new">
+|   <PRIVATE: "private">
+|   <PROTECTED: "protected">
+|   <PUBLIC: "public">
+|   <RETURN: "return">
+|   <STATIC: "static">
+|   <STRING: "String">
+|   <SUPER: "super">
+|   <THIS: "this">
+|   <TRUE: "true">
+|   <VOID: "void">
+|   <WHILE: "while">
+|   <DOTLENGTH: ".length">
+}
+
+/* IDENTIFIERS */
+
+TOKEN :
+{
+    <IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>|"_")*>
+|   <INT: "0" | (["1"-"9"](<DIGIT>)*)>
+|   <LETTER: ["a"-"z"] | ["A"-"Z"]>
+|   <DIGIT: ["0"-"9"]>
+}
+
+/* LOGIC, SCOPING, ARRAYS, AND OPERATORS */
+TOKEN : {
+    <LPAREN: "(">
+|   <RPAREN: ")">
+|   <LBRACKET: "[">
+|   <RBRACKET: "]">
+|   <LBRACE: "{">
+|   <RBRACE: "}">
+|   <ADD: "+">
+|   <AND: "&&">
+|   <ASSIGN: "=">
+|   <BANG: "!">
+|   <COMMA: ",">
+|   <DOT: ".">
+|   <LESSTHAN: "<">
+|   <GREATERTHAN: ">">
+|   <MINUS: "-">
+|   <MULTIPLY: "*">
+|   <DIVIDE: "/">
+|   <SEMICOLON: ";">
+|   <OR: "||">
+}
+
+Program Program() : {
+    MainClass mainClass;
+    ClassDecl currentClass;
+    ArrayList<ClassDecl> classes = new ArrayList<ClassDecl>();
+} {
+    mainClass = MainClass() (
+        currentClass = ClassDeclaration()
+        { classes.add(currentClass); }
+    )* <EOF>
+    { return new Program(mainClass, new NodeList<ClassDecl>(classes)); }
+}

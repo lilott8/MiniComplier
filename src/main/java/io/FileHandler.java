@@ -15,7 +15,7 @@ import config.ConfigFactory;
  */
 public abstract class FileHandler {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(FileHandler.class);
     protected String fileName;
     protected File fileHandler;
     protected CommonConfig config = ConfigFactory.getConfig();
@@ -25,7 +25,6 @@ public abstract class FileHandler {
     public static final int NEW_LINE = 10;
 
     FileHandler(String fileName, Class<? extends FileHandler> clazz) {
-        this.config = ConfigFactory.getConfig();
         this.fileName = fileName;
     }
 
