@@ -61,7 +61,7 @@ public class CliWrapper {
 
         // File(s) to compile
         String desc = "Compile the source file(s)" +
-                "\nUsage: -c /path/to/file_to_compile.phi";
+                "\nUsage: -c /path/to/file_to_compile.[bs | mj]";
         options.addOption(Option.builder("c").longOpt("compile")
                 .desc(desc).hasArgs().required().type(ArrayList.class)
                 .argName("compile").build());
@@ -79,6 +79,8 @@ public class CliWrapper {
         options.addOption(Option.builder("o").longOpt("output")
                 .desc(desc).type(String.class).hasArg().required(false)
                 .argName("output").build());
+
+
         return options;
     }
 }

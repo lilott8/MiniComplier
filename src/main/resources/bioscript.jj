@@ -1,0 +1,76 @@
+/*
+The grammar file definition:
+    https://javacc.org/javaccgrm
+*/
+
+options {
+    STATIC = false;
+    DEBUG_PARSER = true;
+    DEBUG_LOOKAHEAD = true;
+    DEBUG_TOKEN_MANAGER = true;
+    ERROR_REPORTING = true;
+    JAVA_UNICODE_ESCAPE = true;
+}
+
+PARSER_BEGIN(BioScriptParser)
+
+import java.util.ArrayList;
+
+public class BioScriptParser {}
+
+PARSER_END(BioScriptParser)
+
+/* WHITE SPACE */
+
+SKIP:
+{
+    " "
+|   "\t"
+|   "\n"
+|   "\r"
+|   "\f"
+}
+
+TOKEN :
+{
+    <MIX: "mix">
+|   <SPLIT: "split">
+|   <DRAIN: "drain">
+|   <HEAT: "heat">
+|   <FOR: "for">
+|   <AT: "at">
+|   <DETECT: "detect">
+|   <REPEAT: "repeat">
+|   <IF: "if">
+|   <ELSE: "else">
+}
+
+/* IDENTIFIERS */
+
+TOKEN :
+{
+    <IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>|"_")*>
+|   <INT_SCALAR: "0" | (["1"-"9"](<DIGIT>)*)>
+|   <LETTER: ["a"-"z"] | ["A"-"Z"]>
+|   <DIGIT: ["0"-"9"]>
+}
+
+/* LOGIC, SCOPING, ARRAYS, AND OPERATORS */
+TOKEN : {
+    <LPAREN: "(">
+|   <RPAREN: ")">
+|   <LBRACKET: "[">
+|   <RBRACKET: "]">
+|   <LBRACE: "{">
+|   <RBRACE: "}">
+|   <DOT: ".">
+|   <ADD: "+">
+|   <AND: "&&">
+|   <ASSIGN: "=">
+|   <BANG: "!">
+|   <LESSTHAN: "<">
+|   <GREATERTHAN: ">">
+|   <MINUS: "-">
+|   <OR: "||">
+}
+

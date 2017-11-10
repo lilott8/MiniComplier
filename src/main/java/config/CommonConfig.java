@@ -1,6 +1,6 @@
 package config;
 
-import java.util.List;
+import shared.Language;
 
 /**
  * @created: 9/11/17
@@ -14,4 +14,6 @@ public interface CommonConfig {
     String getCompilationFile();
 
     boolean isDebug();
+
+    Language getLanguage();
 }

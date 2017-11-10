@@ -12,11 +12,13 @@ options {
     JAVA_UNICODE_ESCAPE = true;
 }
 
-PARSER_BEGIN(MCLexxer)
+PARSER_BEGIN(MJParser)
 
-public class MCLexxer {}
+import java.util.ArrayList;
 
-PARSER_END(MCLexxer)
+public class MJParser {}
+
+PARSER_END(MJParser)
 
 /* WHITE SPACE */
 
@@ -44,6 +46,7 @@ TOKEN :
 |   <FOR: "for">
 |   <IF: "if">
 |   <INT: "int">
+|   <MAIN: "main">
 |   <NEW: "new">
 |   <PRIVATE: "private">
 |   <PROTECTED: "protected">
@@ -65,7 +68,7 @@ TOKEN :
 TOKEN :
 {
     <IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>|"_")*>
-|   <INT: "0" | (["1"-"9"](<DIGIT>)*)>
+|   <INT_SCALAR: "0" | (["1"-"9"](<DIGIT>)*)>
 |   <LETTER: ["a"-"z"] | ["A"-"Z"]>
 |   <DIGIT: ["0"-"9"]>
 }
@@ -95,7 +98,7 @@ TOKEN : {
 
 Program Program() : {
     MainClass mainClass;
-    ClassDecl currentClass;
+    ClassDeclaration currentClass;
     List<ClassDeclaration> classes = new ArrayList<ClassDeclaration>();
 } {
     mainClass = MainClass() (
@@ -162,6 +165,22 @@ MethodDeclaration MethodDeclaration() : {
         new NodeList<VariableDeclaration>(vars), new NodeList(body), returnStatement); }
 }
 
+NodeList<VariableDeclaration> FormalList() : {
+	Type type;
+	Token name;
+	ArrayList<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
+} {
+    (
+    	type = Type() name = <IDENTIFIER>
+    	{ vars.add(new VariableDeclaration(VariableDeclaration.Kind.FORMAL, type, name.image)); }
+     	(
+     		<COMMA> type = Type() name = <IDENTIFIER>
+     		{ vars.add(new VariableDeclaration(VariableDeclaration.Kind.FORMAL, type, name.image)); }
+     	)*
+    )?
+    { return new NodeList<VariableDeclaration>(vars); }
+}
+
 Type Type() : { }
 {
     ( <INT> (<LBRACKET><RBRACKET> {return IntArrayType.instance;})? {return IntegerType.instance;} )
@@ -220,5 +239,169 @@ Statement Statement() : {
                 return new ArrayAssign(id.image, index, assign);
             }
         }
+    )
+}
+
+
+Expression Expression() : {
+    Expression left, right;
+} {
+    left = LessThanTerm() (
+        LOOKAHEAD(2)
+        <AND> right = LessThanTerm()
+        { left = new And(left, right); }
+    )*
+    {return left;}
+}
+
+Expression LessThanTerm() : {
+    Expression left, right;
+} {
+    left = GreaterThanTerm() (
+        LOOKAHEAD(2)
+        <LESSTHAN> right = GreaterThanTerm()
+        { left = new LessThanTerm(left, right); }
+    )*
+    {return left;}
+}
+
+Expression GreaterThanTerm() : {
+    Expression left, right;
+} {
+    left = AdditionTerm() (
+        LOOKAHEAD(2)
+        <GREATERTHAN> right = AdditionTerm()
+        {left = new GreaterThanTerm(left, right); }
+    )*
+    {return left;}
+}
+
+Expression AdditionTerm() : {
+    Expression left, right;
+} {
+    left = DivideTerm() (
+        LOOKAHEAD(2)
+        <ADD> right = DivideTerm()
+        {left = new Addition(left, right);}
+        | <MINUS> right = DivideTerm()
+        {left = new Subtraction(left, right);}
+    )*
+    {return left;}
+}
+
+Expression DivideTerm() : {
+    Expression left, right;
+} {
+    left = MultiplyTerm() (
+        LOOKAHEAD(2)
+        <DIVIDE> right = MultiplyTerm()
+        {left = new Division(left, right);}
+    )*
+    {return left;}
+}
+
+Expression MultiplyTerm() : {
+    Expression left, right;
+} {
+    left = NotTerm() (
+        LOOKAHEAD(2)
+        <MULTIPLY> right = NotTerm()
+        {left = new Multiplication(left, right);}
+    )*
+    {return left;}
+}
+
+Expression NotTerm() : {
+    Expression expression;
+} {
+    LOOKAHEAD(2)
+    ( <BANG> expression = NotTerm() { return new Negation(expression);} )
+    | ( expression = DotTerm() {return expression;} )
+}
+
+Expression DotTerm() : {
+    Expression left, right;
+} {
+    left = ArrayTerm()
+    (
+        (<DOTLENGTH>{return new ArrayLength(left);})
+        | (<DOT> left = MethodInvoke(left) {left = right;})
+    )*
+    {return left;}
+}
+
+Expression MethodInvoke(Expression left) : {
+    Expression arg;
+    List<Expression> args = new ArrayList<Expression>();
+} {
+    (
+        { Token name; }
+        name = <IDENTIFIER>
+        <LPAREN>
+        (
+            (arg = Expression() {args.add(arg);})
+            (<COMMA> (arg = Expression() {args.add(arg);}))*
+        )
+        <RPAREN>
+        {return new Invoke(left, name.image, new NodeList<Expression>(args));}
+    )
+}
+
+Expression ArrayTerm() : { } {
+    {
+        Expression term;
+        Expression index = null;
+    }
+    (
+        LOOKAHEAD(1)
+        <LBRACKET> index = Expression() <RBRACKET>
+    )?
+    {
+        if (index == null) {
+            return term;
+        } else {
+            return new ArrayLookUp(term, index);
+        }
+    }
+}
+
+Expression TerminalExpression() : {
+    Token name;
+    Expression term;
+} {
+    name = <INT_SCALAR>
+    {return new IntegerLiteral(String.valueOf(name.image));}
+
+    | name = <IDENTIFIER>
+    {return new IdentifierExpression(id.image);}
+
+    | <NEW> term = InstantiateObject()
+    {return term;}
+
+    | <LPAREN> term = Expression() <RPAREN>
+    { return term; }
+
+    | <THIS>
+    {return new Instance();}
+
+    | <TRUE>
+    { return new BooleanLiteral(true); }
+
+    | <FALSE>
+    { return new BooleanLiteral(false); }
+}
+
+Expression InstantiateObject() : { }
+{
+    (
+     	{ Expression expression; }
+        <INT> <LBRACKET> (expression = Expression()) <RBRACKET>
+        { return new NewArray(exp); }
+    )
+
+    | (
+        {Token name;}
+        name = <IDENTIFIER> <LPAREN> <RPAREN>
+        {return new NewObject(name.image);}
     )
 }
