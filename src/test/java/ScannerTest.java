@@ -2,10 +2,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import cli.CliWrapper;
-import complier.scanner.MCScanner;
-import complier.scanner.Scanner;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @created: 9/12/17
@@ -24,20 +20,26 @@ public class ScannerTest {
     }
 
     @Test
-    public void emptyFileSuccess() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/emptyFile.mc");
-        assertEquals(0, scanner.getNumberOfChars());
-        assertEquals(0, scanner.getNumberOfLines());
+    public void emptyFile() {
     }
 
     @Test
-    public void scanFileSuccess() {
-        Scanner scanner = new MCScanner();
-        scanner.scanFile("src/main/resources/testcases/scanner/nonEmptyFile.mc");
-        assertEquals(85, scanner.getNumberOfChars());
-        assertEquals(4, scanner.getNumberOfLines());
+    public void multipleLineBreaks() {
+    }
 
+    @Test
+    public void onlyLineBreaks() {
+    }
 
+    @Test
+    public void regularFileFormat() {
+    }
+
+    @Test
+    public void toyProgram1() {
+    }
+
+    @Test
+    public void toyProgramWithComments() {
     }
 }

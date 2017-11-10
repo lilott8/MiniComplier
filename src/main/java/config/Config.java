@@ -4,24 +4,20 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @created: 9/11/17
  * @since: 0.1
  * @project: MiniComplier
  */
-class Config implements CommonConfig {
+public class Config implements CommonConfig {
 
     private String outputDir = "output/";
-    private List<String> compile = new ArrayList<>();
+    private final String compile;
     private boolean debug = false;
     public static final Logger logger = LogManager.getLogger(Config.class);
 
     Config(CommandLine cmd) {
-        this.compile.addAll(Arrays.asList(cmd.getOptionValues("compile")));
+        this.compile = cmd.getOptionValue("compile");
 
         if (cmd.hasOption("debug")) {
             this.debug = true;
@@ -39,7 +35,7 @@ class Config implements CommonConfig {
     }
 
     @Override
-    public List<String> getFilesForCompilation() {
+    public String getCompilationFile() {
         return this.compile;
     }
 

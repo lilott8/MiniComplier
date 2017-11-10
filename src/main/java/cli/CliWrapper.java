@@ -6,6 +6,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +51,7 @@ public class CliWrapper {
         CommonConfig config = ConfigFactory.buildConfig(cmd);
 
         // add any initializing statements derived from the command line here.
-        if (config.getFilesForCompilation().size() == 0) {
+        if (StringUtils.isEmpty(config.getCompilationFile())) {
             throw new Exception("We have no valid files for input");
         }
     }
@@ -60,7 +61,7 @@ public class CliWrapper {
 
         // File(s) to compile
         String desc = "Compile the source file(s)" +
-                "\nUsage: -c /path/to/file_to_compile.phi";
+                "\nUsage: -c /path/to/file_to_compile.[bs | mj]";
         options.addOption(Option.builder("c").longOpt("compile")
                 .desc(desc).hasArgs().required().type(ArrayList.class)
                 .argName("compile").build());
@@ -78,6 +79,8 @@ public class CliWrapper {
         options.addOption(Option.builder("o").longOpt("output")
                 .desc(desc).type(String.class).hasArg().required(false)
                 .argName("output").build());
+
+
         return options;
     }
 }
