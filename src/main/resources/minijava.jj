@@ -47,6 +47,7 @@ TOKEN :
 |   <NEW: "new">
 |   <PRIVATE: "private">
 |   <PROTECTED: "protected">
+|   <PRINT: "print">
 |   <PUBLIC: "public">
 |   <RETURN: "return">
 |   <STATIC: "static">
@@ -149,9 +150,9 @@ MethodDeclaration MethodDeclaration() : {
     List<VariableDeclaration> variables = new ArrayList<VariableDeclaration>();
 } {
 
-    <PUBLIC> | <PRIVATE> | <PROTECTED> type = Type() name = <IDENTIFIER> <LPAREN> args = FormalList() <RPAREN> <LBRACE>
+    (<PUBLIC> | <PRIVATE> | <PROTECTED>) type = Type() name = <IDENTIFIER> <LPAREN> args = FormalList() <RPAREN> <LBRACE>
     (LOOKAHEAD(2)
-        ({VariableDeclaration var;} var = VariableDeclaration(VariableDeclaration.Kind.LOCLA) {variables.add(var);})
+        ({VariableDeclaration var;} var = VariableDeclaration(VariableDeclaration.Kind.LOCAL) {variables.add(var);})
         | ( {Statement statement;} statement = Statement() {body.add(statement);})
     )*
     <RETURN> {Expression returnStatement;} (returnStatement = Expression()) <SEMICOLON>
@@ -161,3 +162,63 @@ MethodDeclaration MethodDeclaration() : {
         new NodeList<VariableDeclaration>(vars), new NodeList(body), returnStatement); }
 }
 
+Type Type() : { }
+{
+    ( <INT> (<LBRACKET><RBRACKET> {return IntArrayType.instance;})? {return IntegerType.instance;} )
+|   ( <BOOLEAN> {return BooleanType.instance;})
+|   ( <STRING> {return new ObjectType("String");})
+|   ( {Token name; } name = <IDENTIFIER> { return new ObjectType(name.image);} )
+}
+
+Statement Statement() : {
+    Statement statement;
+    Statement statementLocal;
+    Expression expression;
+    Expression branch;
+} {
+    (
+        {List<Statement> statements = new ArrayList<Statements>();}
+        <LBRACE> ((statementLocal = Statement()) {statements.add(statementLocal);})* <RBRACE>
+        { return new Block(new NodeList<Statement>(statements));}
+    )
+|   (
+        {Statement conditionTrue; Statement conditionFalse; List<Statement> elseIfConditions = new ArrayList<Statement>();}
+        <IF> <LPAREN> (test = Expression()) <RPAREN> <LBRACE>
+            (conditionTrue = Statement())
+        <RBRACE>
+        <ELSE> <LBRACE>
+            (conditionFalse = Statement())
+        <RBRACE>
+
+        {return new Branch(test, conditionTrue, conditionFalse);}
+    )
+|   (
+        {Statement body;}
+        <WHILE> <LPAREN> (test = Expression()) <RPAREN> <LBRACE>
+            (body = Statement())
+        <RBRACE>
+        {return new While(test, body); }
+    )
+|   (
+        {Statement body;}
+        <DO> <LBRACE>
+            (body = Statement())
+        <RBRACE> <WHILE> <LPAREN> (test = Expression()) <RPAREN> <SEMICOLON>
+        {return new DoWhile(test, body); }
+    )
+|   (
+        <PRINT> <LPAREN>(expression = Expression()) <RPAREN> <SEMICOLON>
+        {return new Print(expression);}
+    )
+|   (
+        {Token name; Expression index = null; Expression assign; }
+        (name = <IDENTIFIER>)(<LBRACKET>(index = Expression()) <RBRACKET>) ? <ASSIGN> (assign = Expression()) <SEMICOLON>
+        {
+            if (index == null) {
+                return new Assign(name.image, assign);
+            } else {
+                return new ArrayAssign(id.image, index, assign);
+            }
+        }
+    )
+}
