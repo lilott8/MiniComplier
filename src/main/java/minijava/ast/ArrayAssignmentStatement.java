@@ -9,9 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> Identifier() f1 -> "[" f2 -> Expression() f3 -> "]" f4 -> "=" f5 ->
- * Expression() f6 -> ";"
+ * Grammar production: f0 -> Identifier() f1 -> <LSQPAREN> f2 -> Expression() f3 -> <RSQPAREN> f4 ->
+ * <ASSIGN> f5 -> Expression() f6 -> <SEMICOLON>
  */
 public class ArrayAssignmentStatement implements Node {
     public Identifier f0;

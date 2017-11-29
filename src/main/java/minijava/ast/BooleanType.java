@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "boolean"
+ * Grammar production: f0 -> <BOOLEAN>
  */
 public class BooleanType implements Node {
     public NodeToken f0;

@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> Identifier() f1 -> "=" f2 -> Expression() f3 -> ";"
+ * Grammar production: f0 -> Identifier() f1 -> <ASSIGN> f2 -> Expression() f3 -> <SEMICOLON>
  */
 public class AssignmentStatement implements Node {
     public Identifier f0;

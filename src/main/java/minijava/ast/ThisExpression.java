@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "this"
+ * Grammar production: f0 -> <THIS>
  */
 public class ThisExpression implements Node {
     public NodeToken f0;

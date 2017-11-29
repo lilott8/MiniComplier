@@ -9,6 +9,7 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Grammar production: f0 -> Type() f1 -> Identifier()
  */

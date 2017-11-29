@@ -9,11 +9,12 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "public" f1 -> Type() f2 -> Identifier() f3 -> "(" f4 -> (
- * FormalParameterList() )? f5 -> ")" f6 -> "{" f7 -> ( Comment() )* f8 -> (
- * VarDeclarationUnordered() )* f9 -> ( Statement() )* f10 -> "return" f11 -> Expression() f12 ->
- * ";" f13 -> "}"
+ * Grammar production: f0 -> <PUBLIC> f1 -> Type() f2 -> Identifier() f3 -> <LPAREN> f4 -> (
+ * FormalParameterList() )? f5 -> <RPAREN> f6 -> <LBRACE> f7 -> ( Comment() )* f8 -> (
+ * VarDeclarationUnordered() )* f9 -> ( Statement() )* f10 -> <RETURN> f11 -> Expression() f12 ->
+ * <SEMICOLON> f13 -> <RBRACE>
  */
 public class MethodDeclarationUnordered implements Node {
     public NodeToken f0;

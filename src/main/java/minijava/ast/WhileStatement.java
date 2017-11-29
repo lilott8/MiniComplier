@@ -9,8 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "while" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> Statement()
+ * Grammar production: f0 -> <WHILE> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 ->
+ * Statement()
  */
 public class WhileStatement implements Node {
     public NodeToken f0;

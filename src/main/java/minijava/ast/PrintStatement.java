@@ -9,8 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "System.out.println" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> ";"
+ * Grammar production: f0 -> <PRINT> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 ->
+ * <SEMICOLON>
  */
 public class PrintStatement implements Node {
     public NodeToken f0;

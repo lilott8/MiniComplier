@@ -9,9 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> PrimaryExpression() f1 -> "." f2 -> Identifier() f3 -> "(" f4 -> (
- * ExpressionList() )? f5 -> ")"
+ * Grammar production: f0 -> PrimaryExpression() f1 -> <DOT> f2 -> Identifier() f3 -> <LPAREN> f4 ->
+ * ( ExpressionList() )? f5 -> <RPAREN>
  */
 public class MessageSend implements Node {
     public PrimaryExpression f0;

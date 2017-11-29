@@ -9,6 +9,7 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Grammar production: f0 -> <SINGLE_LINE_COMMENT> | <FORMAL_COMMENT> | <MULTI_LINE_COMMENT>
  */

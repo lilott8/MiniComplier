@@ -12,13 +12,12 @@ options {
     JAVA_UNICODE_ESCAPE = true;
 }
 
+
 PARSER_BEGIN(BioScriptParser)
-
-import java.util.ArrayList;
-
-public class BioScriptParser {}
-
+  package bioscript.parser;
+  public class BioScriptParser {}
 PARSER_END(BioScriptParser)
+
 
 /* WHITE SPACE */
 
@@ -49,17 +48,12 @@ TOKEN :
 |   <STATIONARY: "stationary">
 |   <MANIFEST: "manifest">
 |   <TIMES: "times" >
+|   <WITH: "with">
+|   <ON: "on">
+|   <INTO: "into">
+|   <SOMETHING: "something">
 }
 
-/* IDENTIFIERS */
-
-TOKEN :
-{
-    <IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>|"_")*>
-|   <INT_SCALAR: "0" | (["1"-"9"](<DIGIT>)*)>
-|   <LETTER: ["a"-"z"] | ["A"-"Z"]>
-|   <DIGIT: ["0"-"9"]>
-}
 
 /* LOGIC, SCOPING, ARRAYS, AND OPERATORS */
 TOKEN : {
@@ -79,19 +73,27 @@ TOKEN : {
 |   <LESSTHANEQUAL: "<=">
 |   <GREATERTHAN: ">">
 |   <GREATERTHANEQUAL: ">=">
+|   <EQUALITY: "==">
 |   <MINUS: "-">
 |   <MULTIPLY: "*" >
 |   <OR: "||">
-|   <STATIONARY: "stationary">
-|   <MANIFEST: "manifest">
 |   <INSTRUCTIONS: "instructions">
 |   <TRUE: "true" >
 |   <FALSE: "false" >
 }
 
+
+/* IDENTIFIERS */
+TOKEN :
+{
+    //<IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>|"_")*>
+    <INT_SCALAR: "0" | (["1"-"9"](<DIGIT>)*)>
+    //|   <LETTER: ["a"-"z"] | ["A"-"Z"]>
+    //|   <DIGIT: ["0"-"9"]>
+}
 TOKEN : /* LITERALS */
 {
-  < INTEGER_LITERAL: ( ["1"-"9"] (["0"-"9"])* | "0" ) >
+  <INTEGER_LITERAL: ( ["1"-"9"] (["0"-"9"])* | "0" ) >
 }
 
 TOKEN : /* IDENTIFIERS */
@@ -140,31 +142,87 @@ TOKEN : /* IDENTIFIERS */
 void Program() :
 {}
 {
-    <STATIONARY> Stationary()
-    <MANIFEST> Manifest()
+    Stationary()
+    Manifest()
     <INSTRUCTIONS>
     Instruction()
+}
+
+void Stationary() :
+{}
+{
+    <STATIONARY> Identifier()
+}
+
+void Manifest() :
+{}
+{
+    <MANIFEST> Identifier()
 }
 
 void Statement() :
 {}
 {
     Instruction()
-    | BranchStatement()
-    | WhileStatement()
+    |   LOOKAHEAD(BranchStatement())
+            BranchStatement()
+    |   LOOKAHEAD(<REPEAT> IntegerLiteral())
+            WhileStatement()
 }
 
 void Instruction() :
 {}
 {
-    Mix()
-    |   Split()
-    |   Drain()
-    |   Heat()
-    |   Detect()
-    |   Repeat()
-    |   Assignment()
+    LOOKAHEAD(<MIX> PrimaryExpression())
+    MixStatement()
+    |   SplitStatement()
+    |   DrainStatement()
+    |   HeatStatement()
+    |   DetectStatement()
+    |   RepeatStatement()
+    |   AssignmentStatement()
 }
+
+void MixStatement() :
+{}
+{
+    <MIX> PrimaryExpression() <WITH> PrimaryExpression()
+    |   <FOR> IntegerLiteral()
+}
+
+void SplitStatement() :
+{}
+{
+    <SPLIT> PrimaryExpression() <INTO> PrimaryExpression()
+}
+
+void DrainStatement() :
+{}
+{
+    <DRAIN> PrimaryExpression()
+}
+
+void HeatStatement() :
+{}
+{
+    <HEAT> PrimaryExpression() <AT> IntegerLiteral()
+    |   LOOKAHEAD(<FOR> <INTEGER_LITERAL>)
+            <FOR> IntegerLiteral()
+}
+
+void DetectStatement() :
+{}
+{
+    <DETECT> Identifier() <ON> PrimaryExpression()
+    |   <FOR> <INTEGER_LITERAL>
+}
+
+void RepeatStatement() :
+{}
+{
+    WhileStatement()
+}
+
 
 void AssignmentStatement() :
 {}
@@ -194,9 +252,7 @@ void PrimaryExpression() :
     |   TrueLiteral()
     |   FalseLiteral()
     |   Identifier()
-    |   AllocationExpression()
-    |   BracketExpression()
-    |   BooleanExpression()
+    |   ParenthesisExpression()
 }
 
 void IntegerLiteral() :
@@ -255,54 +311,77 @@ void Expression() :
 void AndExpression() :
 {}
 {
-  PrimaryExpression() "&&" PrimaryExpression()
+  PrimaryExpression() <AND> PrimaryExpression()
 }
 
-/* This needs to be exploded to and, or, not, <=, etc */
-void CompareExpression() :
+void LessThanExpression() :
 {}
 {
-  PrimaryExpression() "<" PrimaryExpression()
+  PrimaryExpression() <LESSTHAN> PrimaryExpression()
+}
+
+void LessThanEqualExpression() :
+{}
+{
+  PrimaryExpression() <LESSTHANEQUAL> PrimaryExpression()
+}
+
+void GreaterThanExpression() :
+{}
+{
+  PrimaryExpression() <GREATERTHAN> PrimaryExpression()
+}
+
+void GreaterThanEqualExpression() :
+{}
+{
+  PrimaryExpression() <GREATERTHANEQUAL> PrimaryExpression()
+}
+
+void NotEqualExpression() :
+{}
+{
+  PrimaryExpression() <NOTEQUAL> PrimaryExpression()
+}
+
+void EqualityExpression() :
+{}
+{
+  PrimaryExpression() <OR> PrimaryExpression()
+}
+
+void OrExpression() :
+{}
+{
+  PrimaryExpression() <LESSTHAN> PrimaryExpression()
 }
 
 void PlusExpression() :
 {}
 {
-  PrimaryExpression() "+" PrimaryExpression()
+  PrimaryExpression() <ADD> PrimaryExpression()
 }
 
 void MinusExpression() :
 {}
 {
-  PrimaryExpression() "-" PrimaryExpression()
+  PrimaryExpression() <MINUS> PrimaryExpression()
 }
 
 void TimesExpression() :
 {}
 {
-  PrimaryExpression() "*" PrimaryExpression()
+  PrimaryExpression() <MULTIPLY> PrimaryExpression()
 }
 
 void NotExpression() :
 {}
 {
-  "!" Expression()
+  <BANG> Expression()
 }
 
-void BracketExpression() :
+void ParenthesisExpression() :
 {}
 {
-  "(" Expression() ")"
-}
-
-void BooleanExpression() :
-{}
-{
-    AndExpression()
-    |   NotExpression()
-    |   LessThanExpression()
-    |   LessThanEqualToExpression()
-    |   GreaterThanExpresion()
-    |   GreaterThanEqualToExpression()
-    |   EqualityExpression()
+  <LPAREN> Expression() <RPAREN>
 }

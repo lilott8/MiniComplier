@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> PrimaryExpression() f1 -> "+" f2 -> PrimaryExpression()
+ * Grammar production: f0 -> PrimaryExpression() f1 -> <PLUS> f2 -> PrimaryExpression()
  */
 public class PlusExpression implements Node {
     public PrimaryExpression f0;

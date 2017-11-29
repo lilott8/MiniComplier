@@ -62,119 +62,151 @@ public interface MJParserConstants {
     /**
      * RegularExpression Id.
      */
-    int LT = 18;
+    int EQUALITY = 18;
     /**
      * RegularExpression Id.
      */
-    int PLUS = 19;
+    int NOTEQUAL = 19;
     /**
      * RegularExpression Id.
      */
-    int MINUS = 20;
+    int LT = 20;
     /**
      * RegularExpression Id.
      */
-    int AND = 21;
+    int LTE = 21;
     /**
      * RegularExpression Id.
      */
-    int NOT = 22;
+    int GT = 22;
     /**
      * RegularExpression Id.
      */
-    int BOOLEAN = 23;
+    int GTE = 23;
     /**
      * RegularExpression Id.
      */
-    int CLASS = 24;
+    int PLUS = 24;
     /**
      * RegularExpression Id.
      */
-    int INTERFACE = 25;
+    int MINUS = 25;
     /**
      * RegularExpression Id.
      */
-    int ELSE = 26;
+    int MULTIPLY = 26;
     /**
      * RegularExpression Id.
      */
-    int EXTENDS = 27;
+    int AND = 27;
     /**
      * RegularExpression Id.
      */
-    int FALSE = 28;
+    int NOT = 28;
     /**
      * RegularExpression Id.
      */
-    int IF = 29;
+    int BOOLEAN = 29;
     /**
      * RegularExpression Id.
      */
-    int WHILE = 30;
+    int CLASS = 30;
     /**
      * RegularExpression Id.
      */
-    int INTEGER = 31;
+    int INTERFACE = 31;
     /**
      * RegularExpression Id.
      */
-    int LENGTH = 32;
+    int ELSE = 32;
     /**
      * RegularExpression Id.
      */
-    int MAIN = 33;
+    int ELSE_IF = 33;
     /**
      * RegularExpression Id.
      */
-    int NEW = 34;
+    int EXTENDS = 34;
     /**
      * RegularExpression Id.
      */
-    int PUBLIC = 35;
+    int FALSE = 35;
     /**
      * RegularExpression Id.
      */
-    int RETURN = 36;
+    int IF = 36;
     /**
      * RegularExpression Id.
      */
-    int STATIC = 37;
+    int WHILE = 37;
     /**
      * RegularExpression Id.
      */
-    int STRING = 38;
+    int INTEGER = 38;
     /**
      * RegularExpression Id.
      */
-    int THIS = 39;
+    int LENGTH = 39;
     /**
      * RegularExpression Id.
      */
-    int TRUE = 40;
+    int MAIN = 40;
     /**
      * RegularExpression Id.
      */
-    int PRINT = 41;
+    int NEW = 41;
     /**
      * RegularExpression Id.
      */
-    int VOID = 42;
+    int PUBLIC = 42;
     /**
      * RegularExpression Id.
      */
-    int INTEGER_LITERAL = 43;
+    int RETURN = 43;
     /**
      * RegularExpression Id.
      */
-    int IDENTIFIER = 44;
+    int STATIC = 44;
     /**
      * RegularExpression Id.
      */
-    int LETTER = 45;
+    int STRING = 45;
     /**
      * RegularExpression Id.
      */
-    int DIGIT = 46;
+    int THIS = 46;
+    /**
+     * RegularExpression Id.
+     */
+    int TRUE = 47;
+    /**
+     * RegularExpression Id.
+     */
+    int PRINT = 48;
+    /**
+     * RegularExpression Id.
+     */
+    int VOID = 49;
+    /**
+     * RegularExpression Id.
+     */
+    int COMMA = 50;
+    /**
+     * RegularExpression Id.
+     */
+    int INTEGER_LITERAL = 51;
+    /**
+     * RegularExpression Id.
+     */
+    int IDENTIFIER = 52;
+    /**
+     * RegularExpression Id.
+     */
+    int LETTER = 53;
+    /**
+     * RegularExpression Id.
+     */
+    int DIGIT = 54;
 
     /**
      * Lexical state.
@@ -203,15 +235,22 @@ public interface MJParserConstants {
             "\";\"",
             "\".\"",
             "\"=\"",
+            "\"==\"",
+            "\"!=\"",
             "\"<\"",
+            "\"<=\"",
+            "\">\"",
+            "\">=\"",
             "\"+\"",
             "\"-\"",
+            "\"*\"",
             "\"&&\"",
             "\"!\"",
             "\"boolean\"",
             "\"class\"",
             "\"interface\"",
             "\"else\"",
+            "\"else if\"",
             "\"extends\"",
             "\"false\"",
             "\"if\"",
@@ -228,12 +267,11 @@ public interface MJParserConstants {
             "\"true\"",
             "\"System.out.println\"",
             "\"void\"",
+            "\",\"",
             "<INTEGER_LITERAL>",
             "<IDENTIFIER>",
             "<LETTER>",
             "<DIGIT>",
-            "\",\"",
-            "\"*\"",
     };
 
 }

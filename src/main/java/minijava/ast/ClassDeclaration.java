@@ -9,9 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> ( Comment() )* f4 -> (
- * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> "}"
+ * Grammar production: f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> ( Comment() )* f4 -> (
+ * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> <RBRACE>
  */
 public class ClassDeclaration implements Node {
     public NodeToken f0;

@@ -14,7 +14,7 @@ import minijava.ast.ArrayType;
 import minijava.ast.AssignmentStatement;
 import minijava.ast.Block;
 import minijava.ast.BooleanType;
-import minijava.ast.BracketExpression;
+import minijava.ast.BranchStatement;
 import minijava.ast.ClassDeclaration;
 import minijava.ast.ClassExtendsDeclaration;
 import minijava.ast.Comment;
@@ -28,7 +28,6 @@ import minijava.ast.FormalParameterList;
 import minijava.ast.FormalParameterRest;
 import minijava.ast.Goal;
 import minijava.ast.Identifier;
-import minijava.ast.IfStatement;
 import minijava.ast.IntegerLiteral;
 import minijava.ast.IntegerType;
 import minijava.ast.MainClass;
@@ -41,6 +40,7 @@ import minijava.ast.NodeOptional;
 import minijava.ast.NodeSequence;
 import minijava.ast.NodeToken;
 import minijava.ast.NotExpression;
+import minijava.ast.ParanthesisExpression;
 import minijava.ast.PlusExpression;
 import minijava.ast.PrimaryExpression;
 import minijava.ast.PrintStatement;
@@ -83,9 +83,10 @@ public interface GJNoArguVisitor<R> {
     public R visit(Goal n);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> "public" f4 -> "static" f5 -> "void" f6 ->
-     * "main" f7 -> "(" f8 -> "String" f9 -> "[" f10 -> "]" f11 -> Identifier() f12 -> ")" f13 ->
-     * "{" f14 -> PrintStatement() f15 -> "}" f16 -> "}"
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> <PUBLIC> f4 -> <STATIC> f5 -> <VOID> f6
+     * -> <MAIN> f7 -> <LPAREN> f8 -> <STRING> f9 -> <LSQPAREN> f10 -> <RSQPAREN> f11 ->
+     * Identifier() f12 -> <RPAREN> f13 -> <LBRACE> f14 -> PrintStatement() f15 -> <RBRACE> f16 ->
+     * <RBRACE>
      */
     public R visit(MainClass n);
 
@@ -95,27 +96,27 @@ public interface GJNoArguVisitor<R> {
     public R visit(TypeDeclarationUnordered n);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> ( Comment() )* f4 -> (
-     * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> "}"
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> ( Comment() )* f4 -> (
+     * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> <RBRACE>
      */
     public R visit(ClassDeclaration n);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "extends" f3 -> Identifier() f4 -> "{" f5 -> (
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <EXTENDS> f3 -> Identifier() f4 -> <LBRACE> f5 -> (
      * Comment() )* f6 -> ( VarDeclarationUnordered() )* f7 -> ( MethodDeclarationUnordered() )* f8
-     * -> "}"
+     * -> <RBRACE>
      */
     public R visit(ClassExtendsDeclaration n);
 
     /**
-     * f0 -> Type() f1 -> Identifier() f2 -> ";"
+     * f0 -> Type() f1 -> Identifier() f2 -> <SEMICOLON>
      */
     public R visit(VarDeclarationUnordered n);
 
     /**
-     * f0 -> "public" f1 -> Type() f2 -> Identifier() f3 -> "(" f4 -> ( FormalParameterList() )? f5
-     * -> ")" f6 -> "{" f7 -> ( Comment() )* f8 -> ( VarDeclarationUnordered() )* f9 -> (
-     * Statement() )* f10 -> "return" f11 -> Expression() f12 -> ";" f13 -> "}"
+     * f0 -> <PUBLIC> f1 -> Type() f2 -> Identifier() f3 -> <LPAREN> f4 -> ( FormalParameterList()
+     * )? f5 -> <RPAREN> f6 -> <LBRACE> f7 -> ( Comment() )* f8 -> ( VarDeclarationUnordered() )* f9
+     * -> ( Statement() )* f10 -> <RETURN> f11 -> Expression() f12 -> <SEMICOLON> f13 -> <RBRACE>
      */
     public R visit(MethodDeclarationUnordered n);
 
@@ -130,7 +131,7 @@ public interface GJNoArguVisitor<R> {
     public R visit(FormalParameter n);
 
     /**
-     * f0 -> "," f1 -> FormalParameter()
+     * f0 -> <COMMA> f1 -> FormalParameter()
      */
     public R visit(FormalParameterRest n);
 
@@ -140,55 +141,55 @@ public interface GJNoArguVisitor<R> {
     public R visit(Type n);
 
     /**
-     * f0 -> "int" f1 -> "[" f2 -> "]"
+     * f0 -> <INTEGER> f1 -> <LSQPAREN> f2 -> <RSQPAREN>
      */
     public R visit(ArrayType n);
 
     /**
-     * f0 -> "boolean"
+     * f0 -> <BOOLEAN>
      */
     public R visit(BooleanType n);
 
     /**
-     * f0 -> "int"
+     * f0 -> <INTEGER>
      */
     public R visit(IntegerType n);
 
     /**
-     * f0 -> Block() | AssignmentStatement() | ArrayAssignmentStatement() | IfStatement() |
+     * f0 -> Block() | AssignmentStatement() | ArrayAssignmentStatement() | BranchStatement() |
      * WhileStatement() | PrintStatement()
      */
     public R visit(Statement n);
 
     /**
-     * f0 -> "{" f1 -> ( Statement() )* f2 -> "}"
+     * f0 -> <LBRACE> f1 -> ( Statement() )* f2 -> <RBRACE>
      */
     public R visit(Block n);
 
     /**
-     * f0 -> Identifier() f1 -> "=" f2 -> Expression() f3 -> ";"
+     * f0 -> Identifier() f1 -> <ASSIGN> f2 -> Expression() f3 -> <SEMICOLON>
      */
     public R visit(AssignmentStatement n);
 
     /**
-     * f0 -> Identifier() f1 -> "[" f2 -> Expression() f3 -> "]" f4 -> "=" f5 -> Expression() f6 ->
-     * ";"
+     * f0 -> Identifier() f1 -> <LSQPAREN> f2 -> Expression() f3 -> <RSQPAREN> f4 -> <ASSIGN> f5 ->
+     * Expression() f6 -> <SEMICOLON>
      */
     public R visit(ArrayAssignmentStatement n);
 
     /**
-     * f0 -> "if" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> Statement() f5 -> "else" f6 ->
-     * Statement()
+     * f0 -> <IF> <LPAREN> Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE_IF> <LPAREN>
+     * Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE> <LBRACE> Statement() <RBRACE>
      */
-    public R visit(IfStatement n);
+    public R visit(BranchStatement n);
 
     /**
-     * f0 -> "while" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> Statement()
+     * f0 -> <WHILE> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 -> Statement()
      */
     public R visit(WhileStatement n);
 
     /**
-     * f0 -> "System.out.println" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> ";"
+     * f0 -> <PRINT> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 -> <SEMICOLON>
      */
     public R visit(PrintStatement n);
 
@@ -199,43 +200,43 @@ public interface GJNoArguVisitor<R> {
     public R visit(Expression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "&&" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <AND> f2 -> PrimaryExpression()
      */
     public R visit(AndExpression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "<" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <LT> f2 -> PrimaryExpression()
      */
     public R visit(CompareExpression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "+" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <PLUS> f2 -> PrimaryExpression()
      */
     public R visit(PlusExpression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "-" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <MINUS> f2 -> PrimaryExpression()
      */
     public R visit(MinusExpression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "*" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <MULTIPLY> f2 -> PrimaryExpression()
      */
     public R visit(TimesExpression n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "[" f2 -> PrimaryExpression() f3 -> "]"
+     * f0 -> PrimaryExpression() f1 -> <LSQPAREN> f2 -> PrimaryExpression() f3 -> <RSQPAREN>
      */
     public R visit(ArrayLookup n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "." f2 -> "length"
+     * f0 -> PrimaryExpression() f1 -> <DOT> f2 -> <LENGTH>
      */
     public R visit(ArrayLength n);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "." f2 -> Identifier() f3 -> "(" f4 -> ( ExpressionList() )?
-     * f5 -> ")"
+     * f0 -> PrimaryExpression() f1 -> <DOT> f2 -> Identifier() f3 -> <LPAREN> f4 -> (
+     * ExpressionList() )? f5 -> <RPAREN>
      */
     public R visit(MessageSend n);
 
@@ -245,13 +246,14 @@ public interface GJNoArguVisitor<R> {
     public R visit(ExpressionList n);
 
     /**
-     * f0 -> "," f1 -> Expression()
+     * f0 -> <COMMA> f1 -> Expression()
      */
     public R visit(ExpressionRest n);
 
     /**
      * f0 -> IntegerLiteral() | TrueLiteral() | FalseLiteral() | Identifier() | ThisExpression() |
-     * ArrayAllocationExpression() | AllocationExpression() | NotExpression() | BracketExpression()
+     * ArrayAllocationExpression() | AllocationExpression() | NotExpression() |
+     * ParanthesisExpression()
      */
     public R visit(PrimaryExpression n);
 
@@ -261,12 +263,12 @@ public interface GJNoArguVisitor<R> {
     public R visit(IntegerLiteral n);
 
     /**
-     * f0 -> "true"
+     * f0 -> <TRUE>
      */
     public R visit(TrueLiteral n);
 
     /**
-     * f0 -> "false"
+     * f0 -> <FALSE>
      */
     public R visit(FalseLiteral n);
 
@@ -276,29 +278,29 @@ public interface GJNoArguVisitor<R> {
     public R visit(Identifier n);
 
     /**
-     * f0 -> "this"
+     * f0 -> <THIS>
      */
     public R visit(ThisExpression n);
 
     /**
-     * f0 -> "new" f1 -> "int" f2 -> "[" f3 -> Expression() f4 -> "]"
+     * f0 -> <NEW> f1 -> <INTEGER> f2 -> <LSQPAREN> f3 -> Expression() f4 -> <RSQPAREN>
      */
     public R visit(ArrayAllocationExpression n);
 
     /**
-     * f0 -> "new" f1 -> Identifier() f2 -> "(" f3 -> ")"
+     * f0 -> <NEW> f1 -> Identifier() f2 -> <LPAREN> f3 -> <RPAREN>
      */
     public R visit(AllocationExpression n);
 
     /**
-     * f0 -> "!" f1 -> Expression()
+     * f0 -> <NOT> f1 -> Expression()
      */
     public R visit(NotExpression n);
 
     /**
-     * f0 -> "(" f1 -> Expression() f2 -> ")"
+     * f0 -> <LPAREN> f1 -> Expression() f2 -> <RPAREN>
      */
-    public R visit(BracketExpression n);
+    public R visit(ParanthesisExpression n);
 
     /**
      * f0 -> <SINGLE_LINE_COMMENT> | <FORMAL_COMMENT> | <MULTI_LINE_COMMENT>

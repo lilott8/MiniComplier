@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> PrimaryExpression() f1 -> "." f2 -> "length"
+ * Grammar production: f0 -> PrimaryExpression() f1 -> <DOT> f2 -> <LENGTH>
  */
 public class ArrayLength implements Node {
     public PrimaryExpression f0;

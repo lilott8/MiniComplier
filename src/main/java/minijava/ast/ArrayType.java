@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "int" f1 -> "[" f2 -> "]"
+ * Grammar production: f0 -> <INTEGER> f1 -> <LSQPAREN> f2 -> <RSQPAREN>
  */
 public class ArrayType implements Node {
     public NodeToken f0;

@@ -9,6 +9,7 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Grammar production: f0 -> MainClass() f1 -> ( TypeDeclarationUnordered() )* f2 -> <EOF>
  */

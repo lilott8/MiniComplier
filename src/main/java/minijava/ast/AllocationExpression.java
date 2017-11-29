@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "new" f1 -> Identifier() f2 -> "(" f3 -> ")"
+ * Grammar production: f0 -> <NEW> f1 -> Identifier() f2 -> <LPAREN> f3 -> <RPAREN>
  */
 public class AllocationExpression implements Node {
     public NodeToken f0;

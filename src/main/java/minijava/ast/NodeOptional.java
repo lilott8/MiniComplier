@@ -9,6 +9,7 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Represents an grammar optional node, e.g. ( A )? or [ A ]
  */

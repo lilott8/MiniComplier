@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "false"
+ * Grammar production: f0 -> <FALSE>
  */
 public class FalseLiteral implements Node {
     public NodeToken f0;

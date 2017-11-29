@@ -9,10 +9,12 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> "public" f4 -> "static" f5
- * -> "void" f6 -> "main" f7 -> "(" f8 -> "String" f9 -> "[" f10 -> "]" f11 -> Identifier() f12 ->
- * ")" f13 -> "{" f14 -> PrintStatement() f15 -> "}" f16 -> "}"
+ * Grammar production: f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> <PUBLIC> f4 -> <STATIC>
+ * f5 -> <VOID> f6 -> <MAIN> f7 -> <LPAREN> f8 -> <STRING> f9 -> <LSQPAREN> f10 -> <RSQPAREN> f11 ->
+ * Identifier() f12 -> <RPAREN> f13 -> <LBRACE> f14 -> PrintStatement() f15 -> <RBRACE> f16 ->
+ * <RBRACE>
  */
 public class MainClass implements Node {
     public NodeToken f0;

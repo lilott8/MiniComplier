@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "{" f1 -> ( Statement() )* f2 -> "}"
+ * Grammar production: f0 -> <LBRACE> f1 -> ( Statement() )* f2 -> <RBRACE>
  */
 public class Block implements Node {
     public NodeToken f0;

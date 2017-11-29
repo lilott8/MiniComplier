@@ -1,6 +1,10 @@
 options {
-  STATIC = false;
-  JAVA_UNICODE_ESCAPE = true;
+      STATIC = false;
+      DEBUG_PARSER = true;
+      DEBUG_LOOKAHEAD = true;
+      DEBUG_TOKEN_MANAGER = true;
+      ERROR_REPORTING = true;
+      JAVA_UNICODE_ESCAPE = true;
 }
 
 PARSER_BEGIN(MJParser)
@@ -206,7 +210,7 @@ void Type() :
 {}
 {
     LOOKAHEAD(3)
-    ArrayType()
+        ArrayType()
     |   BooleanType()
     |   IntegerType()
     |   Identifier()
@@ -235,9 +239,9 @@ void Statement() :
 {
     Block()
     |   LOOKAHEAD(2)
-        AssignmentStatement()
+            AssignmentStatement()
     |   LOOKAHEAD(2)
-        ArrayAssignmentStatement()
+            ArrayAssignmentStatement()
     |   BranchStatement()
     |   WhileStatement()
     |   PrintStatement()
@@ -284,31 +288,23 @@ void PrintStatement() :
 void Expression() :
 {}
 {
-  LOOKAHEAD( PrimaryExpression() <AND> )
-  AndExpression()
-|
-  LOOKAHEAD( PrimaryExpression() <LT> )
-  CompareExpression()
-|
-  LOOKAHEAD( PrimaryExpression() <PLUS> )
-  PlusExpression()
-|
-  LOOKAHEAD( PrimaryExpression() <MINUS> )
-  MinusExpression()
-|
-  LOOKAHEAD( PrimaryExpression() <MULTIPLY> )
-  TimesExpression()
-|
-  LOOKAHEAD( PrimaryExpression() <RSQPAREN> )
-  ArrayLookup()
-|
-  LOOKAHEAD( PrimaryExpression() <DOT> <LENGTH> )
-  ArrayLength()
-|
-  LOOKAHEAD( PrimaryExpression() <DOT> Identifier() <LPAREN> )
-  MessageSend()
-|
-  PrimaryExpression()
+    LOOKAHEAD( PrimaryExpression() <AND> )
+        AndExpression()
+    |   LOOKAHEAD( PrimaryExpression() <LT> )
+            CompareExpression()
+    |   LOOKAHEAD( PrimaryExpression() <PLUS> )
+            PlusExpression()
+    |   LOOKAHEAD( PrimaryExpression() <MINUS> )
+            MinusExpression()
+    |   LOOKAHEAD( PrimaryExpression() <MULTIPLY> )
+            TimesExpression()
+    |   LOOKAHEAD( PrimaryExpression() <RSQPAREN> )
+            ArrayLookup()
+    |   LOOKAHEAD( PrimaryExpression() <DOT> <LENGTH> )
+            ArrayLength()
+    |   LOOKAHEAD( PrimaryExpression() <DOT> Identifier() <LPAREN> )
+            MessageSend()
+    |   PrimaryExpression()
 }
 
 void AndExpression() :
@@ -381,7 +377,7 @@ void PrimaryExpression() :
     |   Identifier()
     |   ThisExpression()
     |   LOOKAHEAD(3)
-        ArrayAllocationExpression()
+            ArrayAllocationExpression()
     |   AllocationExpression()
     |   NotExpression()
     |   ParanthesisExpression()

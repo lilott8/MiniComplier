@@ -9,8 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> PrimaryExpression() f1 -> "[" f2 -> PrimaryExpression() f3 -> "]"
+ * Grammar production: f0 -> PrimaryExpression() f1 -> <LSQPAREN> f2 -> PrimaryExpression() f3 ->
+ * <RSQPAREN>
  */
 public class ArrayLookup implements Node {
     public PrimaryExpression f0;

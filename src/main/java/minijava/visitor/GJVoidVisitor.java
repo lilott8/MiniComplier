@@ -14,7 +14,7 @@ import minijava.ast.ArrayType;
 import minijava.ast.AssignmentStatement;
 import minijava.ast.Block;
 import minijava.ast.BooleanType;
-import minijava.ast.BracketExpression;
+import minijava.ast.BranchStatement;
 import minijava.ast.ClassDeclaration;
 import minijava.ast.ClassExtendsDeclaration;
 import minijava.ast.Comment;
@@ -28,7 +28,6 @@ import minijava.ast.FormalParameterList;
 import minijava.ast.FormalParameterRest;
 import minijava.ast.Goal;
 import minijava.ast.Identifier;
-import minijava.ast.IfStatement;
 import minijava.ast.IntegerLiteral;
 import minijava.ast.IntegerType;
 import minijava.ast.MainClass;
@@ -41,6 +40,7 @@ import minijava.ast.NodeOptional;
 import minijava.ast.NodeSequence;
 import minijava.ast.NodeToken;
 import minijava.ast.NotExpression;
+import minijava.ast.ParanthesisExpression;
 import minijava.ast.PlusExpression;
 import minijava.ast.PrimaryExpression;
 import minijava.ast.PrintStatement;
@@ -83,9 +83,10 @@ public interface GJVoidVisitor<A> {
     public void visit(Goal n, A argu);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> "public" f4 -> "static" f5 -> "void" f6 ->
-     * "main" f7 -> "(" f8 -> "String" f9 -> "[" f10 -> "]" f11 -> Identifier() f12 -> ")" f13 ->
-     * "{" f14 -> PrintStatement() f15 -> "}" f16 -> "}"
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> <PUBLIC> f4 -> <STATIC> f5 -> <VOID> f6
+     * -> <MAIN> f7 -> <LPAREN> f8 -> <STRING> f9 -> <LSQPAREN> f10 -> <RSQPAREN> f11 ->
+     * Identifier() f12 -> <RPAREN> f13 -> <LBRACE> f14 -> PrintStatement() f15 -> <RBRACE> f16 ->
+     * <RBRACE>
      */
     public void visit(MainClass n, A argu);
 
@@ -95,27 +96,27 @@ public interface GJVoidVisitor<A> {
     public void visit(TypeDeclarationUnordered n, A argu);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "{" f3 -> ( Comment() )* f4 -> (
-     * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> "}"
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <LBRACE> f3 -> ( Comment() )* f4 -> (
+     * VarDeclarationUnordered() )* f5 -> ( MethodDeclarationUnordered() )* f6 -> <RBRACE>
      */
     public void visit(ClassDeclaration n, A argu);
 
     /**
-     * f0 -> "class" f1 -> Identifier() f2 -> "extends" f3 -> Identifier() f4 -> "{" f5 -> (
+     * f0 -> <CLASS> f1 -> Identifier() f2 -> <EXTENDS> f3 -> Identifier() f4 -> <LBRACE> f5 -> (
      * Comment() )* f6 -> ( VarDeclarationUnordered() )* f7 -> ( MethodDeclarationUnordered() )* f8
-     * -> "}"
+     * -> <RBRACE>
      */
     public void visit(ClassExtendsDeclaration n, A argu);
 
     /**
-     * f0 -> Type() f1 -> Identifier() f2 -> ";"
+     * f0 -> Type() f1 -> Identifier() f2 -> <SEMICOLON>
      */
     public void visit(VarDeclarationUnordered n, A argu);
 
     /**
-     * f0 -> "public" f1 -> Type() f2 -> Identifier() f3 -> "(" f4 -> ( FormalParameterList() )? f5
-     * -> ")" f6 -> "{" f7 -> ( Comment() )* f8 -> ( VarDeclarationUnordered() )* f9 -> (
-     * Statement() )* f10 -> "return" f11 -> Expression() f12 -> ";" f13 -> "}"
+     * f0 -> <PUBLIC> f1 -> Type() f2 -> Identifier() f3 -> <LPAREN> f4 -> ( FormalParameterList()
+     * )? f5 -> <RPAREN> f6 -> <LBRACE> f7 -> ( Comment() )* f8 -> ( VarDeclarationUnordered() )* f9
+     * -> ( Statement() )* f10 -> <RETURN> f11 -> Expression() f12 -> <SEMICOLON> f13 -> <RBRACE>
      */
     public void visit(MethodDeclarationUnordered n, A argu);
 
@@ -130,7 +131,7 @@ public interface GJVoidVisitor<A> {
     public void visit(FormalParameter n, A argu);
 
     /**
-     * f0 -> "," f1 -> FormalParameter()
+     * f0 -> <COMMA> f1 -> FormalParameter()
      */
     public void visit(FormalParameterRest n, A argu);
 
@@ -140,55 +141,55 @@ public interface GJVoidVisitor<A> {
     public void visit(Type n, A argu);
 
     /**
-     * f0 -> "int" f1 -> "[" f2 -> "]"
+     * f0 -> <INTEGER> f1 -> <LSQPAREN> f2 -> <RSQPAREN>
      */
     public void visit(ArrayType n, A argu);
 
     /**
-     * f0 -> "boolean"
+     * f0 -> <BOOLEAN>
      */
     public void visit(BooleanType n, A argu);
 
     /**
-     * f0 -> "int"
+     * f0 -> <INTEGER>
      */
     public void visit(IntegerType n, A argu);
 
     /**
-     * f0 -> Block() | AssignmentStatement() | ArrayAssignmentStatement() | IfStatement() |
+     * f0 -> Block() | AssignmentStatement() | ArrayAssignmentStatement() | BranchStatement() |
      * WhileStatement() | PrintStatement()
      */
     public void visit(Statement n, A argu);
 
     /**
-     * f0 -> "{" f1 -> ( Statement() )* f2 -> "}"
+     * f0 -> <LBRACE> f1 -> ( Statement() )* f2 -> <RBRACE>
      */
     public void visit(Block n, A argu);
 
     /**
-     * f0 -> Identifier() f1 -> "=" f2 -> Expression() f3 -> ";"
+     * f0 -> Identifier() f1 -> <ASSIGN> f2 -> Expression() f3 -> <SEMICOLON>
      */
     public void visit(AssignmentStatement n, A argu);
 
     /**
-     * f0 -> Identifier() f1 -> "[" f2 -> Expression() f3 -> "]" f4 -> "=" f5 -> Expression() f6 ->
-     * ";"
+     * f0 -> Identifier() f1 -> <LSQPAREN> f2 -> Expression() f3 -> <RSQPAREN> f4 -> <ASSIGN> f5 ->
+     * Expression() f6 -> <SEMICOLON>
      */
     public void visit(ArrayAssignmentStatement n, A argu);
 
     /**
-     * f0 -> "if" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> Statement() f5 -> "else" f6 ->
-     * Statement()
+     * f0 -> <IF> <LPAREN> Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE_IF> <LPAREN>
+     * Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE> <LBRACE> Statement() <RBRACE>
      */
-    public void visit(IfStatement n, A argu);
+    public void visit(BranchStatement n, A argu);
 
     /**
-     * f0 -> "while" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> Statement()
+     * f0 -> <WHILE> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 -> Statement()
      */
     public void visit(WhileStatement n, A argu);
 
     /**
-     * f0 -> "System.out.println" f1 -> "(" f2 -> Expression() f3 -> ")" f4 -> ";"
+     * f0 -> <PRINT> f1 -> <LPAREN> f2 -> Expression() f3 -> <RPAREN> f4 -> <SEMICOLON>
      */
     public void visit(PrintStatement n, A argu);
 
@@ -199,43 +200,43 @@ public interface GJVoidVisitor<A> {
     public void visit(Expression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "&&" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <AND> f2 -> PrimaryExpression()
      */
     public void visit(AndExpression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "<" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <LT> f2 -> PrimaryExpression()
      */
     public void visit(CompareExpression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "+" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <PLUS> f2 -> PrimaryExpression()
      */
     public void visit(PlusExpression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "-" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <MINUS> f2 -> PrimaryExpression()
      */
     public void visit(MinusExpression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "*" f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression() f1 -> <MULTIPLY> f2 -> PrimaryExpression()
      */
     public void visit(TimesExpression n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "[" f2 -> PrimaryExpression() f3 -> "]"
+     * f0 -> PrimaryExpression() f1 -> <LSQPAREN> f2 -> PrimaryExpression() f3 -> <RSQPAREN>
      */
     public void visit(ArrayLookup n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "." f2 -> "length"
+     * f0 -> PrimaryExpression() f1 -> <DOT> f2 -> <LENGTH>
      */
     public void visit(ArrayLength n, A argu);
 
     /**
-     * f0 -> PrimaryExpression() f1 -> "." f2 -> Identifier() f3 -> "(" f4 -> ( ExpressionList() )?
-     * f5 -> ")"
+     * f0 -> PrimaryExpression() f1 -> <DOT> f2 -> Identifier() f3 -> <LPAREN> f4 -> (
+     * ExpressionList() )? f5 -> <RPAREN>
      */
     public void visit(MessageSend n, A argu);
 
@@ -245,13 +246,14 @@ public interface GJVoidVisitor<A> {
     public void visit(ExpressionList n, A argu);
 
     /**
-     * f0 -> "," f1 -> Expression()
+     * f0 -> <COMMA> f1 -> Expression()
      */
     public void visit(ExpressionRest n, A argu);
 
     /**
      * f0 -> IntegerLiteral() | TrueLiteral() | FalseLiteral() | Identifier() | ThisExpression() |
-     * ArrayAllocationExpression() | AllocationExpression() | NotExpression() | BracketExpression()
+     * ArrayAllocationExpression() | AllocationExpression() | NotExpression() |
+     * ParanthesisExpression()
      */
     public void visit(PrimaryExpression n, A argu);
 
@@ -261,12 +263,12 @@ public interface GJVoidVisitor<A> {
     public void visit(IntegerLiteral n, A argu);
 
     /**
-     * f0 -> "true"
+     * f0 -> <TRUE>
      */
     public void visit(TrueLiteral n, A argu);
 
     /**
-     * f0 -> "false"
+     * f0 -> <FALSE>
      */
     public void visit(FalseLiteral n, A argu);
 
@@ -276,29 +278,29 @@ public interface GJVoidVisitor<A> {
     public void visit(Identifier n, A argu);
 
     /**
-     * f0 -> "this"
+     * f0 -> <THIS>
      */
     public void visit(ThisExpression n, A argu);
 
     /**
-     * f0 -> "new" f1 -> "int" f2 -> "[" f3 -> Expression() f4 -> "]"
+     * f0 -> <NEW> f1 -> <INTEGER> f2 -> <LSQPAREN> f3 -> Expression() f4 -> <RSQPAREN>
      */
     public void visit(ArrayAllocationExpression n, A argu);
 
     /**
-     * f0 -> "new" f1 -> Identifier() f2 -> "(" f3 -> ")"
+     * f0 -> <NEW> f1 -> Identifier() f2 -> <LPAREN> f3 -> <RPAREN>
      */
     public void visit(AllocationExpression n, A argu);
 
     /**
-     * f0 -> "!" f1 -> Expression()
+     * f0 -> <NOT> f1 -> Expression()
      */
     public void visit(NotExpression n, A argu);
 
     /**
-     * f0 -> "(" f1 -> Expression() f2 -> ")"
+     * f0 -> <LPAREN> f1 -> Expression() f2 -> <RPAREN>
      */
-    public void visit(BracketExpression n, A argu);
+    public void visit(ParanthesisExpression n, A argu);
 
     /**
      * f0 -> <SINGLE_LINE_COMMENT> | <FORMAL_COMMENT> | <MULTI_LINE_COMMENT>

@@ -9,6 +9,7 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Represents a grammar choice, e.g. ( A | B )
  */

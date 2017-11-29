@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "!" f1 -> Expression()
+ * Grammar production: f0 -> <NOT> f1 -> Expression()
  */
 public class NotExpression implements Node {
     public NodeToken f0;

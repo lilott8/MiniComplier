@@ -9,8 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "new" f1 -> "int" f2 -> "[" f3 -> Expression() f4 -> "]"
+ * Grammar production: f0 -> <NEW> f1 -> <INTEGER> f2 -> <LSQPAREN> f3 -> Expression() f4 ->
+ * <RSQPAREN>
  */
 public class ArrayAllocationExpression implements Node {
     public NodeToken f0;

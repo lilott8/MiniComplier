@@ -9,10 +9,11 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "class" f1 -> Identifier() f2 -> "extends" f3 -> Identifier() f4 -> "{"
- * f5 -> ( Comment() )* f6 -> ( VarDeclarationUnordered() )* f7 -> ( MethodDeclarationUnordered() )*
- * f8 -> "}"
+ * Grammar production: f0 -> <CLASS> f1 -> Identifier() f2 -> <EXTENDS> f3 -> Identifier() f4 ->
+ * <LBRACE> f5 -> ( Comment() )* f6 -> ( VarDeclarationUnordered() )* f7 -> (
+ * MethodDeclarationUnordered() )* f8 -> <RBRACE>
  */
 public class ClassExtendsDeclaration implements Node {
     public NodeToken f0;

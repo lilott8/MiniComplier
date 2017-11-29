@@ -9,8 +9,9 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
- * Grammar production: f0 -> "," f1 -> FormalParameter()
+ * Grammar production: f0 -> <COMMA> f1 -> FormalParameter()
  */
 public class FormalParameterRest implements Node {
     public NodeToken f0;

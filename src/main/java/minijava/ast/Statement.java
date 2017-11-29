@@ -9,9 +9,10 @@ import minijava.visitor.GJVisitor;
 import minijava.visitor.GJVoidVisitor;
 import minijava.visitor.Visitor;
 
+
 /**
  * Grammar production: f0 -> Block() | AssignmentStatement() | ArrayAssignmentStatement() |
- * IfStatement() | WhileStatement() | PrintStatement()
+ * BranchStatement() | WhileStatement() | PrintStatement()
  */
 public class Statement implements Node {
     public NodeChoice f0;
