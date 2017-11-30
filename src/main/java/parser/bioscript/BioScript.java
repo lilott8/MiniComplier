@@ -5,21 +5,23 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import config.Config;
 import config.ConfigFactory;
+import parser.ParseStrategy;
 import parser.bioscript.parser.BSParser;
-import shared.Strategy;
 
 /**
  * @created: 11/29/17
  * @since: 0.1
  * @project: MiniComplier
  */
-public class BioScript implements Strategy {
+public class BioScript implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(BioScript.class);
     private Config config = ConfigFactory.getConfig();
+    BSParser parser;
 
     public BioScript() {
     }
@@ -31,6 +33,8 @@ public class BioScript implements Strategy {
 
     @Override
     public void run() throws IOException {
-        BSParser parser = new BSParser(new FileInputStream(config.getInputFile()));
+        InputStream input = new FileInputStream(config.getInputFile());
+        this.parser = new BSParser(input);
+        input.close();
     }
 }

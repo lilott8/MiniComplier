@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import config.Config;
 import config.ConfigFactory;
@@ -28,6 +29,8 @@ public class MiniJava implements Strategy {
 
     @Override
     public void run() throws IOException {
-        MJParser parser = new MJParser(new FileInputStream(config.getInputFile()));
+        InputStream input = new FileInputStream(config.getInputFile());
+        MJParser parser = new MJParser(input);
+        input.close();
     }
 }
