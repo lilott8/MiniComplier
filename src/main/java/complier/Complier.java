@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import config.ConfigFactory;
 import parser.Parser;
 import shared.Phase;
 
@@ -18,15 +17,9 @@ import shared.Phase;
 public class Complier {
 
     public static final Logger logger = LogManager.getLogger(Complier.class);
-
     private List<Phase> phases = new ArrayList<>();
 
     public Complier() {
-        switch (ConfigFactory.getConfig().getLanguage()) {
-            case MINIJAVA:
-            default:
-
-        }
         phases.add(new Parser());
     }
 

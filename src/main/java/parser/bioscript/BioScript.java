@@ -11,6 +11,9 @@ import config.Config;
 import config.ConfigFactory;
 import parser.ParseStrategy;
 import parser.bioscript.parser.BSParser;
+import parser.bioscript.parser.ParseException;
+import parser.bioscript.typchecker.BSTypeChecker;
+import shared.Strategy;
 
 /**
  * @created: 11/29/17
@@ -22,19 +25,31 @@ public class BioScript implements ParseStrategy {
     public static final Logger logger = LogManager.getLogger(BioScript.class);
     private Config config = ConfigFactory.getConfig();
     BSParser parser;
+    private Strategy typeChecker;
 
     public BioScript() {
     }
 
     @Override
     public String getName() {
-        return "BioScript Strategy";
+        return "BioScript Parse Strategy";
     }
 
     @Override
-    public void run() throws IOException {
-        InputStream input = new FileInputStream(config.getInputFile());
-        this.parser = new BSParser(input);
-        input.close();
+    public Strategy run() {
+        try (InputStream input = new FileInputStream(config.getInputFile())) {
+            this.parser = new BSParser(input);
+            input.close();
+            // We run the type checking inside the parse.
+            try {
+                typeChecker = new BSTypeChecker(this.parser.Program()).run();
+            } catch (ParseException e) {
+                logger.error(e);
+            }
+        } catch (IOException ioe) {
+            logger.fatal("Couldn't load the file: " + config.getInputFile());
+        }
+        return this;
     }
+
 }
