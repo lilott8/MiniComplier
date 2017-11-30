@@ -5,5 +5,5 @@ package symboltable;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class BioScriptSymbolTable {
+public class MethodBinding implements Binding {
 }

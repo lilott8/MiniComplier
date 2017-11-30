@@ -5,6 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 import parser.minijava.ast.MJProgram;
 import shared.Strategy;
+import symboltable.Binding;
+import symboltable.SymbolTable;
 
 /**
  * @created: 11/30/17
@@ -16,8 +18,8 @@ public class MJTypeChecker implements Strategy {
     public static final Logger logger = LogManager.getLogger(MJTypeChecker.class);
     private MJProgram program;
 
-    public MJTypeChecker(MJProgram goal) {
-        this.program = goal;
+    public MJTypeChecker(MJProgram program) {
+        this.program = program;
     }
 
     @Override
@@ -34,7 +36,6 @@ public class MJTypeChecker implements Strategy {
 
 
     private void buildSymbolTable() {
-
     }
 
     private void runTypecheck() {
