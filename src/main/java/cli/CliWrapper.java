@@ -80,6 +80,15 @@ public class CliWrapper {
                 .desc(desc).type(String.class).hasArg().required(false)
                 .argName("output").build());
 
+        // What type checker to use
+        desc = "Type check using: \n" +
+                "0 - disable\n" +
+                "1 - static\n" +
+                "2 - inference\n" +
+                "Usage: -tc 1";
+        options.addOption(Option.builder("tc").longOpt("typechecker")
+                .desc(desc).type(Integer.class).hasArg().argName("typechecker")
+                .build());
 
         return options;
     }
