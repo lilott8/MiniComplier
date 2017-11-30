@@ -17,7 +17,6 @@ import shared.Phase;
 public class Complier {
 
     public static final Logger logger = LogManager.getLogger(Complier.class);
-
     private List<Phase> phases = new ArrayList<>();
 
     public Complier() {

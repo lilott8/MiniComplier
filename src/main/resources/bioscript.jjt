@@ -139,13 +139,14 @@ TOKEN : /* IDENTIFIERS */
   >
 }
 
-void Program() :
+void BSProgram() :
 {}
 {
     Stationary()
     Manifest()
     <INSTRUCTIONS>
     Instruction()
+    <EOF>
 }
 
 void Stationary() :

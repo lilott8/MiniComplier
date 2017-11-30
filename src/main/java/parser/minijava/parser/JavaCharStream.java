@@ -3,8 +3,8 @@
 package parser.minijava.parser;
 
 /**
- * An implementation of interface CharStream, where the stream is assumed to contain only ASCII
- * characters (with java-like unicode escape processing).
+ * An implementation of interface CharStream, where the stream is assumed to
+ * contain only ASCII characters (with java-like unicode escape processing).
  */
 
 public class JavaCharStream {
@@ -12,104 +12,6 @@ public class JavaCharStream {
      * Whether parser is static.
      */
     public static final boolean staticFlag = false;
-    /**
-     * Position in buffer.
-     */
-    public int bufpos = -1;
-    protected int bufline[];
-    protected int bufcolumn[];
-    protected int column = 0;
-    protected int line = 1;
-    protected boolean prevCharIsCR = false;
-    protected boolean prevCharIsLF = false;
-    protected java.io.Reader inputStream;
-    protected char[] nextCharBuf;
-    protected char[] buffer;
-    protected int maxNextCharInd = 0;
-    protected int nextCharInd = -1;
-    protected int inBuf = 0;
-    protected int tabSize = 8;
-    protected boolean trackLineColumn = true;
-    int bufsize;
-    int available;
-    int tokenBegin;
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.Reader dstream,
-                          int startline, int startcolumn, int buffersize) {
-        inputStream = dstream;
-        line = startline;
-        column = startcolumn - 1;
-
-        available = bufsize = buffersize;
-        buffer = new char[buffersize];
-        bufline = new int[buffersize];
-        bufcolumn = new int[buffersize];
-        nextCharBuf = new char[4096];
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.Reader dstream,
-                          int startline, int startcolumn) {
-        this(dstream, startline, startcolumn, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.Reader dstream) {
-        this(dstream, 1, 1, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream, String encoding, int startline,
-                          int startcolumn, int buffersize) throws java.io.UnsupportedEncodingException {
-        this(encoding == null ? new java.io.InputStreamReader(dstream) : new java.io.InputStreamReader(dstream, encoding), startline, startcolumn, buffersize);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream, int startline,
-                          int startcolumn, int buffersize) {
-        this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream, String encoding, int startline,
-                          int startcolumn) throws java.io.UnsupportedEncodingException {
-        this(dstream, encoding, startline, startcolumn, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream, int startline,
-                          int startcolumn) {
-        this(dstream, startline, startcolumn, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream, String encoding) throws java.io.UnsupportedEncodingException {
-        this(dstream, encoding, 1, 1, 4096);
-    }
-
-    /**
-     * Constructor.
-     */
-    public JavaCharStream(java.io.InputStream dstream) {
-        this(dstream, 1, 1, 4096);
-    }
 
     static final int hexval(char c) throws java.io.IOException {
         switch (c) {
@@ -157,12 +59,38 @@ public class JavaCharStream {
         throw new java.io.IOException(); // Should never come here
     }
 
-    public int getTabSize() {
-        return tabSize;
-    }
+    /**
+     * Position in buffer.
+     */
+    public int bufpos = -1;
+    int bufsize;
+    int available;
+    int tokenBegin;
+    protected int bufline[];
+    protected int bufcolumn[];
+
+    protected int column = 0;
+    protected int line = 1;
+
+    protected boolean prevCharIsCR = false;
+    protected boolean prevCharIsLF = false;
+
+    protected java.io.Reader inputStream;
+
+    protected char[] nextCharBuf;
+    protected char[] buffer;
+    protected int maxNextCharInd = 0;
+    protected int nextCharInd = -1;
+    protected int inBuf = 0;
+    protected int tabSize = 8;
+    protected boolean trackLineColumn = true;
 
     public void setTabSize(int i) {
         tabSize = i;
+    }
+
+    public int getTabSize() {
+        return tabSize;
     }
 
     protected void ExpandBuff(boolean wrapAround) {
@@ -450,6 +378,37 @@ public class JavaCharStream {
     }
 
     /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.Reader dstream,
+                          int startline, int startcolumn, int buffersize) {
+        inputStream = dstream;
+        line = startline;
+        column = startcolumn - 1;
+
+        available = bufsize = buffersize;
+        buffer = new char[buffersize];
+        bufline = new int[buffersize];
+        bufcolumn = new int[buffersize];
+        nextCharBuf = new char[4096];
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.Reader dstream,
+                          int startline, int startcolumn) {
+        this(dstream, startline, startcolumn, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.Reader dstream) {
+        this(dstream, 1, 1, 4096);
+    }
+
+    /**
      * Reinitialise.
      */
     public void ReInit(java.io.Reader dstream,
@@ -483,6 +442,52 @@ public class JavaCharStream {
      */
     public void ReInit(java.io.Reader dstream) {
         ReInit(dstream, 1, 1, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream, String encoding, int startline,
+                          int startcolumn, int buffersize) throws java.io.UnsupportedEncodingException {
+        this(encoding == null ? new java.io.InputStreamReader(dstream) : new java.io.InputStreamReader(dstream, encoding), startline, startcolumn, buffersize);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream, int startline,
+                          int startcolumn, int buffersize) {
+        this(new java.io.InputStreamReader(dstream), startline, startcolumn, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream, String encoding, int startline,
+                          int startcolumn) throws java.io.UnsupportedEncodingException {
+        this(dstream, encoding, startline, startcolumn, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream, int startline,
+                          int startcolumn) {
+        this(dstream, startline, startcolumn, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream, String encoding) throws java.io.UnsupportedEncodingException {
+        this(dstream, encoding, 1, 1, 4096);
+    }
+
+    /**
+     * Constructor.
+     */
+    public JavaCharStream(java.io.InputStream dstream) {
+        this(dstream, 1, 1, 4096);
     }
 
     /**
@@ -618,4 +623,4 @@ public class JavaCharStream {
     }
 
 }
-/* JavaCC - OriginalChecksum=7381f7620f25e2159d9d6e3ebcc0c63a (do not edit this line) */
+/* JavaCC - OriginalChecksum=9184a59896ffacee64d58a01e6c6e952 (do not edit this line) */

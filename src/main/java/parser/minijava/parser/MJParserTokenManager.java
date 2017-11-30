@@ -8,189 +8,15 @@ package parser.minijava.parser;
 @SuppressWarnings("unused")
 public class MJParserTokenManager implements MJParserConstants {
 
-    /**
-     * Token literal values.
-     */
-    public static final String[] jjstrLiteralImages = {
-            "", null, null, null, null, null, null, null, null, "\50", "\51", "\133",
-            "\135", "\173", "\175", "\73", "\56", "\75", "\75\75", "\41\75", "\74", "\74\75",
-            "\76", "\76\75", "\53", "\55", "\52", "\46\46", "\41",
-            "\142\157\157\154\145\141\156", "\143\154\141\163\163", "\151\156\164\145\162\146\141\143\145",
-            "\145\154\163\145", "\145\154\163\145\40\151\146", "\145\170\164\145\156\144\163",
-            "\146\141\154\163\145", "\151\146", "\167\150\151\154\145", "\151\156\164",
-            "\154\145\156\147\164\150", "\155\141\151\156", "\156\145\167", "\160\165\142\154\151\143",
-            "\162\145\164\165\162\156", "\163\164\141\164\151\143", "\123\164\162\151\156\147", "\164\150\151\163",
-            "\164\162\165\145", "\123\171\163\164\145\155\56\157\165\164\56\160\162\151\156\164\154\156",
-            "\166\157\151\144", "\54", null, null, null, null,};
-    /**
-     * Lexer state names.
-     */
-    public static final String[] lexStateNames = {
-            "DEFAULT",
-    };
-    protected static final int[][][] statesForState = {
-            {
-                    {0, 2, 3, 5,},
-                    {1},
-                    {0, 2, 3, 5,},
-                    {0, 2, 3, 5,},
-                    {4},
-                    {0, 2, 3, 5,},
-                    {6},
-                    {7},
-                    {8},
-                    {9},
-                    {10},
-                    {11},
-                    {12},
-                    {13},
-                    {14},
-                    {15},
-                    {16},
-                    {17},
-                    {18},
-                    {19},
-                    {20},
-                    {21},
-                    {22},
-                    {23},
-            },
-
-    };
-    protected static final int[][] kindForState = {
-            {
-                    51,
-                    51,
-                    51,
-                    52,
-                    52,
-                    6,
-                    6,
-                    6,
-                    6,
-                    6,
-                    6,
-                    7,
-                    7,
-                    7,
-                    7,
-                    7,
-                    7,
-                    7,
-                    8,
-                    8,
-                    8,
-                    8,
-                    8,
-                    8,}
-    };
-    static final long[] jjbitVec0 = {
-            0x1ff00000fffffffeL, 0xffffffffffffc000L, 0xffffffffL, 0x600000000000000L
-    };
-    static final long[] jjbitVec2 = {
-            0x0L, 0x0L, 0x0L, 0xff7fffffff7fffffL
-    };
-    static final long[] jjbitVec3 = {
-            0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
-    static final long[] jjbitVec4 = {
-            0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffL, 0x0L
-    };
-    static final long[] jjbitVec5 = {
-            0xffffffffffffffffL, 0xffffffffffffffffL, 0x0L, 0x0L
-    };
-    static final long[] jjbitVec6 = {
-            0x3fffffffffffL, 0x0L, 0x0L, 0x0L
-    };
-    static final long[] jjbitVec7 = {
-            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
-    static final long[] jjbitVec8 = {
-            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
-    };
-    static final int[] jjnextStates = {
-            6, 17, 18, 7, 8, 10, 13, 14, 16, 20, 21, 23,
-    };
-    static final long[] jjtoToken = {
-            0x1fffffffffffc1L,
-    };
-    static final long[] jjtoSkip = {
-            0x3eL,
-    };
-    private final int[] jjrounds = new int[24];
-    private final int[] jjstateSet = new int[2 * 24];
-    /**
-     * Debug output.
-     */
+    /** Debug output. */
     public java.io.PrintStream debugStream = System.out;
-    protected JavaCharStream input_stream;
-    protected char curChar;
-    int curLexState = 0;
-    int defaultLexState = 0;
-    int jjnewStateCnt;
-    int jjround;
-    int jjmatchedPos;
-    int jjmatchedKind;
-    int kindCnt = 0;
 
-    /**
-     * Constructor.
-     */
-    public MJParserTokenManager(JavaCharStream stream) {
-
-        if (JavaCharStream.staticFlag)
-            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
-
-        input_stream = stream;
-    }
-
-    /**
-     * Constructor.
-     */
-    public MJParserTokenManager(JavaCharStream stream, int lexState) {
-        ReInit(stream);
-        SwitchTo(lexState);
-    }
-
-    private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
-        switch (hiByte) {
-            case 0:
-                return ((jjbitVec2[i2] & l2) != 0L);
-            case 48:
-                return ((jjbitVec3[i2] & l2) != 0L);
-            case 49:
-                return ((jjbitVec4[i2] & l2) != 0L);
-            case 51:
-                return ((jjbitVec5[i2] & l2) != 0L);
-            case 61:
-                return ((jjbitVec6[i2] & l2) != 0L);
-            default:
-                if ((jjbitVec0[i1] & l1) != 0L)
-                    return true;
-                return false;
-        }
-    }
-
-    private static final boolean jjCanMove_1(int hiByte, int i1, int i2, long l1, long l2) {
-        switch (hiByte) {
-            case 0:
-                return ((jjbitVec8[i2] & l2) != 0L);
-            default:
-                if ((jjbitVec7[i1] & l1) != 0L)
-                    return true;
-                return false;
-        }
-    }
-
-    /**
-     * Set debug output.
-     */
+    /** Set debug output. */
     public void setDebugStream(java.io.PrintStream ds) {
         debugStream = ds;
     }
 
     private final int jjStopStringLiteralDfa_0(int pos, long active0) {
-        debugStream.println("   No more string literal token matches are possible.");
         switch (pos) {
             case 0:
                 if ((active0 & 0x3ffffe0000000L) != 0L) {
@@ -372,8 +198,6 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjStopAtPos(int pos, int kind) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
-        debugStream.println("   No more string literal token matches are possible.");
-        debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
         return pos + 1;
     }
 
@@ -448,26 +272,17 @@ public class MJParserTokenManager implements MJParserConstants {
             case 125:
                 return jjStopAtPos(0, 14);
             default:
-                debugStream.println("   No string literal matches possible.");
                 return jjMoveNfa_0(0, 0);
         }
     }
 
     private int jjMoveStringLiteralDfa1_0(long active0) {
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(0, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 1;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 38:
                 if ((active0 & 0x8000000L) != 0L)
@@ -510,7 +325,6 @@ public class MJParserTokenManager implements MJParserConstants {
             case 121:
                 return jjMoveStringLiteralDfa2_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(0, active0);
@@ -519,20 +333,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa2_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(0, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(1, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 2;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 97:
                 return jjMoveStringLiteralDfa3_0(active0, 0x100040000000L);
@@ -563,7 +369,6 @@ public class MJParserTokenManager implements MJParserConstants {
                     return jjStartNfaWithStates_0(2, 41, 4);
                 break;
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(1, active0);
@@ -572,20 +377,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa3_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(1, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(2, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 3;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 100:
                 if ((active0 & 0x2000000000000L) != 0L)
@@ -617,7 +414,6 @@ public class MJParserTokenManager implements MJParserConstants {
             case 117:
                 return jjMoveStringLiteralDfa4_0(active0, 0x80000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(2, active0);
@@ -626,20 +422,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa4_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(2, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(3, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 4;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 32:
                 return jjMoveStringLiteralDfa5_0(active0, 0x200000000L);
@@ -662,7 +450,6 @@ public class MJParserTokenManager implements MJParserConstants {
             case 116:
                 return jjMoveStringLiteralDfa5_0(active0, 0x8000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(3, active0);
@@ -671,20 +458,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa5_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(3, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(4, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 5;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 97:
                 return jjMoveStringLiteralDfa6_0(active0, 0x20000000L);
@@ -715,7 +494,6 @@ public class MJParserTokenManager implements MJParserConstants {
                     return jjStartNfaWithStates_0(5, 43, 4);
                 break;
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(4, active0);
@@ -724,20 +502,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa6_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(4, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(5, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 6;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 46:
                 return jjMoveStringLiteralDfa7_0(active0, 0x1000000000000L);
@@ -756,7 +526,6 @@ public class MJParserTokenManager implements MJParserConstants {
                     return jjStartNfaWithStates_0(6, 34, 4);
                 break;
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(5, active0);
@@ -765,27 +534,18 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa7_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(5, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(6, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 7;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 99:
                 return jjMoveStringLiteralDfa8_0(active0, 0x80000000L);
             case 111:
                 return jjMoveStringLiteralDfa8_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(6, active0);
@@ -794,20 +554,12 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa8_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(6, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(7, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 8;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 101:
                 if ((active0 & 0x80000000L) != 0L)
@@ -816,7 +568,6 @@ public class MJParserTokenManager implements MJParserConstants {
             case 117:
                 return jjMoveStringLiteralDfa9_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(7, active0);
@@ -825,25 +576,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa9_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(7, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(8, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 9;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 116:
                 return jjMoveStringLiteralDfa10_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(8, active0);
@@ -852,25 +594,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa10_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(8, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(9, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 10;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 46:
                 return jjMoveStringLiteralDfa11_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(9, active0);
@@ -879,25 +612,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa11_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(9, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(10, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 11;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 112:
                 return jjMoveStringLiteralDfa12_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(10, active0);
@@ -906,25 +630,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa12_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(10, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(11, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 12;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 114:
                 return jjMoveStringLiteralDfa13_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(11, active0);
@@ -933,25 +648,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa13_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(11, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(12, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 13;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 105:
                 return jjMoveStringLiteralDfa14_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(12, active0);
@@ -960,25 +666,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa14_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(12, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(13, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 14;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 110:
                 return jjMoveStringLiteralDfa15_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(13, active0);
@@ -987,25 +684,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa15_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(13, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(14, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 15;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 116:
                 return jjMoveStringLiteralDfa16_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(14, active0);
@@ -1014,25 +702,16 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa16_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(14, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(15, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 16;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 108:
                 return jjMoveStringLiteralDfa17_0(active0, 0x1000000000000L);
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(15, active0);
@@ -1041,27 +720,18 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjMoveStringLiteralDfa17_0(long old0, long active0) {
         if (((active0 &= old0)) == 0L)
             return jjStartNfa_0(15, old0);
-        if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-            debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
-        debugStream.println("   Possible string literal matches : { "
-                +
-                jjKindsForBitVector(0, active0) + " } ");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             jjStopStringLiteralDfa_0(16, active0);
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             return 17;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         switch (curChar) {
             case 110:
                 if ((active0 & 0x1000000000000L) != 0L)
                     return jjStopAtPos(17, 48);
                 break;
             default:
-                debugStream.println("   No string literal matches possible.");
                 break;
         }
         return jjStartNfa_0(16, active0);
@@ -1070,24 +740,44 @@ public class MJParserTokenManager implements MJParserConstants {
     private int jjStartNfaWithStates_0(int pos, int kind, int state) {
         jjmatchedKind = kind;
         jjmatchedPos = pos;
-        debugStream.println("   No more string literal token matches are possible.");
-        debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
         try {
             curChar = input_stream.readChar();
         } catch (java.io.IOException e) {
             return pos + 1;
         }
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         return jjMoveNfa_0(state, pos + 1);
     }
+
+    static final long[] jjbitVec0 = {
+            0x1ff00000fffffffeL, 0xffffffffffffc000L, 0xffffffffL, 0x600000000000000L
+    };
+    static final long[] jjbitVec2 = {
+            0x0L, 0x0L, 0x0L, 0xff7fffffff7fffffL
+    };
+    static final long[] jjbitVec3 = {
+            0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final long[] jjbitVec4 = {
+            0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffL, 0x0L
+    };
+    static final long[] jjbitVec5 = {
+            0xffffffffffffffffL, 0xffffffffffffffffL, 0x0L, 0x0L
+    };
+    static final long[] jjbitVec6 = {
+            0x3fffffffffffL, 0x0L, 0x0L, 0x0L
+    };
+    static final long[] jjbitVec7 = {
+            0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
+    static final long[] jjbitVec8 = {
+            0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
+    };
 
     private int jjMoveNfa_0(int startState, int curPos) {
         int startsAt = 0;
         jjnewStateCnt = 24;
         int i = 1;
         jjstateSet[0] = startState;
-        debugStream.println("   Starting NFA to match one of : " + jjKindsForStateVector(curLexState, jjstateSet, 0, 1));
-        debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         int kind = 0x7fffffff;
         for (; ; ) {
             if (++jjround == 0x7fffffff)
@@ -1337,19 +1027,62 @@ public class MJParserTokenManager implements MJParserConstants {
                 kind = 0x7fffffff;
             }
             ++curPos;
-            if (jjmatchedKind != 0 && jjmatchedKind != 0x7fffffff)
-                debugStream.println("   Currently matched the first " + (jjmatchedPos + 1) + " characters as a " + tokenImage[jjmatchedKind] + " token.");
             if ((i = jjnewStateCnt) == (startsAt = 24 - (jjnewStateCnt = startsAt)))
                 return curPos;
-            debugStream.println("   Possible kinds of longer matches : " + jjKindsForStateVector(curLexState, jjstateSet, startsAt, i));
             try {
                 curChar = input_stream.readChar();
             } catch (java.io.IOException e) {
                 return curPos;
             }
-            debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
         }
     }
+
+    static final int[] jjnextStates = {
+            6, 17, 18, 7, 8, 10, 13, 14, 16, 20, 21, 23,
+    };
+
+    private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2) {
+        switch (hiByte) {
+            case 0:
+                return ((jjbitVec2[i2] & l2) != 0L);
+            case 48:
+                return ((jjbitVec3[i2] & l2) != 0L);
+            case 49:
+                return ((jjbitVec4[i2] & l2) != 0L);
+            case 51:
+                return ((jjbitVec5[i2] & l2) != 0L);
+            case 61:
+                return ((jjbitVec6[i2] & l2) != 0L);
+            default:
+                if ((jjbitVec0[i1] & l1) != 0L)
+                    return true;
+                return false;
+        }
+    }
+
+    private static final boolean jjCanMove_1(int hiByte, int i1, int i2, long l1, long l2) {
+        switch (hiByte) {
+            case 0:
+                return ((jjbitVec8[i2] & l2) != 0L);
+            default:
+                if ((jjbitVec7[i1] & l1) != 0L)
+                    return true;
+                return false;
+        }
+    }
+
+    /** Token literal values. */
+    public static final String[] jjstrLiteralImages = {
+            "", null, null, null, null, null, null, null, null, "\50", "\51", "\133",
+            "\135", "\173", "\175", "\73", "\56", "\75", "\75\75", "\41\75", "\74", "\74\75",
+            "\76", "\76\75", "\53", "\55", "\52", "\46\46", "\41",
+            "\142\157\157\154\145\141\156", "\143\154\141\163\163", "\151\156\164\145\162\146\141\143\145",
+            "\145\154\163\145", "\145\154\163\145\40\151\146", "\145\170\164\145\156\144\163",
+            "\146\141\154\163\145", "\151\146", "\167\150\151\154\145", "\151\156\164",
+            "\154\145\156\147\164\150", "\155\141\151\156", "\156\145\167", "\160\165\142\154\151\143",
+            "\162\145\164\165\162\156", "\163\164\141\164\151\143", "\123\164\162\151\156\147", "\164\150\151\163",
+            "\164\162\165\145", "\123\171\163\164\145\155\56\157\165\164\56\160\162\151\156\164\154\156",
+            "\166\157\151\144", "\54", null, null, null, null,};
 
     protected Token jjFillToken() {
         final Token t;
@@ -1374,9 +1107,14 @@ public class MJParserTokenManager implements MJParserConstants {
         return t;
     }
 
-    /**
-     * Get the next Token.
-     */
+    int curLexState = 0;
+    int defaultLexState = 0;
+    int jjnewStateCnt;
+    int jjround;
+    int jjmatchedPos;
+    int jjmatchedKind;
+
+    /** Get the next Token. */
     public Token getNextToken() {
         Token matchedToken;
         int curPos = 0;
@@ -1386,7 +1124,6 @@ public class MJParserTokenManager implements MJParserConstants {
             try {
                 curChar = input_stream.BeginToken();
             } catch (java.io.IOException e) {
-                debugStream.println("Returning the <EOF> token.\n");
                 jjmatchedKind = 0;
                 jjmatchedPos = -1;
                 matchedToken = jjFillToken();
@@ -1395,23 +1132,17 @@ public class MJParserTokenManager implements MJParserConstants {
 
             try {
                 input_stream.backup(0);
-                while (curChar <= 32 && (0x100003600L & (1L << curChar)) != 0L) {
-                    debugStream.println("Skipping character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ")");
+                while (curChar <= 32 && (0x100003600L & (1L << curChar)) != 0L)
                     curChar = input_stream.BeginToken();
-                }
             } catch (java.io.IOException e1) {
                 continue EOFLoop;
             }
             jjmatchedKind = 0x7fffffff;
             jjmatchedPos = 0;
-            debugStream.println("Current character : " + TokenMgrError.addEscapes(String.valueOf(curChar)) + " (" + (int) curChar + ") at line " + input_stream.getEndLine() + " column " + input_stream.getEndColumn());
             curPos = jjMoveStringLiteralDfa0_0();
             if (jjmatchedKind != 0x7fffffff) {
-                if (jjmatchedPos + 1 < curPos) {
-                    debugStream.println("   Putting back " + (curPos - jjmatchedPos - 1) + " characters into the input stream.");
+                if (jjmatchedPos + 1 < curPos)
                     input_stream.backup(curPos - jjmatchedPos - 1);
-                }
-                debugStream.println("****** FOUND A " + tokenImage[jjmatchedKind] + " MATCH (" + TokenMgrError.addEscapes(new String(input_stream.GetSuffix(jjmatchedPos + 1))) + ") ******\n");
                 if ((jjtoToken[jjmatchedKind >> 6] & (1L << (jjmatchedKind & 077))) != 0L) {
                     matchedToken = jjFillToken();
                     return matchedToken;
@@ -1443,48 +1174,6 @@ public class MJParserTokenManager implements MJParserConstants {
         }
     }
 
-    protected final String jjKindsForBitVector(int i, long vec) {
-        String retVal = "";
-        if (i == 0)
-            kindCnt = 0;
-        for (int j = 0; j < 64; j++) {
-            if ((vec & (1L << j)) != 0L) {
-                if (kindCnt++ > 0)
-                    retVal += ", ";
-                if (kindCnt % 5 == 0)
-                    retVal += "\n     ";
-                retVal += tokenImage[i * 64 + j];
-            }
-        }
-        return retVal;
-    }
-
-    protected final String jjKindsForStateVector(int lexState, int[] vec, int start, int end) {
-        boolean[] kindDone = new boolean[55];
-        String retVal = "";
-        int cnt = 0;
-        for (int i = start; i < end; i++) {
-            if (vec[i] == -1)
-                continue;
-            int[] stateSet = statesForState[curLexState][vec[i]];
-            for (int j = 0; j < stateSet.length; j++) {
-                int state = stateSet[j];
-                if (!kindDone[kindForState[lexState][state]]) {
-                    kindDone[kindForState[lexState][state]] = true;
-                    if (cnt++ > 0)
-                        retVal += ", ";
-                    if (cnt % 5 == 0)
-                        retVal += "\n     ";
-                    retVal += tokenImage[kindForState[lexState][state]];
-                }
-            }
-        }
-        if (cnt == 0)
-            return "{  }";
-        else
-            return "{ " + retVal + " }";
-    }
-
     private void jjCheckNAdd(int state) {
         if (jjrounds[state] != jjround) {
             jjstateSet[jjnewStateCnt++] = state;
@@ -1509,9 +1198,22 @@ public class MJParserTokenManager implements MJParserConstants {
         } while (start++ != end);
     }
 
-    /**
-     * Reinitialise parser.
-     */
+    /** Constructor. */
+    public MJParserTokenManager(JavaCharStream stream) {
+
+        if (JavaCharStream.staticFlag)
+            throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
+
+        input_stream = stream;
+    }
+
+    /** Constructor. */
+    public MJParserTokenManager(JavaCharStream stream, int lexState) {
+        ReInit(stream);
+        SwitchTo(lexState);
+    }
+
+    /** Reinitialise parser. */
     public void ReInit(JavaCharStream stream) {
         jjmatchedPos = jjnewStateCnt = 0;
         curLexState = defaultLexState;
@@ -1526,21 +1228,35 @@ public class MJParserTokenManager implements MJParserConstants {
             jjrounds[i] = 0x80000000;
     }
 
-    /**
-     * Reinitialise parser.
-     */
+    /** Reinitialise parser. */
     public void ReInit(JavaCharStream stream, int lexState) {
         ReInit(stream);
         SwitchTo(lexState);
     }
 
-    /**
-     * Switch to specified lex state.
-     */
+    /** Switch to specified lex state. */
     public void SwitchTo(int lexState) {
         if (lexState >= 1 || lexState < 0)
             throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
         else
             curLexState = lexState;
     }
+
+    /** Lexer state names. */
+    public static final String[] lexStateNames = {
+            "DEFAULT",
+    };
+    static final long[] jjtoToken = {
+            0x1fffffffffffc1L,
+    };
+    static final long[] jjtoSkip = {
+            0x3eL,
+    };
+    protected JavaCharStream input_stream;
+
+    private final int[] jjrounds = new int[24];
+    private final int[] jjstateSet = new int[2 * 24];
+
+
+    protected char curChar;
 }

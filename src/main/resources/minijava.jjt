@@ -1,14 +1,14 @@
 options {
       STATIC = false;
-      DEBUG_PARSER = true;
-      DEBUG_LOOKAHEAD = true;
-      DEBUG_TOKEN_MANAGER = true;
+      DEBUG_PARSER = false;
+      DEBUG_LOOKAHEAD = false;
+      DEBUG_TOKEN_MANAGER = false;
       ERROR_REPORTING = true;
       JAVA_UNICODE_ESCAPE = true;
 }
 
 PARSER_BEGIN(MJParser)
-  package minijava.parser;
+  package parser;
   public class MJParser {}
 PARSER_END(MJParser)
 
@@ -127,7 +127,7 @@ TOKEN : /* IDENTIFIERS */
  * The MiniJava Grammar Starts Here *
  ************************************/
 
-void Goal() :
+void MJProgram() :
 {}
 {
   MainClass()
@@ -140,7 +140,7 @@ void MainClass() :
 {
   <CLASS> Identifier() <LBRACE>
     <PUBLIC> <STATIC> <VOID> <MAIN> <LPAREN> <STRING> <LSQPAREN> <RSQPAREN> Identifier() <RPAREN>
-    <LBRACE> PrintStatement() <RBRACE>
+    <LBRACE> ( LOOKAHEAD(2) VarDeclarationUnordered() )* ( Statement() )* <RBRACE>
   <RBRACE>
 }
 
@@ -149,8 +149,7 @@ void TypeDeclarationUnordered() :
 {
   LOOKAHEAD(3)
   ClassDeclaration()
-|
-  ClassExtendsDeclaration()
+    |   ClassExtendsDeclaration()
 }
 
 void ClassDeclaration() :
@@ -380,7 +379,7 @@ void PrimaryExpression() :
             ArrayAllocationExpression()
     |   AllocationExpression()
     |   NotExpression()
-    |   ParanthesisExpression()
+    |   ParenthesisExpression()
 }
 
 void IntegerLiteral() :
@@ -432,7 +431,7 @@ void NotExpression() :
   <NOT> Expression()
 }
 
-void ParanthesisExpression() :
+void ParenthesisExpression() :
 {}
 {
   <LPAREN> Expression() <RPAREN>
