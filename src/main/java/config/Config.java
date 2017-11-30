@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import shared.Language;
+import shared.TypeCheckLevel;
 
 /**
  * @created: 9/11/17
@@ -15,11 +16,13 @@ import shared.Language;
  */
 public class Config implements CommonConfig, ParseConfig {
 
+    public static final Logger logger = LogManager.getLogger(Config.class);
+
     private String outputDir = "output/";
     private final String compile;
     private boolean debug = false;
     private Language language;
-    public static final Logger logger = LogManager.getLogger(Config.class);
+    private TypeCheckLevel typeCheckLevel = TypeCheckLevel.STATIC;
 
     Config(CommandLine cmd) {
         this.compile = cmd.getOptionValue("compile");
@@ -34,6 +37,20 @@ public class Config implements CommonConfig, ParseConfig {
             this.outputDir = cmd.getOptionValue("output");
         }
 
+        if (cmd.hasOption("typechecker")) {
+            switch (Integer.parseInt(cmd.getOptionValue("typechecker"))) {
+                case 0:
+                    this.typeCheckLevel = TypeCheckLevel.DISABLED;
+                    break;
+                default:
+                case 1:
+                    this.typeCheckLevel = TypeCheckLevel.STATIC;
+                    break;
+                case 2:
+                    this.typeCheckLevel = TypeCheckLevel.INFERENCE;
+                    break;
+            }
+        }
     }
 
     private Language setLanguage(String input) {
@@ -67,5 +84,10 @@ public class Config implements CommonConfig, ParseConfig {
     @Override
     public Language getLanguage() {
         return this.language;
+    }
+
+    @Override
+    public TypeCheckLevel getTypeCheckLevel() {
+        return this.typeCheckLevel;
     }
 }

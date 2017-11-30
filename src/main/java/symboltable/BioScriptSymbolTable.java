@@ -5,7 +5,5 @@ package symboltable;
  * @since: 0.1
  * @project: MiniComplier
  */
-public enum SymbolTable {
-    INSTANCE;
-
+public class BioScriptSymbolTable {
 }

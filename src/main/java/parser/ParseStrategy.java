@@ -8,4 +8,5 @@ import shared.Strategy;
  * @project: MiniComplier
  */
 public interface ParseStrategy extends Strategy {
+
 }
