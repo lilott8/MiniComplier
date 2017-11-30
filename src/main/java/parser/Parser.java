@@ -3,50 +3,50 @@ package parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import shared.Language;
+import java.io.IOException;
+
+import config.Config;
+import config.ConfigFactory;
+import parser.bioscript.BioScript;
+import parser.minijava.MiniJava;
 import shared.Phase;
 import shared.Strategy;
 
 /**
- * @created: 10/22/17
+ * @created: 11/29/17
  * @since: 0.1
  * @project: MiniComplier
  */
 public class Parser implements Phase {
 
-    protected final String PHASE_NAME = "Parser";
-
-    private static final Logger logger = LogManager.getLogger(Parser.class);
-
-    private Strategy algorithm;
+    public static final Logger logger = LogManager.getLogger(Parser.class);
+    private Strategy parser;
+    private Config config = ConfigFactory.getConfig();
 
     public Parser() {
-        this(Language.MINIJAVA);
-    }
-
-    public Parser(Language language) {
-        switch (language) {
+        switch (config.getLanguage()) {
+            default:
             case MINIJAVA:
-                this.algorithm = new MJParser();
+                parser = new MiniJava();
                 break;
             case BIOSCRIPT:
-                this.algorithm = new BSParser();
+                parser = new BioScript();
                 break;
         }
     }
 
-    public Parser(Strategy strategy) {
-        this.algorithm = strategy;
+    @Override
+    public String getPhaseName() {
+        return "Parsing";
     }
 
     @Override
     public Phase runPhase() {
-        this.algorithm.run();
+        try {
+            parser.run();
+        } catch (IOException e) {
+            logger.fatal(e);
+        }
         return this;
-    }
-
-    @Override
-    public String getPhaseName() {
-        return this.algorithm.getName();
     }
 }

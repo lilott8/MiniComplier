@@ -51,7 +51,7 @@ public class CliWrapper {
         CommonConfig config = ConfigFactory.buildConfig(cmd);
 
         // add any initializing statements derived from the command line here.
-        if (StringUtils.isEmpty(config.getCompilationFile())) {
+        if (StringUtils.isEmpty(config.getInputFile())) {
             throw new Exception("We have no valid files for input");
         }
     }
@@ -80,6 +80,15 @@ public class CliWrapper {
                 .desc(desc).type(String.class).hasArg().required(false)
                 .argName("output").build());
 
+        // What type checker to use
+        desc = "Type check using: \n" +
+                "0 - disable\n" +
+                "1 - static\n" +
+                "2 - inference\n" +
+                "Usage: -tc 1";
+        options.addOption(Option.builder("tc").longOpt("typechecker")
+                .desc(desc).type(Integer.class).hasArg().argName("typechecker")
+                .build());
 
         return options;
     }

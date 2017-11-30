@@ -11,7 +11,7 @@ public interface CommonConfig {
 
     String getOutputDir();
 
-    String getCompilationFile();
+    String getInputFile();
 
     boolean isDebug();
 
