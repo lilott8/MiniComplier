@@ -13,10 +13,10 @@ options {
 }
 
 
-PARSER_BEGIN(BioScriptParser)
+PARSER_BEGIN(BSParser)
   package bioscript.parser;
-  public class BioScriptParser {}
-PARSER_END(BioScriptParser)
+  public class BSParser {}
+PARSER_END(BSParser)
 
 
 /* WHITE SPACE */

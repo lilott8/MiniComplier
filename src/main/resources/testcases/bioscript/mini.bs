@@ -1,0 +1,8 @@
+stationary b
+manifest chemical1
+manifest chemical2
+instructions
+
+mix chemical1 with chemical2
+chemical3 = heat chemical2 at 90 for 20
+detect b on chemical3

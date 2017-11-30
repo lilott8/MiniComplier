@@ -51,7 +51,7 @@ public class CliWrapper {
         CommonConfig config = ConfigFactory.buildConfig(cmd);
 
         // add any initializing statements derived from the command line here.
-        if (StringUtils.isEmpty(config.getCompilationFile())) {
+        if (StringUtils.isEmpty(config.getInputFile())) {
             throw new Exception("We have no valid files for input");
         }
     }
