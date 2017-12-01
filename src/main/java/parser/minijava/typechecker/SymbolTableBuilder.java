@@ -30,6 +30,10 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
     private Method<Type> currentMethod;
     private Clazz<Type> currentClazz;
 
+    public SymbolTableBuilder() {
+
+    }
+
     private void put(Symbol symbol) {
         this.symbolTable.put(symbol.getName(), symbol);
     }
@@ -60,7 +64,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(MainClass n) {
-        super.visit(n);
+        //super.visit(n);
 
         Clazz<Type> mainClass = new Clazz<>(n.f1.f0.toString(), true);
         Method<Type> mainMethod = new Method<>(n.f5.toString(), new Type(new NodeChoice(n.f5)), Scope.getScopeFromString(n.f3.toString()));
@@ -107,7 +111,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(ClassDeclaration n) {
-        super.visit(n);
+        //super.visit(n);
 
         Clazz<Type> clazz = new Clazz<>(n.f1.f0.toString());
         this.currentClazz = clazz;
@@ -137,7 +141,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(ClassExtendsDeclaration n) {
-        super.visit(n);
+        //super.visit(n);
 
         Clazz<Type> clazz = new Clazz<>(n.f1.f0.toString());
         Clazz<Type> extending = (Clazz<Type>) this.symbolTable.get(n.f3.f0.toString());
@@ -172,7 +176,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(VarDeclarationUnordered n) {
-        super.visit(n);
+        //super.visit(n);
 
         if (currentMethod != null) {
             this.currentMethod.addLocal(new Variable<>(n.f1.f0.toString(), n.f0));
@@ -206,7 +210,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(MethodDeclarationUnordered n) {
-        super.visit(n);
+        //super.visit(n);
 
         Method<Type> method = new Method<>(n.f2.f0.toString(), n.f1);
 
@@ -248,7 +252,7 @@ public class SymbolTableBuilder extends DepthFirstVisitor {
      */
     @Override
     public void visit(FormalParameter n) {
-        super.visit(n);
+        //super.visit(n);
 
         Method<Type> method = this.currentClazz.getMethodByName(this.currentMethod.getName());
         method.addParameter(new Variable<>(n.f1.f0.toString(), n.f0));
