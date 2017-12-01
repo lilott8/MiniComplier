@@ -1,4 +1,4 @@
-package shared;
+package enums;
 
 /**
  * @created: 11/9/17
@@ -6,5 +6,5 @@ package shared;
  * @project: MiniComplier
  */
 public enum Language {
-    MINIJAVA, BIOSCRIPT;
+    MINIJAVA, BIOSCRIPT
 }

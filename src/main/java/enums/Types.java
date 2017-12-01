@@ -1,4 +1,4 @@
-package parser.minijava.typechecker;
+package enums;
 
 import parser.minijava.ast.Type;
 

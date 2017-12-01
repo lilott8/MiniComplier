@@ -1,6 +1,6 @@
 package config;
 
-import shared.Language;
+import enums.Language;
 
 /**
  * @created: 9/11/17

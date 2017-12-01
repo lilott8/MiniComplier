@@ -1,4 +1,4 @@
-package shared;
+package enums;
 
 /**
  * @created: 11/30/17

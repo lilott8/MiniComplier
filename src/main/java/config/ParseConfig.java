@@ -1,6 +1,6 @@
 package config;
 
-import shared.TypeCheckLevel;
+import enums.TypeCheckLevel;
 
 /**
  * @created: 11/29/17
