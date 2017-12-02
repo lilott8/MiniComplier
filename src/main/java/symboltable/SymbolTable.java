@@ -5,5 +5,9 @@ package symboltable;
  * @since: 0.1
  * @project: MiniComplier
  */
-public interface SymbolTable {
+public interface SymbolTable<Program> {
+
+    void buildTable();
+
+    Program getSymbolTable();
 }

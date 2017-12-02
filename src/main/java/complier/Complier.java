@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.IntermediateRepresentation;
 import parser.Parser;
 import shared.Phase;
 
@@ -22,7 +21,7 @@ public class Complier {
 
     public Complier() {
         phases.add(new Parser());
-        phases.add(new IntermediateRepresentation());
+        //phases.add(new IntermediateRepresentation());
     }
 
     public void compile() {

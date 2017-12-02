@@ -9,9 +9,11 @@ import java.io.InputStream;
 
 import config.Config;
 import config.ConfigFactory;
+import enums.TypeCheckLevel;
 import parser.ParseStrategy;
 import parser.minijava.parser.MJParser;
 import parser.minijava.parser.ParseException;
+import parser.minijava.typechecker.MJSymbolTable;
 import parser.minijava.typechecker.MJTypeChecker;
 import shared.Strategy;
 
@@ -24,7 +26,8 @@ public class MiniJava implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(MiniJava.class);
     private Config config = ConfigFactory.getConfig();
-    private Strategy typeChecker;
+    private MJSymbolTable symbolTable = new MJSymbolTable();
+    private MJTypeChecker typeChecker;
 
     @Override
     public String getName() {
@@ -36,7 +39,15 @@ public class MiniJava implements ParseStrategy {
         try (InputStream input = new FileInputStream(config.getInputFile())) {
             MJParser parser = new MJParser(input);
             try {
-                typeChecker = new MJTypeChecker(parser.MJProgram()).run();
+                parser.MJProgram().accept(symbolTable);
+                if (this.config.getTypeCheckLevel() != TypeCheckLevel.DISABLED) {
+                    typeChecker = new MJTypeChecker();
+                    parser.MJProgram().accept(typeChecker);
+                } else {
+                    logger.warn("We are not type checking anything.");
+                }
+
+                logger.info("If you want to build stack allocation, introduce it here.");
             } catch (ParseException e) {
                 logger.error(e);
             }

@@ -14,9 +14,11 @@ import parser.minijava.ast.NodeChoice;
 import parser.minijava.ast.Type;
 import parser.minijava.ast.VarDeclarationUnordered;
 import parser.minijava.visitor.DepthFirstVisitor;
+import shared.Phase;
 import symboltable.Clazz;
 import symboltable.Method;
 import symboltable.Symbol;
+import symboltable.SymbolTable;
 import symboltable.Variable;
 
 /**
@@ -24,14 +26,28 @@ import symboltable.Variable;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class SymbolTableBuilder extends DepthFirstVisitor {
+public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Phase {
 
     private Map<String, Symbol> symbolTable = new LinkedHashMap<>();
     private Method<Type> currentMethod;
     private Clazz<Type> currentClazz;
 
-    public SymbolTableBuilder() {
+    public MJSymbolTable() {
+    }
 
+    @Override
+    public void buildTable() {
+
+    }
+
+    @Override
+    public String getPhaseName() {
+        return null;
+    }
+
+    @Override
+    public Phase runPhase() {
+        return null;
     }
 
     private void put(Symbol symbol) {
