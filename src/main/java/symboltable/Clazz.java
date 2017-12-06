@@ -62,4 +62,19 @@ public class Clazz<Type> implements Symbol {
     public Scope getScope() {
         return this.scope;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Class name: ").append(this.name).append(System.lineSeparator());
+        sb.append("Variables: ").append(System.lineSeparator());
+        for (Map.Entry<String, Variable<Type>> entry : this.locals.entrySet()) {
+            sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
+        }
+        sb.append("Methods: ").append(System.lineSeparator());
+        for (Map.Entry<String, Method<Type>> entry : this.methods.entrySet()) {
+            sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
 }

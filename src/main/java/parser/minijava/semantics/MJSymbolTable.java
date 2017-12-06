@@ -1,13 +1,20 @@
-package parser.minijava.typechecker;
+package parser.minijava.semantics;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import enums.Scope;
+import enums.Types;
+import parser.minijava.ast.ArrayType;
+import parser.minijava.ast.BooleanType;
 import parser.minijava.ast.ClassDeclaration;
 import parser.minijava.ast.ClassExtendsDeclaration;
 import parser.minijava.ast.FormalParameter;
 import parser.minijava.ast.FormalParameterList;
+import parser.minijava.ast.IntegerType;
 import parser.minijava.ast.MainClass;
 import parser.minijava.ast.MethodDeclarationUnordered;
 import parser.minijava.ast.NodeChoice;
@@ -31,6 +38,9 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     private Map<String, Symbol> symbolTable = new LinkedHashMap<>();
     private Method<Type> currentMethod;
     private Clazz<Type> currentClazz;
+    private Types currentVarType;
+
+    public static final Logger logger = LogManager.getLogger(MJSymbolTable.class);
 
     public MJSymbolTable() {
     }
@@ -186,6 +196,51 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     }
 
     /**
+     * f0 -> ArrayType()
+     * | BooleanType()
+     * | IntegerType()
+     * | Identifier()
+     */
+    @Override
+    public void visit(Type n) {
+        logger.warn(n.f0.choice.toString());
+    }
+
+    /**
+     * f0 -> <INTEGER>
+     * f1 -> <LSQPAREN>
+     * f2 -> <RSQPAREN>
+     */
+    @Override
+    public void visit(ArrayType n) {
+        this.currentVarType = Types.ARRAY;
+
+        n.f0.accept(this);
+        n.f1.accept(this);
+        n.f2.accept(this);
+    }
+
+    /**
+     * f0 -> <BOOLEAN>
+     */
+    @Override
+    public void visit(BooleanType n) {
+        this.currentVarType = Types.BOOL;
+        n.f0.accept(this);
+    }
+
+    /**
+     * f0 -> <INTEGER>
+     */
+    @Override
+    public void visit(IntegerType n) {
+        this.currentVarType = Types.INT;
+        n.f0.accept(this);
+    }
+
+
+
+    /**
      * f0 -> Type()
      * f1 -> Identifier()
      * f2 -> <SEMICOLON>
@@ -279,5 +334,13 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
 
         n.f0.accept(this);
         n.f1.accept(this);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Symbol> entry : this.symbolTable.entrySet()) {
+            sb.append(entry.getValue()).append(System.lineSeparator());
+        }
+        return sb.toString();
     }
 }

@@ -13,8 +13,8 @@ import enums.TypeCheckLevel;
 import parser.ParseStrategy;
 import parser.minijava.parser.MJParser;
 import parser.minijava.parser.ParseException;
-import parser.minijava.typechecker.MJSymbolTable;
-import parser.minijava.typechecker.MJTypeChecker;
+import parser.minijava.semantics.MJSymbolTable;
+import parser.minijava.semantics.MJTypeChecker;
 import shared.Strategy;
 
 /**
@@ -40,6 +40,7 @@ public class MiniJava implements ParseStrategy {
             MJParser parser = new MJParser(input);
             try {
                 parser.MJProgram().accept(symbolTable);
+                logger.info(symbolTable);
                 if (this.config.getTypeCheckLevel() != TypeCheckLevel.DISABLED) {
                     typeChecker = new MJTypeChecker();
                     parser.MJProgram().accept(typeChecker);
@@ -48,8 +49,10 @@ public class MiniJava implements ParseStrategy {
                 }
 
                 logger.info("If you want to build stack allocation, introduce it here.");
+
             } catch (ParseException e) {
                 logger.error(e);
+                e.printStackTrace();
             }
         } catch (IOException ioe) {
             logger.fatal("Couldn't load the file: " + config.getInputFile());

@@ -57,6 +57,23 @@ public class Method<Type> implements Symbol {
         return this;
     }
 
+    public Map<String, Variable> getParameters() {
+        return this.parameters;
+    }
+
+    /**
+     * A simple wrapper for the getParameters.
+     *
+     * @return Mapping of names to variables.
+     */
+    public Map<String, Variable> getArguments() {
+        return this.getParameters();
+    }
+
+    public Map<String, Variable> getLocals() {
+        return this.locals;
+    }
+
     public Method<Type> addLocal(Variable value) {
         return this.addLocal(value.getName(), value);
     }
@@ -69,5 +86,17 @@ public class Method<Type> implements Symbol {
             }
         }
         return StringUtils.substring(sb.toString(), 0, sb.toString().length() - 1);
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getMethodSignature()).append(System.lineSeparator());
+        sb.append("Locals: ").append(System.lineSeparator());
+        for (Map.Entry<String, Variable> entry : this.locals.entrySet()) {
+            sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
+        }
+
+
+        return sb.toString();
     }
 }

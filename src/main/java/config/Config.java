@@ -37,8 +37,8 @@ public class Config implements CommonConfig, ParseConfig {
             this.outputDir = cmd.getOptionValue("output");
         }
 
-        if (cmd.hasOption("typechecker")) {
-            switch (Integer.parseInt(cmd.getOptionValue("typechecker"))) {
+        if (cmd.hasOption("semantics")) {
+            switch (Integer.parseInt(cmd.getOptionValue("semantics"))) {
                 case 0:
                     this.typeCheckLevel = TypeCheckLevel.DISABLED;
                     break;

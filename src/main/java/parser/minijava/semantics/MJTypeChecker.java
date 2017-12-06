@@ -1,4 +1,4 @@
-package parser.minijava.typechecker;
+package parser.minijava.semantics;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

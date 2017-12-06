@@ -86,8 +86,8 @@ public class CliWrapper {
                 "1 - static\n" +
                 "2 - inference\n" +
                 "Usage: -tc 1";
-        options.addOption(Option.builder("tc").longOpt("typechecker")
-                .desc(desc).type(Integer.class).hasArg().argName("typechecker")
+        options.addOption(Option.builder("tc").longOpt("semantics")
+                .desc(desc).type(Integer.class).hasArg().argName("semantics")
                 .build());
 
         return options;

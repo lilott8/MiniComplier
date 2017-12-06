@@ -1,5 +1,7 @@
 package symboltable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import enums.Scope;
 
 /**
@@ -12,6 +14,7 @@ public class Variable<Type> implements Symbol {
     private String name;
     private Type type;
     private Scope scope = Scope.LOCAL;
+    private String typeName = "";
 
     public Variable(String name, Type type) {
         this.name = name;
@@ -22,6 +25,11 @@ public class Variable<Type> implements Symbol {
         this.name = name;
         this.type = type;
         this.scope = scope;
+    }
+
+    public Variable<Type> setTypeName(String typeName) {
+        this.typeName = typeName;
+        return this;
     }
 
     public Type getType() {
@@ -36,5 +44,10 @@ public class Variable<Type> implements Symbol {
     @Override
     public Scope getScope() {
         return this.scope;
+    }
+
+    public String toString() {
+        String temp = StringUtils.isEmpty(this.typeName) ? this.type.toString() : this.typeName;
+        return String.format("%s %s %s", this.scope, temp, this.name);
     }
 }
