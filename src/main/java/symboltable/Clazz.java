@@ -10,11 +10,11 @@ import enums.Scope;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class Clazz<Type> implements Symbol {
+public class Clazz implements Symbol {
 
     private String name;
-    private Map<String, Variable<Type>> locals = new LinkedHashMap<>();
-    private Map<String, Method<Type>> methods = new LinkedHashMap<>();
+    private Map<String, Variable> locals = new LinkedHashMap<>();
+    private Map<String, Method> methods = new LinkedHashMap<>();
     private Scope scope = Scope.PUBLIC;
     private boolean isMainClass = false;
 
@@ -31,25 +31,25 @@ public class Clazz<Type> implements Symbol {
         return isMainClass;
     }
 
-    public Clazz<Type> addMethod(Method<Type> method) {
+    public Clazz addMethod(Method method) {
         this.methods.put(method.getMethodSignature(), method);
         return this;
     }
 
-    public Clazz<Type> addVariable(Variable<Type> v) {
+    public Clazz addVariable(Variable v) {
         this.locals.put(v.getName(), v);
         return this;
     }
 
-    public Method<Type> getMethodByName(String name) {
+    public Method getMethodByName(String name) {
         return this.methods.get(name);
     }
 
-    public Map<String, Variable<Type>> getLocals() {
+    public Map<String, Variable> getLocals() {
         return locals;
     }
 
-    public Map<String, Method<Type>> getMethods() {
+    public Map<String, Method> getMethods() {
         return methods;
     }
 
@@ -68,11 +68,11 @@ public class Clazz<Type> implements Symbol {
 
         sb.append("Class name: ").append(this.name).append(System.lineSeparator());
         sb.append("Variables: ").append(System.lineSeparator());
-        for (Map.Entry<String, Variable<Type>> entry : this.locals.entrySet()) {
+        for (Map.Entry<String, Variable> entry : this.locals.entrySet()) {
             sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
         }
         sb.append("Methods: ").append(System.lineSeparator());
-        for (Map.Entry<String, Method<Type>> entry : this.methods.entrySet()) {
+        for (Map.Entry<String, Method> entry : this.methods.entrySet()) {
             sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
         }
         return sb.toString();

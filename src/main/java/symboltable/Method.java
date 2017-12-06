@@ -12,7 +12,7 @@ import enums.Scope;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class Method<Type> implements Symbol {
+public class Method implements Symbol {
 
     private Map<String, Variable> parameters = new LinkedHashMap<>();
     private Map<String, Variable> locals = new LinkedHashMap<>();
@@ -43,16 +43,16 @@ public class Method<Type> implements Symbol {
         return name;
     }
 
-    private Method<Type> addParameter(String key, Variable value) {
+    private Method addParameter(String key, Variable value) {
         this.parameters.put(key, value);
         return this;
     }
 
-    public Method<Type> addParameter(Variable value) {
+    public Method addParameter(Variable value) {
         return this.addParameter(value.getName(), value);
     }
 
-    private Method<Type> addLocal(String key, Variable value) {
+    private Method addLocal(String key, Variable value) {
         this.locals.put(key, value);
         return this;
     }
@@ -74,7 +74,7 @@ public class Method<Type> implements Symbol {
         return this.locals;
     }
 
-    public Method<Type> addLocal(Variable value) {
+    public Method addLocal(Variable value) {
         return this.addLocal(value.getName(), value);
     }
 

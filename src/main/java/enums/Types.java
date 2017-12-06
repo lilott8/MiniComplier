@@ -8,7 +8,7 @@ import parser.minijava.ast.Type;
  * @project: MiniComplier
  */
 public enum Types {
-    INT, BOOL, ARRAY, IDENTIFIER;
+    INT, BOOL, ARRAY, IDENTIFIER, STRING;
 
     public static Types getType(Type t) {
         return IDENTIFIER;

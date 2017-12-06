@@ -3,13 +3,14 @@ package symboltable;
 import org.apache.commons.lang3.StringUtils;
 
 import enums.Scope;
+import enums.Types;
 
 /**
  * @created: 11/30/17
  * @since: 0.1
  * @project: MiniComplier
  */
-public class Variable<Type> implements Symbol {
+public class Variable implements Symbol {
 
     private String name;
     private Type type;
@@ -27,7 +28,7 @@ public class Variable<Type> implements Symbol {
         this.scope = scope;
     }
 
-    public Variable<Type> setTypeName(String typeName) {
+    public Variable setTypeName(String typeName) {
         this.typeName = typeName;
         return this;
     }

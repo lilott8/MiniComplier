@@ -18,7 +18,6 @@ import parser.minijava.ast.IntegerType;
 import parser.minijava.ast.MainClass;
 import parser.minijava.ast.MethodDeclarationUnordered;
 import parser.minijava.ast.NodeChoice;
-import parser.minijava.ast.Type;
 import parser.minijava.ast.VarDeclarationUnordered;
 import parser.minijava.visitor.DepthFirstVisitor;
 import shared.Phase;
@@ -26,6 +25,7 @@ import symboltable.Clazz;
 import symboltable.Method;
 import symboltable.Symbol;
 import symboltable.SymbolTable;
+import symboltable.Type;
 import symboltable.Variable;
 
 /**
@@ -35,10 +35,10 @@ import symboltable.Variable;
  */
 public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Phase {
 
-    private Map<String, Symbol> symbolTable = new LinkedHashMap<>();
-    private Method<Type> currentMethod;
-    private Clazz<Type> currentClazz;
-    private Types currentVarType;
+    private Map<String, Symbol> symbolTable = new LinkedHashMap();
+    private Method currentMethod;
+    private Clazz currentClazz;
+    private Type currentType;
 
     public static final Logger logger = LogManager.getLogger(MJSymbolTable.class);
 
@@ -92,9 +92,13 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     public void visit(MainClass n) {
         //super.visit(n);
 
-        Clazz<Type> mainClass = new Clazz<>(n.f1.f0.toString(), true);
-        Method<Type> mainMethod = new Method<>(n.f5.toString(), new Type(new NodeChoice(n.f5)), Scope.getScopeFromString(n.f3.toString()));
-        Variable<Type> argument = new Variable<>(n.f11.f0.toString(), new Type(new NodeChoice(n.f8)));
+        Clazz mainClass = new Clazz(n.f1.f0.toString(), true);
+
+        //Method mainMethod = new Method(n.f5.toString(), new Type(new NodeChoice(n.f5)), Scope.getScopeFromString(n.f3.toString()));
+        NodeChoice methodType = new NodeChoice(n.f5);
+        Method mainMethod = new Method(n.f5.toString(), new Type(methodType.toString()), Scope.getScopeFromString(n.f3.toString()));
+        //Variable argument = new Variable(n.f11.f0.toString(), new Type(new NodeChoice(n.f8)));
+        Variable argument = new Variable(n.f11.f0.toString(), new Type(Types.STRING));
         mainMethod.addParameter(argument);
         mainClass.addMethod(mainMethod);
         this.currentClazz = mainClass;
@@ -139,7 +143,7 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     public void visit(ClassDeclaration n) {
         //super.visit(n);
 
-        Clazz<Type> clazz = new Clazz<>(n.f1.f0.toString());
+        Clazz clazz = new Clazz(n.f1.f0.toString());
         this.currentClazz = clazz;
         this.put(clazz);
 
@@ -169,14 +173,14 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     public void visit(ClassExtendsDeclaration n) {
         //super.visit(n);
 
-        Clazz<Type> clazz = new Clazz<>(n.f1.f0.toString());
-        Clazz<Type> extending = (Clazz<Type>) this.symbolTable.get(n.f3.f0.toString());
+        Clazz clazz = new Clazz(n.f1.f0.toString());
+        Clazz extending = (Clazz) this.symbolTable.get(n.f3.f0.toString());
 
-        for (Map.Entry<String, Variable<Type>> entry : extending.getLocals().entrySet()) {
+        for (Map.Entry<String, Variable> entry : extending.getLocals().entrySet()) {
             clazz.addVariable(entry.getValue());
         }
 
-        for (Map.Entry<String, Method<Type>> entry : extending.getMethods().entrySet()) {
+        for (Map.Entry<String, Method> entry : extending.getMethods().entrySet()) {
             clazz.addMethod(entry.getValue());
         }
         this.currentClazz = clazz;
@@ -202,8 +206,9 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
      * | Identifier()
      */
     @Override
-    public void visit(Type n) {
-        logger.warn(n.f0.choice.toString());
+    public void visit(parser.minijava.ast.Type n) {
+        //this.currentType = new Type(n.f0.choice.toString());
+        n.f0.accept(this);
     }
 
     /**
@@ -213,7 +218,7 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
      */
     @Override
     public void visit(ArrayType n) {
-        this.currentVarType = Types.ARRAY;
+        this.currentType = new Type(Types.ARRAY);
 
         n.f0.accept(this);
         n.f1.accept(this);
@@ -225,7 +230,7 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
      */
     @Override
     public void visit(BooleanType n) {
-        this.currentVarType = Types.BOOL;
+        this.currentType = new Type(Types.BOOL);
         n.f0.accept(this);
     }
 
@@ -234,7 +239,7 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
      */
     @Override
     public void visit(IntegerType n) {
-        this.currentVarType = Types.INT;
+        this.currentType = new Type(Types.INT);
         n.f0.accept(this);
     }
 
@@ -248,17 +253,19 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     @Override
     public void visit(VarDeclarationUnordered n) {
         //super.visit(n);
+        n.f0.accept(this);
 
         if (currentMethod != null) {
-            this.currentMethod.addLocal(new Variable<>(n.f1.f0.toString(), n.f0));
+            this.currentMethod.addLocal(new Variable(n.f1.f0.toString(), this.currentType));
             this.currentClazz.addMethod(this.currentMethod);
         } else {
-            this.currentClazz.addVariable(new Variable<>(n.f1.f0.toString(), n.f0));
+            this.currentClazz.addVariable(new Variable(n.f1.f0.toString(), this.currentType));
         }
 
         this.put(this.currentClazz);
 
-        n.f0.accept(this);
+        this.currentType = null;
+
         n.f1.accept(this);
         n.f2.accept(this);
     }
@@ -282,15 +289,15 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     @Override
     public void visit(MethodDeclarationUnordered n) {
         //super.visit(n);
+        n.f1.accept(this);
 
-        Method<Type> method = new Method<>(n.f2.f0.toString(), n.f1);
+        Method method = new Method(n.f2.f0.toString(), this.currentType);
 
         this.currentClazz.addMethod(method);
         currentMethod = method;
         this.put(this.currentClazz);
 
         n.f0.accept(this);
-        n.f1.accept(this);
         n.f2.accept(this);
         n.f3.accept(this);
         n.f4.accept(this);
@@ -304,7 +311,8 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
         n.f12.accept(this);
         n.f13.accept(this);
 
-        currentMethod = null;
+        this.currentMethod = null;
+        this.currentType = null;
 
     }
 
@@ -325,14 +333,16 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     public void visit(FormalParameter n) {
         //super.visit(n);
 
-        Method<Type> method = this.currentClazz.getMethodByName(this.currentMethod.getName());
-        method.addParameter(new Variable<>(n.f1.f0.toString(), n.f0));
+        Method method = this.currentClazz.getMethodByName(this.currentMethod.getName());
+        n.f0.accept(this);
+        method.addParameter(new Variable(n.f1.f0.toString(), this.currentType));
 
         this.currentClazz.addMethod(method);
 
         this.put(this.currentClazz);
 
-        n.f0.accept(this);
+        this.currentType = null;
+
         n.f1.accept(this);
     }
 
