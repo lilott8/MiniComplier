@@ -35,7 +35,7 @@ import symboltable.Variable;
  */
 public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Phase {
 
-    private Map<String, Symbol> symbolTable = new LinkedHashMap();
+    private Map<String, Symbol> symbolTable = new LinkedHashMap<>();
     private Method currentMethod;
     private Clazz currentClazz;
     private Type currentType;
