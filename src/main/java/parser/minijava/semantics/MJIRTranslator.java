@@ -1,5 +1,18 @@
 package parser.minijava.semantics;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import enums.Scope;
+import ir.frame.Frame;
+import ir.memory.Memory;
+import ir.translate.Fragment;
+import ir.translate.Fragments;
+import ir.translate.MethodFragment;
+import ir.tree.IR;
+import ir.tree.statement.Move;
+import ir.tree.statement.Statement;
 import parser.minijava.ast.AllocationExpression;
 import parser.minijava.ast.AndExpression;
 import parser.minijava.ast.ArrayAllocationExpression;
@@ -23,6 +36,8 @@ import parser.minijava.ast.MainClass;
 import parser.minijava.ast.MessageSend;
 import parser.minijava.ast.MethodDeclarationUnordered;
 import parser.minijava.ast.MinusExpression;
+import parser.minijava.ast.Node;
+import parser.minijava.ast.NodeChoice;
 import parser.minijava.ast.NodeList;
 import parser.minijava.ast.NodeListOptional;
 import parser.minijava.ast.NodeOptional;
@@ -38,7 +53,10 @@ import parser.minijava.ast.TrueLiteral;
 import parser.minijava.ast.TypeDeclarationUnordered;
 import parser.minijava.ast.WhileStatement;
 import parser.minijava.visitor.GJNoArguDepthFirst;
+import symboltable.Clazz;
+import symboltable.Method;
 import symboltable.SymbolTable;
+import symboltable.Type;
 import translate.TranslateExpression;
 
 /**
@@ -48,15 +66,26 @@ import translate.TranslateExpression;
  */
 public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
 
-    private SymbolTable symbolTable;
+    private Fragments fragments;
+    private Fragments classFragment;
 
-    public MJIRTranslator(SymbolTable table) {
+    private Stack<Frame> frames = new Stack<>();
+    private SymbolTable symbolTable;
+    private Clazz currentClass;
+    private Method currentMethod;
+
+    public MJIRTranslator(Frame frame, Fragments fragments, SymbolTable table) {
+        this.frames.push(frame);
+        this.fragments = fragments;
         this.symbolTable = table;
     }
 
     @Override
     public TranslateExpression visit(NodeList n) {
-        return super.visit(n);
+        for (Node node : n.nodes) {
+            node.accept(this);
+        }
+        return null;
     }
 
     @Override
@@ -81,7 +110,13 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(MJProgram n) {
-        return super.visit(n);
+        n.f0.accept(this);
+        n.f1.accept(this);
+
+        for (Fragment fragment : this.classFragment.getList()) {
+            this.fragments.add(fragment);
+        }
+        return null;
     }
 
     /**
@@ -106,7 +141,18 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(MainClass n) {
-        return super.visit(n);
+        List<Boolean> frameParams = new ArrayList<>();
+        this.frames.push(Frame.buildFrame(new Memory("mj_main"), frameParams));
+        this.currentClass = new Clazz(n.f1.f0.toString());
+        NodeChoice methodType = new NodeChoice(n.f5);
+        this.currentMethod = new Method(n.f6.toString(), new Type(methodType.toString()), Scope.getScopeFromString(n.f3.toString()));
+
+        this.fragments.add(new MethodFragment(this.frames.peek(), this.methodEntryExit(n.f15.accept(this))));
+
+        this.currentClass = null;
+        this.currentMethod = null;
+
+        return null;
     }
 
     /**
@@ -452,5 +498,24 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     @Override
     public TranslateExpression visit(ParenthesisExpression n) {
         return super.visit(n);
+    }
+
+    /**
+     * Helper function that builds the entry/exit portion of the method
+     */
+    private Statement methodEntryExit(TranslateExpression body) {
+        Frame currentFrame = this.frames.peek();
+
+        Statement s = IR.NOP();
+        if (body == null) {
+            ir.tree.expression.Expression e = body.unEx();
+            if (e != null) {
+                s = new Move(currentFrame.returnValue(), e);
+            } else {
+                s = body.unNx();
+            }
+        }
+
+        return currentFrame.procedureEntry(s);
     }
 }

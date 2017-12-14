@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import enums.CPUArchitecture;
 import enums.Language;
 import enums.TypeCheckLevel;
 
@@ -14,7 +15,7 @@ import enums.TypeCheckLevel;
  * @since: 0.1
  * @project: MiniComplier
  */
-public class Config implements CommonConfig, ParseConfig {
+class Config implements CommonConfig, ParseConfig {
 
     public static final Logger logger = LogManager.getLogger(Config.class);
 
@@ -23,6 +24,7 @@ public class Config implements CommonConfig, ParseConfig {
     private boolean debug = false;
     private Language language;
     private TypeCheckLevel typeCheckLevel = TypeCheckLevel.STATIC;
+    private CPUArchitecture architecture = CPUArchitecture.X86;
 
     Config(CommandLine cmd) {
         this.compile = cmd.getOptionValue("compile");
@@ -35,6 +37,10 @@ public class Config implements CommonConfig, ParseConfig {
 
         if (cmd.hasOption("output")) {
             this.outputDir = cmd.getOptionValue("output");
+        }
+
+        if (cmd.hasOption("target")) {
+            this.architecture = CPUArchitecture.getArchitecture(cmd.getOptionValue("target"));
         }
 
         if (cmd.hasOption("semantics")) {
@@ -89,5 +95,10 @@ public class Config implements CommonConfig, ParseConfig {
     @Override
     public TypeCheckLevel getTypeCheckLevel() {
         return this.typeCheckLevel;
+    }
+
+    @Override
+    public CPUArchitecture getTarget() {
+        return this.architecture;
     }
 }

@@ -90,6 +90,14 @@ public class CliWrapper {
                 .desc(desc).type(Integer.class).hasArg().argName("semantics")
                 .build());
 
+        // Target machine code
+        desc = "Target machine: \n" +
+                "arm|risc|x86 (Default: x86\n" +
+                "Usage: -target [arm|risc|x86]";
+        options.addOption(Option.builder("target").longOpt("target")
+                .desc(desc).type(String.class).hasArg().argName("target")
+                .build());
+
         return options;
     }
 }

@@ -24,6 +24,7 @@ public class X86Frame extends Frame {
 
     public static final int FIRST_FORMAL_OFFSET = 8;
     public static final int FORMAL_INCREMENT = 4;
+    public static final int WORD_SIZE = FORMAL_INCREMENT;
 
     private Register framePointer = new Register("ebp");
     private Register returnValue = new Register("eax");

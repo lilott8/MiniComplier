@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import config.Config;
+import config.CommonConfig;
 import config.ConfigFactory;
 import parser.ParseStrategy;
 import parser.bioscript.parser.BSParser;
@@ -23,7 +23,7 @@ import shared.Strategy;
 public class BioScript implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(BioScript.class);
-    private Config config = ConfigFactory.getConfig();
+    private CommonConfig config = ConfigFactory.getConfig();
     BSParser parser;
     private Strategy typeChecker;
 

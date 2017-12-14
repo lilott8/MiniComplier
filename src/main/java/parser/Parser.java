@@ -3,7 +3,7 @@ package parser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import config.Config;
+import config.CommonConfig;
 import config.ConfigFactory;
 import parser.bioscript.BioScript;
 import parser.minijava.MiniJava;
@@ -18,7 +18,7 @@ public class Parser implements Phase {
 
     public static final Logger logger = LogManager.getLogger(Parser.class);
     private ParseStrategy parser;
-    private Config config = ConfigFactory.getConfig();
+    private CommonConfig config = ConfigFactory.getConfig();
 
     public Parser() {
         switch (config.getLanguage()) {

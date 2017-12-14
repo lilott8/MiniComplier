@@ -6,10 +6,14 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
-import config.Config;
 import config.ConfigFactory;
+import config.ParseConfig;
 import enums.TypeCheckLevel;
+import ir.frame.Frame;
+import ir.memory.Memory;
+import ir.translate.Fragments;
 import parser.ParseStrategy;
 import parser.minijava.ast.MJProgram;
 import parser.minijava.parser.MJParser;
@@ -27,7 +31,7 @@ import shared.Strategy;
 public class MiniJava implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(MiniJava.class);
-    private Config config = ConfigFactory.getConfig();
+    private ParseConfig config = ConfigFactory.getConfig();
     private MJSymbolTable symbolTable = new MJSymbolTable();
     private MJTypeChecker typeChecker;
     private MJIRTranslator translator;
@@ -53,7 +57,8 @@ public class MiniJava implements ParseStrategy {
                 }
 
                 logger.info("If you want to build stack allocation, introduce it here.");
-                translator = new MJIRTranslator(symbolTable);
+                Frame frame = Frame.buildFrame(new Memory(), new ArrayList<>());
+                translator = new MJIRTranslator(frame, new Fragments(frame), symbolTable);
                 program.accept(translator);
 
             } catch (ParseException e) {

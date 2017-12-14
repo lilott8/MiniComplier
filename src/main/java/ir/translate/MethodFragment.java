@@ -16,7 +16,7 @@ import ir.tree.statement.Statement;
  * A Method fragment represent the result of transforming a
  * minijava method declaration into IR code.
  */
-public class MethodFragment {
+public class MethodFragment implements Fragment {
 
     // Note that we keep all the different versions of the IR and Assem code.
     // In production code, you will only keep the "last" result

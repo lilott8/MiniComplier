@@ -1,5 +1,6 @@
 package config;
 
+import enums.CPUArchitecture;
 import enums.Language;
 
 /**
@@ -16,4 +17,6 @@ public interface CommonConfig {
     boolean isDebug();
 
     Language getLanguage();
+
+    CPUArchitecture getTarget();
 }
