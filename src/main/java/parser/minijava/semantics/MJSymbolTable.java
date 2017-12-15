@@ -5,9 +5,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Stack;
 
 import enums.Scope;
 import enums.Types;
+import ir.frame.Frame;
+import ir.translate.Fragments;
 import parser.minijava.ast.ArrayType;
 import parser.minijava.ast.BooleanType;
 import parser.minijava.ast.ClassDeclaration;
@@ -18,6 +21,7 @@ import parser.minijava.ast.IntegerType;
 import parser.minijava.ast.MainClass;
 import parser.minijava.ast.MethodDeclarationUnordered;
 import parser.minijava.ast.NodeChoice;
+import parser.minijava.ast.NodeList;
 import parser.minijava.ast.VarDeclarationUnordered;
 import parser.minijava.visitor.DepthFirstVisitor;
 import shared.Phase;
@@ -26,6 +30,7 @@ import symboltable.Method;
 import symboltable.Symbol;
 import symboltable.SymbolTable;
 import symboltable.Type;
+import symboltable.VarBuilder;
 import symboltable.Variable;
 
 /**
@@ -36,13 +41,22 @@ import symboltable.Variable;
 public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Phase {
 
     private Map<String, Symbol> symbolTable = new LinkedHashMap<>();
+
+    private Fragments fragments;
+    private Fragments classFragments;
+    private Stack<Frame> frames = new Stack<>();
+    private SymbolTable symbols = new SymbolTable();
+
     private Method currentMethod;
     private Clazz currentClazz;
     private Type currentType;
 
     public static final Logger logger = LogManager.getLogger(MJSymbolTable.class);
 
-    public MJSymbolTable() {
+    public MJSymbolTable(Frame frame, Fragments fragment) {
+        this.frames.push(frame);
+        this.fragments = fragments;
+        this.classFragments = new Fragments(frame);
     }
 
     @Override
@@ -67,6 +81,15 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
     public Map<String, Symbol> getSymbolTable() {
         return this.symbolTable;
     }
+
+    @Override
+    public void visit(NodeList n) {
+        for (int i = 0; i < n.size(); i++) {
+            n.elementAt(i).accept(this);
+        }
+    }
+
+
 
     /**
      * f0 -> <CLASS>
@@ -250,16 +273,25 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
      * f1 -> Identifier()
      * f2 -> <SEMICOLON>
      */
+    // TODO: Start Here
     @Override
     public void visit(VarDeclarationUnordered n) {
         //super.visit(n);
         n.f0.accept(this);
 
+        VarBuilder builder = new VarBuilder();
         if (currentMethod != null) {
-            this.currentMethod.addLocal(new Variable(n.f1.f0.toString(), this.currentType));
+            builder.addAccess(this.frames.peek().allocateLocal(false))
+                    .addName(n.f1.f0.toString())
+                    .addType(this.currentType);
+            this.symbols.addClassMethodVar(this.currentClazz, this.currentMethod, builder.build());
+            this.currentMethod.addLocal(builder.build());
             this.currentClazz.addMethod(this.currentMethod);
         } else {
-            this.currentClazz.addVariable(new Variable(n.f1.f0.toString(), this.currentType));
+            builder.addAccess(this.frames.peek().allocate(this.symbols.getClassVars(this.currentClazz).size() * this.frames.peek().wordSize()))
+                    .addName(n.f1.f0.toString())
+                    .addType(this.currentType);
+            this.currentClazz.addVariable(builder.build());
         }
 
         this.put(this.currentClazz);
@@ -335,7 +367,8 @@ public class MJSymbolTable extends DepthFirstVisitor implements SymbolTable, Pha
 
         Method method = this.currentClazz.getMethodByName(this.currentMethod.getName());
         n.f0.accept(this);
-        method.addParameter(new Variable(n.f1.f0.toString(), this.currentType));
+        VarBuilder vb = new VarBuilder();
+        //method.addParameter(new Variable(n.f1.f0.toString(), this.currentType));
 
         this.currentClazz.addMethod(method);
 

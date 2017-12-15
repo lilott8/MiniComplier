@@ -9,6 +9,7 @@ import java.util.List;
 import enums.IROpCodes;
 import ir.memory.Memory;
 import ir.simulate.frames.FrameSimulate;
+import ir.tree.IR;
 import ir.tree.expression.Expression;
 
 /**
@@ -26,6 +27,21 @@ public class Sequence extends Statement {
     public Sequence(Statement left, Statement right) {
         this.left = left;
         this.right = right;
+    }
+
+    public static Statement buildSequence(Statement... statements) {
+        Statement temp = IR.NOP;
+        // Bottom up iteration.
+        for (int x = statements.length - 1; x >= 0; x--) {
+            if (temp == NOP) {
+                temp = statements[x];
+            } else if (statements[x] == NOP) {
+                continue;
+            } else {
+                temp = new Sequence(statements[x], temp);
+            }
+        }
+        return temp;
     }
 
     @Override

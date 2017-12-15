@@ -8,5 +8,7 @@ import ir.tree.expression.Expression;
  * @project: minicomplier
  */
 public abstract class Access {
+
     public abstract Expression getExpression(Expression exp);
+
 }

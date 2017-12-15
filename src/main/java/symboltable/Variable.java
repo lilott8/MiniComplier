@@ -3,7 +3,7 @@ package symboltable;
 import org.apache.commons.lang3.StringUtils;
 
 import enums.Scope;
-import enums.Types;
+import ir.frame.Access;
 
 /**
  * @created: 11/30/17
@@ -12,25 +12,26 @@ import enums.Types;
  */
 public class Variable implements Symbol {
 
-    private String name;
-    private Type type;
-    private Scope scope = Scope.LOCAL;
-    private String typeName = "";
+    private final String name;
+    private final Type type;
+    private final Scope scope;
+    private final String typeName;
+    private final Access access;
 
-    public Variable(String name, Type type) {
-        this.name = name;
-        this.type = type;
-    }
-
-    public Variable(String name, Type type, Scope scope) {
+    Variable(String name, Type type, Scope scope, String typeName, Access access) {
         this.name = name;
         this.type = type;
         this.scope = scope;
+        this.typeName = typeName;
+        this.access = access;
     }
 
-    public Variable setTypeName(String typeName) {
-        this.typeName = typeName;
-        return this;
+    public Access getAccess() {
+        return this.access;
+    }
+
+    public String getTypeName() {
+        return this.typeName;
     }
 
     public Type getType() {

@@ -35,8 +35,17 @@ public class Memory {
         this.name = name;
     }
 
+    public Memory(String name, boolean build) {
+        this.name = name + "_" + count;
+        count += 1;
+    }
+
     public Memory() {
         this.name = "L" + count;
         count += 1;
+    }
+
+    public String getName() {
+        return name;
     }
 }

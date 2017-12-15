@@ -2,16 +2,25 @@ package parser.minijava.semantics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import enums.Scope;
+import ir.frame.Access;
 import ir.frame.Frame;
 import ir.memory.Memory;
 import ir.translate.Fragment;
 import ir.translate.Fragments;
 import ir.translate.MethodFragment;
 import ir.tree.IR;
+import ir.tree.expression.Call;
+import ir.tree.expression.ExpressionSequence;
+import ir.tree.expression.Name;
+import ir.tree.statement.Evaluate;
+import ir.tree.statement.Jump;
+import ir.tree.statement.Label;
 import ir.tree.statement.Move;
+import ir.tree.statement.Sequence;
 import ir.tree.statement.Statement;
 import parser.minijava.ast.AllocationExpression;
 import parser.minijava.ast.AndExpression;
@@ -29,6 +38,7 @@ import parser.minijava.ast.Expression;
 import parser.minijava.ast.ExpressionList;
 import parser.minijava.ast.ExpressionRest;
 import parser.minijava.ast.FalseLiteral;
+import parser.minijava.ast.FormalParameterList;
 import parser.minijava.ast.Identifier;
 import parser.minijava.ast.IntegerLiteral;
 import parser.minijava.ast.MJProgram;
@@ -55,9 +65,12 @@ import parser.minijava.ast.WhileStatement;
 import parser.minijava.visitor.GJNoArguDepthFirst;
 import symboltable.Clazz;
 import symboltable.Method;
+import symboltable.Symbol;
 import symboltable.SymbolTable;
 import symboltable.Type;
+import translate.TranslateEx;
 import translate.TranslateExpression;
+import translate.TranslateNx;
 
 /**
  * @created: 12/5/17
@@ -70,14 +83,16 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     private Fragments classFragment;
 
     private Stack<Frame> frames = new Stack<>();
-    private SymbolTable symbolTable;
+    private SymbolTable<MJProgram> symbolTable;
+    private Map<String, Symbol> symbolMap;
     private Clazz currentClass;
     private Method currentMethod;
 
-    public MJIRTranslator(Frame frame, Fragments fragments, SymbolTable table) {
+    public MJIRTranslator(Frame frame, Fragments fragments, SymbolTable<MJProgram> table) {
         this.frames.push(frame);
         this.fragments = fragments;
         this.symbolTable = table;
+        this.symbolMap = table.getSymbolTable();
     }
 
     @Override
@@ -175,7 +190,14 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ClassDeclaration n) {
-        return super.visit(n);
+        this.currentClass = new Clazz(n.f1.f0.toString());
+
+        n.f4.accept(this);
+        n.f5.accept(this);
+
+        this.currentClass = null;
+
+        return null;
     }
 
     /**
@@ -212,6 +234,35 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(MethodDeclarationUnordered n) {
+        this.currentMethod = new Method(n.f2.f0.toString(),
+                new Type(new NodeChoice(n.f5).toString()),
+                Scope.getScopeFromString(n.f0.toString()));
+
+        List<Boolean> formalParams = new ArrayList<>();
+        // Add the implicit "this" argument to all method calls.
+        formalParams.add(true);
+        // TODO: figure out how to handle this case.
+        //for (String s : n.f4.node.accept(this))
+
+        this.frames.push(Frame.buildFrame(new Memory(this.currentClass.getName() + "_" + this.currentMethod.getName()), formalParams));
+        ir.tree.expression.Expression expression = null;
+
+        int numStatements = n.f9.size();
+        if (numStatements > 0) {
+            Statement statement = n.f9.elementAt(0).accept(this).unNx();
+
+            for (Node node : n.f9.nodes) {
+                statement = new Sequence(statement, node.accept(this).unNx());
+            }
+            expression = new ExpressionSequence(statement, n.f10.accept(this).unEx());
+        } else {
+            expression = n.f11.accept(this).unEx();
+        }
+
+        this.classFragment.add(new MethodFragment(this.frames.peek(),
+                this.methodEntryExit(new TranslateEx(expression))));
+
+
         return super.visit(n);
     }
 
@@ -224,6 +275,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     public TranslateExpression visit(Block n) {
         return super.visit(n);
     }
+
 
     /**
      * f0 -> Identifier()
@@ -247,6 +299,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ArrayAssignmentStatement n) {
+
         return super.visit(n);
     }
 
@@ -257,7 +310,9 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(BranchStatement n) {
-        return super.visit(n);
+        // TODO: figure this out
+        //return new BranchExpression()
+        return null;
     }
 
     /**
@@ -269,7 +324,19 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(WhileStatement n) {
-        return super.visit(n);
+        Memory done = new Memory("done", true);
+        Memory body = new Memory("body", true);
+        Memory condition = new Memory("condition", true);
+        return new TranslateNx(
+                Sequence.buildSequence(
+                        new Label(condition),
+                        n.f2.accept(this).unCx(body, done),
+                        new Label(body),
+                        n.f4.accept(this).unNx(),
+                        new Jump(condition),
+                        new Label(done)
+                )
+        );
     }
 
     /**
@@ -281,7 +348,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(PrintStatement n) {
-        return super.visit(n);
+        return new TranslateNx(new Evaluate(new Call(new Name(TranslateExpression.PRINT), n.f2.accept(this).unEx())));
     }
 
     /**
@@ -501,6 +568,38 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     }
 
     /**
+     * f0 -> FormalParameter()
+     * f1 -> ( FormalParameterRest() )*
+     */
+    @Override
+    public TranslateExpression visit(FormalParameterList n) {
+        return super.visit(n);
+    }
+
+    /**
+     * f0 -> Block()
+     * | AssignmentStatement()
+     * | ArrayAssignmentStatement()
+     * | BranchStatement()
+     * | WhileStatement()
+     * | PrintStatement()
+     */
+    @Override
+    public TranslateExpression visit(parser.minijava.ast.Statement n) {
+        Statement statement = IR.NOP;
+        int length = n.f0.which;
+
+        if (length > 0) {
+            // TODO: figure out how to handle this too.
+        }
+        return new TranslateNx(statement);
+    }
+
+
+
+
+
+    /**
      * Helper function that builds the entry/exit portion of the method
      */
     private Statement methodEntryExit(TranslateExpression body) {
@@ -517,5 +616,21 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
         }
 
         return currentFrame.procedureEntry(s);
+    }
+
+    private ir.tree.expression.Expression getVarLocation(String id) {
+        ir.tree.expression.Expression exp = this.frames.peek().framePointer();
+
+        Access var = null;
+        if (var == null) {
+            var = this.lookupClassVar(id);
+            if (var == null) {
+                return null;
+            }
+
+            exp = this.lookupVar("this").exp(p);
+        }
+
+        exp
     }
 }

@@ -15,11 +15,16 @@ import ir.simulate.word.Word;
  */
 public class Call extends Expression {
     private Expression method;
-    private List<Expression> args;
+    private List<Expression> args = new ArrayList<>();
 
     public Call(Expression method, List<Expression> args) {
         this.method = method;
         this.args = args;
+    }
+
+    public Call(Expression method, Expression arg) {
+        this.method = method;
+        this.args.add(arg);
     }
 
     /**

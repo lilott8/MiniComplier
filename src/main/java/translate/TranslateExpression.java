@@ -1,7 +1,7 @@
 package translate;
 
+import ir.memory.Memory;
 import ir.tree.expression.Expression;
-import ir.tree.statement.Label;
 import ir.tree.statement.Statement;
 
 /**
@@ -10,9 +10,13 @@ import ir.tree.statement.Statement;
  * @project: minicomplier
  */
 public interface TranslateExpression {
+
+    Memory PRINT = new Memory("mj_println");
+    Memory MAIN = new Memory("mj_main");
+
     Expression unEx();
 
     Statement unNx();
 
-    Statement unCx(Label trueBranch, Label falseBranch);
+    Statement unCx(Memory trueBranch, Memory falseBranch);
 }
