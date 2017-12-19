@@ -2,7 +2,7 @@ package symboltable;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import enums.Scope;
@@ -14,8 +14,10 @@ import enums.Scope;
  */
 public class Method implements Symbol {
 
-    private Map<String, Variable> parameters = new LinkedHashMap<>();
-    private Map<String, Variable> locals = new LinkedHashMap<>();
+    private Map<String, Variable> parameters = new HashMap<>();
+    private Map<String, Variable> locals = new HashMap<>();
+    //private List<Access> parameters = new ArrayList<>();
+    //private List<Access> locals = new ArrayList<>();
     private Type returnType;
     private Scope scope = Scope.PUBLIC;
     private String name;
@@ -43,17 +45,13 @@ public class Method implements Symbol {
         return name;
     }
 
-    private Method addParameter(String key, Variable value) {
-        this.parameters.put(key, value);
+    public Method addParameter(Variable value) {
+        this.parameters.put(value.getName(), value);
         return this;
     }
 
-    public Method addParameter(Variable value) {
-        return this.addParameter(value.getName(), value);
-    }
-
-    private Method addLocal(String key, Variable value) {
-        this.locals.put(key, value);
+    public Method addLocal(Variable value) {
+        this.locals.put(value.getName(), value);
         return this;
     }
 
@@ -74,14 +72,10 @@ public class Method implements Symbol {
         return this.locals;
     }
 
-    public Method addLocal(Variable value) {
-        return this.addLocal(value.getName(), value);
-    }
-
     public String getMethodSignature() {
         StringBuilder sb = new StringBuilder(this.name).append("_");
         if (!this.parameters.isEmpty()) {
-            for (String s : this.parameters.keySet()) {
+            for (Map.Entry<String, Variable> s : this.parameters.entrySet()) {
                 sb.append(s).append("_");
             }
         }
@@ -93,7 +87,7 @@ public class Method implements Symbol {
         sb.append(this.getMethodSignature()).append(System.lineSeparator());
         sb.append("Locals: ").append(System.lineSeparator());
         for (Map.Entry<String, Variable> entry : this.locals.entrySet()) {
-            sb.append("\t").append(entry.getValue()).append(System.lineSeparator());
+            sb.append("\t").append(entry).append(System.lineSeparator());
         }
 
 

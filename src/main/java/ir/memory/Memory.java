@@ -27,7 +27,7 @@ public class Memory {
      * A map for use in the fromString method (to return the same memory object if an
      * address with this name already exists).
      */
-    private static Map<String, Memory> labels = new HashMap<String, Memory>();
+    private static Map<String, Memory> addresses = new HashMap<String, Memory>();
     private static int count = 0;
     private String name;
 
@@ -47,5 +47,12 @@ public class Memory {
 
     public String getName() {
         return name;
+    }
+
+    public static Memory addressExists(String name) {
+        if (!addresses.containsKey(name)) {
+            addresses.put(name, new Memory(name));
+        }
+        return addresses.get(name);
     }
 }

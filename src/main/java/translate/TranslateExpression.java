@@ -13,6 +13,7 @@ public interface TranslateExpression {
 
     Memory PRINT = new Memory("mj_println");
     Memory MAIN = new Memory("mj_main");
+    Memory NEW_ARRAY = new Memory("mj_new_array");
 
     Expression unEx();
 

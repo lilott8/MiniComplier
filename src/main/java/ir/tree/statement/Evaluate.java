@@ -30,7 +30,6 @@ public class Evaluate extends Statement {
         this.expression = expression;
     }
 
-    @Override
     public List<Expression> expressions() {
         List<Expression> list = new ArrayList<>();
         list.add(this.expression);
@@ -49,7 +48,6 @@ public class Evaluate extends Statement {
      * This method is used by the TraceScheduling algorithm. The order
      * in which the jumptargets are retur
      */
-    @Override
     public List<Memory> getJumpTargets() {
         logger.warn("expressions is not implemented");
         return new ArrayList<>();

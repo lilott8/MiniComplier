@@ -2,20 +2,27 @@ package parser.minijava.semantics;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
+import enums.IRBinOps;
+import enums.IRCJumps;
 import enums.Scope;
 import ir.frame.Access;
 import ir.frame.Frame;
 import ir.memory.Memory;
+import ir.memory.Register;
 import ir.translate.Fragment;
 import ir.translate.Fragments;
 import ir.translate.MethodFragment;
 import ir.tree.IR;
+import ir.tree.expression.BinaryOp;
 import ir.tree.expression.Call;
+import ir.tree.expression.Constant;
 import ir.tree.expression.ExpressionSequence;
 import ir.tree.expression.Name;
+import ir.tree.expression.Store;
+import ir.tree.expression.Temp;
+import ir.tree.statement.ConditionalJump;
 import ir.tree.statement.Evaluate;
 import ir.tree.statement.Jump;
 import ir.tree.statement.Label;
@@ -65,9 +72,10 @@ import parser.minijava.ast.WhileStatement;
 import parser.minijava.visitor.GJNoArguDepthFirst;
 import symboltable.Clazz;
 import symboltable.Method;
-import symboltable.Symbol;
 import symboltable.SymbolTable;
 import symboltable.Type;
+import symboltable.Variable;
+import translate.RelCx;
 import translate.TranslateEx;
 import translate.TranslateExpression;
 import translate.TranslateNx;
@@ -83,16 +91,16 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     private Fragments classFragment;
 
     private Stack<Frame> frames = new Stack<>();
-    private SymbolTable<MJProgram> symbolTable;
-    private Map<String, Symbol> symbolMap;
+    private SymbolTable symbolTable;
     private Clazz currentClass;
     private Method currentMethod;
+    private Variable currentVariable;
+    private int numParameters = 0;
 
-    public MJIRTranslator(Frame frame, Fragments fragments, SymbolTable<MJProgram> table) {
+    public MJIRTranslator(Frame frame, Fragments fragments, SymbolTable table) {
         this.frames.push(frame);
         this.fragments = fragments;
         this.symbolTable = table;
-        this.symbolMap = table.getSymbolTable();
     }
 
     @Override
@@ -241,8 +249,13 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
         List<Boolean> formalParams = new ArrayList<>();
         // Add the implicit "this" argument to all method calls.
         formalParams.add(true);
-        // TODO: figure out how to handle this case.
-        //for (String s : n.f4.node.accept(this))
+        // This will set the numParameters variable
+        // that lets us know how many parameters exist
+        n.f4.accept(this);
+        for (int x = 0; x < this.numParameters; x++) {
+            formalParams.add(true);
+        }
+        this.numParameters = 0;
 
         this.frames.push(Frame.buildFrame(new Memory(this.currentClass.getName() + "_" + this.currentMethod.getName()), formalParams));
         ir.tree.expression.Expression expression = null;
@@ -261,7 +274,6 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
 
         this.classFragment.add(new MethodFragment(this.frames.peek(),
                 this.methodEntryExit(new TranslateEx(expression))));
-
 
         return super.visit(n);
     }
@@ -311,8 +323,10 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     @Override
     public TranslateExpression visit(BranchStatement n) {
         // TODO: figure this out
+
+        //return new BranchExpression(n.);
         //return new BranchExpression()
-        return null;
+        return super.visit(n);
     }
 
     /**
@@ -374,7 +388,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(AndExpression n) {
-        return super.visit(n);
+        return new translate.AndExpression(n.f0.accept(this), n.f2.accept(this));
     }
 
     /**
@@ -384,7 +398,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(CompareExpression n) {
-        return super.visit(n);
+        return new RelCx(IRCJumps.LESS_THAN_U, n.f0.accept(this).unEx(), n.f2.accept(this).unEx());
     }
 
     /**
@@ -394,7 +408,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(PlusExpression n) {
-        return super.visit(n);
+        return new TranslateEx(new BinaryOp(IRBinOps.PLUS, n.f0.accept(this).unEx(), n.f2.accept(this).unEx()));
     }
 
     /**
@@ -404,7 +418,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(MinusExpression n) {
-        return super.visit(n);
+        return new TranslateEx(new BinaryOp(IRBinOps.MINUS, n.f0.accept(this).unEx(), n.f2.accept(this).unEx()));
     }
 
     /**
@@ -414,7 +428,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(TimesExpression n) {
-        return super.visit(n);
+        return new TranslateEx(new BinaryOp(IRBinOps.MULTIPLY, n.f0.accept(this).unEx(), n.f2.accept(this).unEx()));
     }
 
     /**
@@ -425,7 +439,31 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ArrayLookup n) {
-        return super.visit(n);
+        int wordSize = this.frames.peek().wordSize();
+        Memory l1 = new Memory();
+        Memory l2 = new Memory();
+        Memory l3 = new Memory();
+        Memory l4 = new Memory();
+
+        ir.tree.expression.Expression p = n.f0.accept(this).unEx();
+        ir.tree.expression.Expression index = n.f2.accept(this).unEx();
+        ir.tree.expression.Expression r = new Temp(new Register());
+
+        return new TranslateEx(
+                new ExpressionSequence(
+                        Sequence.buildSequence(
+                                new ConditionalJump(IRCJumps.LESS_THAN_U, new Constant(-1), index, l2, l1),
+                                new Label(l1),
+                                new Move(r, IR.FALSE),
+                                new Label(l4),
+                                new ConditionalJump(IRCJumps.LESS_THAN_U, index, new Store(new BinaryOp(IRBinOps.MINUS, p, new Constant(wordSize))), l3, l1),
+                                new Label(l3),
+                                new Move(r, new Store(new BinaryOp(IRBinOps.PLUS, p, new BinaryOp(IRBinOps.MULTIPLY, index, new Constant(wordSize))))),
+                                new Label(l4)
+                        ), r
+                )
+        );
+
     }
 
     /**
@@ -435,7 +473,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ArrayLength n) {
-        return super.visit(n);
+        return new TranslateEx(new BinaryOp(IRBinOps.MINUS, n.f0.accept(this).unEx(), new Constant(this.frames.peek().wordSize())));
     }
 
     /**
@@ -448,6 +486,10 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(MessageSend n) {
+        List<Expression> args = new ArrayList<>();
+
+
+        //return new TranslateEx(new Call(new Label(n.f2.accept(this).unEx().)))
         return super.visit(n);
     }
 
@@ -490,7 +532,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(IntegerLiteral n) {
-        return super.visit(n);
+        return new TranslateEx(new Constant(Integer.parseInt(n.f0.tokenImage)));
     }
 
     /**
@@ -498,7 +540,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(TrueLiteral n) {
-        return super.visit(n);
+        return new TranslateEx(IR.TRUE);
     }
 
     /**
@@ -506,7 +548,7 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(FalseLiteral n) {
-        return super.visit(n);
+        return new TranslateEx(IR.FALSE);
     }
 
     /**
@@ -514,7 +556,8 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(Identifier n) {
-        return super.visit(n);
+        ir.tree.expression.Expression expression = this.getVarLocation(n.f0.tokenImage);
+        return (expression != null) ? new TranslateEx(expression) : null;
     }
 
     /**
@@ -522,7 +565,8 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ThisExpression n) {
-        return super.visit(n);
+        Access var = this.lookupVar("this");
+        return (var != null) ? new TranslateEx(var.getExpression(this.frames.peek().framePointer())) : null;
     }
 
     /**
@@ -534,7 +578,12 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(ArrayAllocationExpression n) {
-        return super.visit(n);
+        ir.tree.expression.Expression arraySize = n.f3.accept(this).unEx();
+        ir.tree.expression.Expression row = new Name(new Memory());
+        ir.tree.expression.Expression column = new Call(new Name(TranslateExpression.NEW_ARRAY), arraySize);
+        Statement sequence = new Move(row, column);
+
+        return new TranslateEx(new ExpressionSequence(sequence, row));
     }
 
     /**
@@ -573,7 +622,8 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
      */
     @Override
     public TranslateExpression visit(FormalParameterList n) {
-        return super.visit(n);
+        this.numParameters = n.f1.size();
+        return null;
     }
 
     /**
@@ -594,10 +644,6 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
         }
         return new TranslateNx(statement);
     }
-
-
-
-
 
     /**
      * Helper function that builds the entry/exit portion of the method
@@ -621,16 +667,35 @@ public class MJIRTranslator extends GJNoArguDepthFirst<TranslateExpression> {
     private ir.tree.expression.Expression getVarLocation(String id) {
         ir.tree.expression.Expression exp = this.frames.peek().framePointer();
 
-        Access var = null;
+        Access var = this.lookupMethodVar(id);
         if (var == null) {
-            var = this.lookupClassVar(id);
+            var = this.symbolTable.getMethodVar(this.currentClass, this.currentMethod, id);
             if (var == null) {
                 return null;
             }
+            exp = this.lookupVar("this").getExpression(exp);
+        }
+        return var.getExpression(exp);
+    }
 
-            exp = this.lookupVar("this").exp(p);
+    private Access lookupClassVar(String id) {
+        return this.symbolTable.getClassVar(this.currentClass, id);
+    }
+
+    private Access lookupMethodVar(String id) {
+        return this.symbolTable.getMethodVar(this.currentClass, this.currentMethod, id);
+    }
+
+    private Access lookupVar(String variable) {
+        Access var = null;
+        if (this.currentMethod != null) {
+            var = this.lookupMethodVar(variable);
         }
 
-        exp
+        if (var == null) {
+            var = this.lookupClassVar(variable);
+        }
+
+        return var;
     }
 }

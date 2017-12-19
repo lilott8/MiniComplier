@@ -16,6 +16,16 @@ public class SymbolTable {
 
     private Map<String, Clazz> table = new HashMap<>();
 
+    public Map<String, Clazz> getTable() {
+        return this.table;
+    }
+
+    public void addClass(Clazz clazz) {
+        //if (!this.table.containsKey(clazz.getName())) {
+        this.table.put(clazz.getName(), clazz);
+        //}
+    }
+
     public void addClassMethod(Clazz clazz, Method method) {
         if (!this.table.containsKey(clazz.getName())) {
             this.table.put(clazz.getName(), clazz);
@@ -40,6 +50,16 @@ public class SymbolTable {
         this.table.get(clazz.getName()).getMethodByName(method.getName()).addLocal(variable);
     }
 
+    public void addClassMethodVar(Clazz clazz, Method method, Access var) {
+        if (!this.table.containsKey(clazz.getName())) {
+            this.table.put(clazz.getName(), clazz);
+        }
+        VarBuilder varBuilder = new VarBuilder();
+        varBuilder.addAccess(var).addName("UNKNOWN");
+
+        this.table.get(clazz.getName()).getMethodByName(method.getName()).addLocal(varBuilder.build());
+    }
+
     public void addClassVar(Clazz clazz, Variable variable, Access var) {
         if (!this.table.containsKey(clazz.getName())) {
             this.table.put(clazz.getName(), clazz);
@@ -56,12 +76,16 @@ public class SymbolTable {
         return vars;
     }
 
-    public Access getClassVar(Clazz clazz, Variable var) {
-        return this.table.get(clazz.getName()).getLocals().get(var.getName()).getAccess();
+    public Access getMethodVar(Clazz clazz, Method method, String id) {
+        return clazz.getMethodByName(method.getName()).getLocals().get(id).getAccess();
     }
 
-    public Access lookupMethodVar(Clazz clazz, Method method, Variable var) {
-        return this.table.get(clazz.getName()).getMethodByName(method.getName()).getLocals().get(var.getName()).getAccess();
+    public Access getClassVar(Clazz clazz, Variable var) {
+        return this.getClassVar(clazz, var.getName());
+    }
+
+    public Access getClassVar(Clazz clazz, String varName) {
+        return this.table.get(clazz.getName()).getLocals().get(varName).getAccess();
     }
 
     public int getNumClasses(Clazz clazz) {

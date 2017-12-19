@@ -32,9 +32,14 @@ public class MiniJava implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(MiniJava.class);
     private ParseConfig config = ConfigFactory.getConfig();
-    private MJSymbolTable symbolTable = new MJSymbolTable();
+    private MJSymbolTable symbolTable;
     private MJTypeChecker typeChecker;
     private MJIRTranslator translator;
+
+    public MiniJava() {
+        Frame frame = Frame.buildFrame(new Memory(), new ArrayList<>());
+        this.symbolTable = new MJSymbolTable(frame, new Fragments(frame));
+    }
 
     @Override
     public String getName() {
@@ -58,7 +63,7 @@ public class MiniJava implements ParseStrategy {
 
                 logger.info("If you want to build stack allocation, introduce it here.");
                 Frame frame = Frame.buildFrame(new Memory(), new ArrayList<>());
-                translator = new MJIRTranslator(frame, new Fragments(frame), symbolTable);
+                translator = new MJIRTranslator(frame, new Fragments(frame), symbolTable.getSymbolTable());
                 program.accept(translator);
 
             } catch (ParseException e) {
