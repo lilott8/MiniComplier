@@ -52,10 +52,14 @@ TOKEN :
 |   <ON: "on">
 |   <INTO: "into">
 |   <SOMETHING: "something">
+|   <FUNCTION: "function">
+|   <REAL: "real">
+|   <NAT: "nat">
+|   <MAT: "mat">
 }
 
 
-/* LOGIC, SCOPING, ARRAYS, AND OPERATORS */
+/* ARRAYS, AND OPERATORS */
 TOKEN : {
     <LPAREN: "(">
 |   <RPAREN: ")">
@@ -80,6 +84,7 @@ TOKEN : {
 |   <INSTRUCTIONS: "instructions">
 |   <TRUE: "true" >
 |   <FALSE: "false" >
+|   <COMMA: "," >
 }
 
 
@@ -184,6 +189,32 @@ void Instruction() :
     |   AssignmentStatement()
 }
 
+void Function() :
+{}
+{
+    <FUNCTION> Identifier() <LPAREN> FormalParameterList() <RPAREN> <LBRACE>
+        Statement()
+    <LBRACE>
+}
+
+void FormalParameterList() :
+{}
+{
+    FormalParameter() ( FormalParameterRest() )*
+}
+
+void FormalParameter() :
+{}
+{
+    (Type())* Identifier()
+}
+
+void FormalParameterRest() :
+{}
+{
+    <COMMA> FormalParameter()
+}
+
 void MixStatement() :
 {}
 {
@@ -228,7 +259,15 @@ void RepeatStatement() :
 void AssignmentStatement() :
 {}
 {
-  Identifier() <ASSIGN> Expression()
+  (Type())* Identifier() <ASSIGN> Expression()
+}
+
+void Type() :
+{}
+{
+    MatLiteral()
+    |   NatLiteral()
+    |   RealLiteral()
 }
 
 void BranchStatement() :
@@ -262,6 +301,23 @@ void IntegerLiteral() :
   <INTEGER_LITERAL>
 }
 
+void NatLiteral() :
+{}
+{
+    <NAT>
+}
+
+void MatLiteral() :
+{}
+{
+    <MAT>
+}
+
+void RealLiteral() :
+{}
+{
+    <REAL>
+}
 
 void TrueLiteral() :
 {}
