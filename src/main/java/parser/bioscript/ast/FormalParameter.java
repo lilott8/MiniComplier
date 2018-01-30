@@ -6,25 +6,16 @@ package parser.bioscript.ast;
 import parser.bioscript.visitor.*;
 /**
  * Grammar production:
- * f0 -> PrimaryExpression()
- * f1 -> <MINUS>
- * f2 -> PrimaryExpression()
+ * f0 -> ( Type() )*
+ * f1 -> Identifier()
  */
-public class MinusExpression implements Node {
-    public PrimaryExpression f0;
-    public NodeToken f1;
-    public PrimaryExpression f2;
+public class FormalParameter implements Node {
+    public NodeListOptional f0;
+    public Identifier f1;
 
-    public MinusExpression(PrimaryExpression n0, NodeToken n1, PrimaryExpression n2) {
+    public FormalParameter(NodeListOptional n0, Identifier n1) {
         f0 = n0;
         f1 = n1;
-        f2 = n2;
-    }
-
-    public MinusExpression(PrimaryExpression n0, PrimaryExpression n1) {
-        f0 = n0;
-        f1 = new NodeToken("-");
-        f2 = n1;
     }
 
     public void accept(Visitor v) {

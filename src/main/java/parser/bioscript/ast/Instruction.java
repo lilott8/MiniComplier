@@ -3,16 +3,16 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> MixStatement() | SplitStatement() | DrainStatement() | HeatStatement()
- * | DetectStatement() | RepeatStatement() | AssignmentStatement()
+ * Grammar production:
+ * f0 -> MixStatement()
+ * | SplitStatement()
+ * | DrainStatement()
+ * | HeatStatement()
+ * | DetectStatement()
+ * | RepeatStatement()
+ * | AssignmentStatement()
  */
 public class Instruction implements Node {
     public NodeChoice f0;

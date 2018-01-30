@@ -3,17 +3,20 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> AndExpression() | LessThanExpression() | LessThanEqualExpression() |
- * GreaterThanExpression() | GreaterThanEqualExpression() | NotEqualExpression() |
- * EqualityExpression() | OrExpression() | PlusExpression() | MinusExpression() | TimesExpression()
+ * Grammar production:
+ * f0 -> AndExpression()
+ * | LessThanExpression()
+ * | LessThanEqualExpression()
+ * | GreaterThanExpression()
+ * | GreaterThanEqualExpression()
+ * | NotEqualExpression()
+ * | EqualityExpression()
+ * | OrExpression()
+ * | PlusExpression()
+ * | MinusExpression()
+ * | TimesExpression()
  * | PrimaryExpression()
  */
 public class Expression implements Node {

@@ -3,16 +3,11 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <MIX> PrimaryExpression() <WITH> PrimaryExpression() | <FOR>
- * IntegerLiteral()
+ * Grammar production:
+ * f0 -> <MIX> PrimaryExpression() <WITH> PrimaryExpression()
+ * | <FOR> IntegerLiteral()
  */
 public class MixStatement implements Node {
     public NodeChoice f0;

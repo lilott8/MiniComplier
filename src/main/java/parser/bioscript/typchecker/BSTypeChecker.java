@@ -3,7 +3,6 @@ package parser.bioscript.typchecker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import parser.bioscript.ast.Program;
 import shared.Strategy;
 
 /**
@@ -13,8 +12,8 @@ import shared.Strategy;
  */
 public class BSTypeChecker implements Strategy {
 
-    Program program;
     public static final Logger logger = LogManager.getLogger(BSTypeChecker.class);
+    Program program;
 
     public BSTypeChecker(Program program) {
         this.program = program;

@@ -6,25 +6,17 @@ package parser.bioscript.ast;
 import parser.bioscript.visitor.*;
 /**
  * Grammar production:
- * f0 -> PrimaryExpression()
- * f1 -> <MINUS>
- * f2 -> PrimaryExpression()
+ * f0 -> <MAT>
  */
-public class MinusExpression implements Node {
-    public PrimaryExpression f0;
-    public NodeToken f1;
-    public PrimaryExpression f2;
+public class MatLiteral implements Node {
+    public NodeToken f0;
 
-    public MinusExpression(PrimaryExpression n0, NodeToken n1, PrimaryExpression n2) {
+    public MatLiteral(NodeToken n0) {
         f0 = n0;
-        f1 = n1;
-        f2 = n2;
     }
 
-    public MinusExpression(PrimaryExpression n0, PrimaryExpression n1) {
-        f0 = n0;
-        f1 = new NodeToken("-");
-        f2 = n1;
+    public MatLiteral() {
+        f0 = new NodeToken("mat");
     }
 
     public void accept(Visitor v) {

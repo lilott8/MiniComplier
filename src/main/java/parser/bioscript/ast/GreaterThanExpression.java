@@ -3,15 +3,12 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> PrimaryExpression() f1 -> <GREATERTHAN> f2 -> PrimaryExpression()
+ * Grammar production:
+ * f0 -> PrimaryExpression()
+ * f1 -> <GREATERTHAN>
+ * f2 -> PrimaryExpression()
  */
 public class GreaterThanExpression implements Node {
     public PrimaryExpression f0;

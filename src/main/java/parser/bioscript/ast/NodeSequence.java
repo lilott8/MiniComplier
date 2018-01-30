@@ -3,18 +3,13 @@
 //
 
 package parser.bioscript.ast;
-
+import parser.bioscript.visitor.*;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
 /**
- * Represents a sequence of nodes nested within a choice, list, optional list, or optional, e.g. ( A
- * B )+ or [ C D E ]
+ * Represents a sequence of nodes nested within a choice, list,
+ * optional list, or optional, e.g. ( A B )+ or [ C D E ]
  */
 public class NodeSequence implements NodeListInterface {
     public Vector<Node> nodes;

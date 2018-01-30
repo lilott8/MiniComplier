@@ -3,15 +3,11 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <STATIONARY> f1 -> Identifier()
+ * Grammar production:
+ * f0 -> <STATIONARY>
+ * f1 -> Identifier()
  */
 public class Stationary implements Node {
     public NodeToken f0;

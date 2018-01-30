@@ -3,15 +3,10 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> WhileStatement()
+ * Grammar production:
+ * f0 -> WhileStatement()
  */
 public class RepeatStatement implements Node {
     public WhileStatement f0;

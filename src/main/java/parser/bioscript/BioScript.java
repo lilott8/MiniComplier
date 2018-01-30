@@ -10,8 +10,6 @@ import java.io.InputStream;
 import config.Config;
 import config.ConfigFactory;
 import parser.ParseStrategy;
-import parser.bioscript.parser.BSParser;
-import parser.bioscript.parser.ParseException;
 import parser.bioscript.typchecker.BSTypeChecker;
 import shared.Strategy;
 
@@ -23,8 +21,8 @@ import shared.Strategy;
 public class BioScript implements ParseStrategy {
 
     public static final Logger logger = LogManager.getLogger(BioScript.class);
-    private Config config = ConfigFactory.getConfig();
     BSParser parser;
+    private Config config = ConfigFactory.getConfig();
     private Strategy typeChecker;
 
     public BioScript() {

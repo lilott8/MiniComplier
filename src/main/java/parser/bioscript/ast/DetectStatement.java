@@ -3,16 +3,11 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <DETECT> Identifier() <ON> PrimaryExpression() | <FOR>
- * <INTEGER_LITERAL>
+ * Grammar production:
+ * f0 -> <DETECT> Identifier() <ON> PrimaryExpression()
+ * | <FOR> <INTEGER_LITERAL>
  */
 public class DetectStatement implements Node {
     public NodeChoice f0;

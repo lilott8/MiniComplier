@@ -8,12 +8,17 @@ import java.util.Enumeration;
 
 import parser.bioscript.ast.AndExpression;
 import parser.bioscript.ast.AssignmentStatement;
+import parser.bioscript.ast.BSProgram;
 import parser.bioscript.ast.BranchStatement;
 import parser.bioscript.ast.DetectStatement;
 import parser.bioscript.ast.DrainStatement;
 import parser.bioscript.ast.EqualityExpression;
 import parser.bioscript.ast.Expression;
 import parser.bioscript.ast.FalseLiteral;
+import parser.bioscript.ast.FormalParameter;
+import parser.bioscript.ast.FormalParameterList;
+import parser.bioscript.ast.FormalParameterRest;
+import parser.bioscript.ast.Function;
 import parser.bioscript.ast.GreaterThanEqualExpression;
 import parser.bioscript.ast.GreaterThanExpression;
 import parser.bioscript.ast.HeatStatement;
@@ -23,8 +28,10 @@ import parser.bioscript.ast.IntegerLiteral;
 import parser.bioscript.ast.LessThanEqualExpression;
 import parser.bioscript.ast.LessThanExpression;
 import parser.bioscript.ast.Manifest;
+import parser.bioscript.ast.MatLiteral;
 import parser.bioscript.ast.MinusExpression;
 import parser.bioscript.ast.MixStatement;
+import parser.bioscript.ast.NatLiteral;
 import parser.bioscript.ast.Node;
 import parser.bioscript.ast.NodeList;
 import parser.bioscript.ast.NodeListOptional;
@@ -37,18 +44,19 @@ import parser.bioscript.ast.OrExpression;
 import parser.bioscript.ast.ParenthesisExpression;
 import parser.bioscript.ast.PlusExpression;
 import parser.bioscript.ast.PrimaryExpression;
-import parser.bioscript.ast.Program;
+import parser.bioscript.ast.RealLiteral;
 import parser.bioscript.ast.RepeatStatement;
 import parser.bioscript.ast.SplitStatement;
 import parser.bioscript.ast.Statement;
 import parser.bioscript.ast.Stationary;
 import parser.bioscript.ast.TimesExpression;
 import parser.bioscript.ast.TrueLiteral;
+import parser.bioscript.ast.Type;
 import parser.bioscript.ast.WhileStatement;
 
 /**
- * Provides default methods which visit each node in the tree in depth-first order.  Your visitors
- * may extend this class.
+ * Provides default methods which visit each node in the tree in depth-first
+ * order.  Your visitors may extend this class.
  */
 public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     //
@@ -103,19 +111,25 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     //
 
     /**
-     * f0 -> Stationary() f1 -> Manifest() f2 -> <INSTRUCTIONS> f3 -> Instruction()
+     * f0 -> Stationary()
+     * f1 -> Manifest()
+     * f2 -> <INSTRUCTIONS>
+     * f3 -> Instruction()
+     * f4 -> <EOF>
      */
-    public R visit(Program n, A argu) {
+    public R visit(BSProgram n, A argu) {
         R _ret = null;
         n.f0.accept(this, argu);
         n.f1.accept(this, argu);
         n.f2.accept(this, argu);
         n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
         return _ret;
     }
 
     /**
-     * f0 -> <STATIONARY> f1 -> Identifier()
+     * f0 -> <STATIONARY>
+     * f1 -> Identifier()
      */
     public R visit(Stationary n, A argu) {
         R _ret = null;
@@ -125,7 +139,8 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <MANIFEST> f1 -> Identifier()
+     * f0 -> <MANIFEST>
+     * f1 -> Identifier()
      */
     public R visit(Manifest n, A argu) {
         R _ret = null;
@@ -135,7 +150,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> Instruction() | BranchStatement() | WhileStatement()
+     * f0 -> Instruction()
+     * | BranchStatement()
+     * | WhileStatement()
      */
     public R visit(Statement n, A argu) {
         R _ret = null;
@@ -144,8 +161,13 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> MixStatement() | SplitStatement() | DrainStatement() | HeatStatement() |
-     * DetectStatement() | RepeatStatement() | AssignmentStatement()
+     * f0 -> MixStatement()
+     * | SplitStatement()
+     * | DrainStatement()
+     * | HeatStatement()
+     * | DetectStatement()
+     * | RepeatStatement()
+     * | AssignmentStatement()
      */
     public R visit(Instruction n, A argu) {
         R _ret = null;
@@ -154,7 +176,64 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <MIX> PrimaryExpression() <WITH> PrimaryExpression() | <FOR> IntegerLiteral()
+     * f0 -> <FUNCTION>
+     * f1 -> Identifier()
+     * f2 -> <LPAREN>
+     * f3 -> FormalParameterList()
+     * f4 -> <RPAREN>
+     * f5 -> <LBRACE>
+     * f6 -> Statement()
+     * f7 -> <LBRACE>
+     */
+    public R visit(Function n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
+        n.f4.accept(this, argu);
+        n.f5.accept(this, argu);
+        n.f6.accept(this, argu);
+        n.f7.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> FormalParameter()
+     * f1 -> ( FormalParameterRest() )*
+     */
+    public R visit(FormalParameterList n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> ( Type() )*
+     * f1 -> Identifier()
+     */
+    public R visit(FormalParameter n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <COMMA>
+     * f1 -> FormalParameter()
+     */
+    public R visit(FormalParameterRest n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        n.f1.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <MIX> PrimaryExpression() <WITH> PrimaryExpression()
+     * | <FOR> IntegerLiteral()
      */
     public R visit(MixStatement n, A argu) {
         R _ret = null;
@@ -163,7 +242,10 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <SPLIT> f1 -> PrimaryExpression() f2 -> <INTO> f3 -> PrimaryExpression()
+     * f0 -> <SPLIT>
+     * f1 -> PrimaryExpression()
+     * f2 -> <INTO>
+     * f3 -> PrimaryExpression()
      */
     public R visit(SplitStatement n, A argu) {
         R _ret = null;
@@ -175,7 +257,8 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <DRAIN> f1 -> PrimaryExpression()
+     * f0 -> <DRAIN>
+     * f1 -> PrimaryExpression()
      */
     public R visit(DrainStatement n, A argu) {
         R _ret = null;
@@ -185,7 +268,8 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <HEAT> PrimaryExpression() <AT> IntegerLiteral() | <FOR> IntegerLiteral()
+     * f0 -> <HEAT> PrimaryExpression() <AT> IntegerLiteral()
+     * | <FOR> IntegerLiteral()
      */
     public R visit(HeatStatement n, A argu) {
         R _ret = null;
@@ -194,7 +278,8 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <DETECT> Identifier() <ON> PrimaryExpression() | <FOR> <INTEGER_LITERAL>
+     * f0 -> <DETECT> Identifier() <ON> PrimaryExpression()
+     * | <FOR> <INTEGER_LITERAL>
      */
     public R visit(DetectStatement n, A argu) {
         R _ret = null;
@@ -212,19 +297,35 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> Identifier() f1 -> <ASSIGN> f2 -> Expression()
+     * f0 -> ( Type() )*
+     * f1 -> Identifier()
+     * f2 -> <ASSIGN>
+     * f3 -> Expression()
      */
     public R visit(AssignmentStatement n, A argu) {
         R _ret = null;
         n.f0.accept(this, argu);
         n.f1.accept(this, argu);
         n.f2.accept(this, argu);
+        n.f3.accept(this, argu);
         return _ret;
     }
 
     /**
-     * f0 -> <IF> <LPAREN> Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE_IF> <LPAREN>
-     * Expression() <RPAREN> <LBRACE> Statement() <RBRACE> | <ELSE> <LBRACE> Statement() <RBRACE>
+     * f0 -> MatLiteral()
+     * | NatLiteral()
+     * | RealLiteral()
+     */
+    public R visit(Type n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <IF> <LPAREN> Expression() <RPAREN> <LBRACE> Statement() <RBRACE>
+     * | <ELSE_IF> <LPAREN> Expression() <RPAREN> <LBRACE> Statement() <RBRACE>
+     * | <ELSE> <LBRACE> Statement() <RBRACE>
      */
     public R visit(BranchStatement n, A argu) {
         R _ret = null;
@@ -233,8 +334,12 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <REPEAT> f1 -> IntegerLiteral() f2 -> <TIMES> f3 -> <LBRACE> f4 -> Statement() f5 ->
-     * <RBRACE>
+     * f0 -> <REPEAT>
+     * f1 -> IntegerLiteral()
+     * f2 -> <TIMES>
+     * f3 -> <LBRACE>
+     * f4 -> Statement()
+     * f5 -> <RBRACE>
      */
     public R visit(WhileStatement n, A argu) {
         R _ret = null;
@@ -248,8 +353,11 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> IntegerLiteral() | TrueLiteral() | FalseLiteral() | Identifier() |
-     * ParenthesisExpression()
+     * f0 -> IntegerLiteral()
+     * | TrueLiteral()
+     * | FalseLiteral()
+     * | Identifier()
+     * | ParenthesisExpression()
      */
     public R visit(PrimaryExpression n, A argu) {
         R _ret = null;
@@ -261,6 +369,33 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
      * f0 -> <INTEGER_LITERAL>
      */
     public R visit(IntegerLiteral n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <NAT>
+     */
+    public R visit(NatLiteral n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <MAT>
+     */
+    public R visit(MatLiteral n, A argu) {
+        R _ret = null;
+        n.f0.accept(this, argu);
+        return _ret;
+    }
+
+    /**
+     * f0 -> <REAL>
+     */
+    public R visit(RealLiteral n, A argu) {
         R _ret = null;
         n.f0.accept(this, argu);
         return _ret;
@@ -294,10 +429,18 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> AndExpression() | LessThanExpression() | LessThanEqualExpression() |
-     * GreaterThanExpression() | GreaterThanEqualExpression() | NotEqualExpression() |
-     * EqualityExpression() | OrExpression() | PlusExpression() | MinusExpression() |
-     * TimesExpression() | PrimaryExpression()
+     * f0 -> AndExpression()
+     * | LessThanExpression()
+     * | LessThanEqualExpression()
+     * | GreaterThanExpression()
+     * | GreaterThanEqualExpression()
+     * | NotEqualExpression()
+     * | EqualityExpression()
+     * | OrExpression()
+     * | PlusExpression()
+     * | MinusExpression()
+     * | TimesExpression()
+     * | PrimaryExpression()
      */
     public R visit(Expression n, A argu) {
         R _ret = null;
@@ -306,7 +449,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <AND> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <AND>
+     * f2 -> PrimaryExpression()
      */
     public R visit(AndExpression n, A argu) {
         R _ret = null;
@@ -317,7 +462,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <LESSTHAN> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <LESSTHAN>
+     * f2 -> PrimaryExpression()
      */
     public R visit(LessThanExpression n, A argu) {
         R _ret = null;
@@ -328,7 +475,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <LESSTHANEQUAL> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <LESSTHANEQUAL>
+     * f2 -> PrimaryExpression()
      */
     public R visit(LessThanEqualExpression n, A argu) {
         R _ret = null;
@@ -339,7 +488,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <GREATERTHAN> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <GREATERTHAN>
+     * f2 -> PrimaryExpression()
      */
     public R visit(GreaterThanExpression n, A argu) {
         R _ret = null;
@@ -350,7 +501,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <GREATERTHANEQUAL> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <GREATERTHANEQUAL>
+     * f2 -> PrimaryExpression()
      */
     public R visit(GreaterThanEqualExpression n, A argu) {
         R _ret = null;
@@ -361,7 +514,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <NOTEQUAL> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <NOTEQUAL>
+     * f2 -> PrimaryExpression()
      */
     public R visit(NotEqualExpression n, A argu) {
         R _ret = null;
@@ -372,7 +527,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <OR> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <OR>
+     * f2 -> PrimaryExpression()
      */
     public R visit(EqualityExpression n, A argu) {
         R _ret = null;
@@ -383,7 +540,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <LESSTHAN> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <LESSTHAN>
+     * f2 -> PrimaryExpression()
      */
     public R visit(OrExpression n, A argu) {
         R _ret = null;
@@ -394,7 +553,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <ADD> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <ADD>
+     * f2 -> PrimaryExpression()
      */
     public R visit(PlusExpression n, A argu) {
         R _ret = null;
@@ -405,7 +566,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <MINUS> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <MINUS>
+     * f2 -> PrimaryExpression()
      */
     public R visit(MinusExpression n, A argu) {
         R _ret = null;
@@ -416,7 +579,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> PrimaryExpression() f1 -> <MULTIPLY> f2 -> PrimaryExpression()
+     * f0 -> PrimaryExpression()
+     * f1 -> <MULTIPLY>
+     * f2 -> PrimaryExpression()
      */
     public R visit(TimesExpression n, A argu) {
         R _ret = null;
@@ -427,7 +592,8 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <BANG> f1 -> Expression()
+     * f0 -> <BANG>
+     * f1 -> Expression()
      */
     public R visit(NotExpression n, A argu) {
         R _ret = null;
@@ -437,7 +603,9 @@ public class GJDepthFirst<R, A> implements GJVisitor<R, A> {
     }
 
     /**
-     * f0 -> <LPAREN> f1 -> Expression() f2 -> <RPAREN>
+     * f0 -> <LPAREN>
+     * f1 -> Expression()
+     * f2 -> <RPAREN>
      */
     public R visit(ParenthesisExpression n, A argu) {
         R _ret = null;

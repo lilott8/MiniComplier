@@ -3,16 +3,13 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <SPLIT> f1 -> PrimaryExpression() f2 -> <INTO> f3 ->
- * PrimaryExpression()
+ * Grammar production:
+ * f0 -> <SPLIT>
+ * f1 -> PrimaryExpression()
+ * f2 -> <INTO>
+ * f3 -> PrimaryExpression()
  */
 public class SplitStatement implements Node {
     public NodeToken f0;

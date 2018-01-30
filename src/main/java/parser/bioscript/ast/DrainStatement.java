@@ -3,15 +3,11 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <DRAIN> f1 -> PrimaryExpression()
+ * Grammar production:
+ * f0 -> <DRAIN>
+ * f1 -> PrimaryExpression()
  */
 public class DrainStatement implements Node {
     public NodeToken f0;

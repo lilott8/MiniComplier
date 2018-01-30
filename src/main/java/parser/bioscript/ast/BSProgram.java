@@ -3,34 +3,36 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> Stationary() f1 -> Manifest() f2 -> <INSTRUCTIONS> f3 -> Instruction()
+ * Grammar production:
+ * f0 -> Stationary()
+ * f1 -> Manifest()
+ * f2 -> <INSTRUCTIONS>
+ * f3 -> Instruction()
+ * f4 -> <EOF>
  */
-public class Program implements Node {
+public class BSProgram implements Node {
     public Stationary f0;
     public Manifest f1;
     public NodeToken f2;
     public Instruction f3;
+    public NodeToken f4;
 
-    public Program(Stationary n0, Manifest n1, NodeToken n2, Instruction n3) {
+    public BSProgram(Stationary n0, Manifest n1, NodeToken n2, Instruction n3, NodeToken n4) {
         f0 = n0;
         f1 = n1;
         f2 = n2;
         f3 = n3;
+        f4 = n4;
     }
 
-    public Program(Stationary n0, Manifest n1, Instruction n2) {
+    public BSProgram(Stationary n0, Manifest n1, Instruction n2) {
         f0 = n0;
         f1 = n1;
         f2 = new NodeToken("instructions");
         f3 = n2;
+        f4 = new NodeToken("");
     }
 
     public void accept(Visitor v) {

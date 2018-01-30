@@ -3,18 +3,13 @@
 //
 
 package parser.bioscript.ast;
-
+import parser.bioscript.visitor.*;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
 /**
- * Represents a single token in the grammar.  If the "-tk" option is used, also contains a Vector of
- * preceding special tokens.
+ * Represents a single token in the grammar.  If the "-tk" option
+ * is used, also contains a Vector of preceding special tokens.
  */
 public class NodeToken implements Node {
     public String tokenImage;

@@ -3,15 +3,12 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * Grammar production: f0 -> <LPAREN> f1 -> Expression() f2 -> <RPAREN>
+ * Grammar production:
+ * f0 -> <LPAREN>
+ * f1 -> Expression()
+ * f2 -> <RPAREN>
  */
 public class ParenthesisExpression implements Node {
     public NodeToken f0;

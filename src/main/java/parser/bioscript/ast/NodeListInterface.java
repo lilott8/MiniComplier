@@ -3,15 +3,10 @@
 //
 
 package parser.bioscript.ast;
-
-import parser.bioscript.visitor.GJNoArguVisitor;
-import parser.bioscript.visitor.GJVisitor;
-import parser.bioscript.visitor.GJVoidVisitor;
-import parser.bioscript.visitor.Visitor;
-
-
+import parser.bioscript.visitor.*;
 /**
- * The interface which NodeList, NodeListOptional, and NodeSequence implement.
+ * The interface which NodeList, NodeListOptional, and NodeSequence
+ * implement.
  */
 public interface NodeListInterface extends Node {
     public void addNode(Node n);
